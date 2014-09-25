@@ -42,6 +42,7 @@ class RipplingMath
 	    {
 	      float dxy_val = 0.0;
 	      dxy(i,j,&dxy_val);
+
 	      double numerator = cos(dxy_val/10-t/7);
 	      double denominator = dxy_val/10+1;
 	      double result = 128+127*numerator/denominator;
