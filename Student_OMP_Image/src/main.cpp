@@ -4,6 +4,7 @@
 #include "GLUTImageViewers.h"
 
 #include "RipplingProvider.h"
+#include "FractalProvider.h"
 
 using std::cout;
 using std::endl;
@@ -50,18 +51,24 @@ int run(void)
     bool isAnimation = true;
     bool isSelectionEnable = false;
 
-    RipplingImage* ptrRippling = RipplingProvider::create();
+   //RipplingImage* ptrRippling = RipplingProvider::create();
 
-    GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelectionEnable, 20, 20);
+    //GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelectionEnable, 20, 20);
     // Insert here other viewers ...
+
+    isAnimation = false;
+    isSelectionEnable = true;
+    FractalImage* ptrFractal = FractalProvider::create();
+    GLUTImageViewers fractalViewer(ptrFractal,isAnimation,isSelectionEnable,20,20);
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
     // destruction
 	{
-	delete ptrRippling;
-
-	ptrRippling = NULL;
+	//delete ptrRippling;
+	delete ptrFractal;
+	//ptrRippling = NULL;
+	ptrFractal = NULL;
 	}
 
     return EXIT_SUCCESS;
