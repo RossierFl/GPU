@@ -1,14 +1,11 @@
-#include <iostream>
-
 #include "Indice2D.h"
+#include "IndiceTools.h"
+#include "DomaineMath.h"
 #include "cudaTools.h"
 #include "Device.h"
+#include "FractalMath.h"
 
-#include "RipplingMath.h"
-#include "IndiceTools.h"
 
-using std::cout;
-using std::endl;
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -22,11 +19,13 @@ using std::endl;
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
+__global__ void fractal(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t);
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
+
+
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -40,23 +39,12 @@ __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t)
+__global__ void fractal(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t)
     {
-	RipplingMath ripplingMath(w,h);
-	const int WH = w * h;
-	const int NB_THREAD = Indice2D::nbThread();// dans region parallel
-	const int TID = Indice2D::tid();
-	int s = TID; // in [0,...
+    FractalMath fractalMath = FractalMath(n);
 
-	int i;
-	int j;
-	while (s < WH)
-	    {
-	    IndiceTools::toIJ(s, w, &i, &j); // s[0,W*H[ --> i[0,H[ j[0,W[
-	    ripplingMath.color(i,j,t,ptrDevPixels[s]);
+    //TODO
 
-	    s += NB_THREAD;
-	    }
     }
 
 /*----------------------------------------------------------------------*\

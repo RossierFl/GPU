@@ -1,11 +1,8 @@
-#include <iostream>
 #include <assert.h>
 
-#include "Rippling.h"
+#include "Fractal.h"
 #include "Device.h"
-
-using std::cout;
-using std::endl;
+#include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -15,7 +12,7 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
+__global__ void fractal(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -37,30 +34,32 @@ extern __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
  |*	Constructeur	    *|
  \*-------------------------*/
 
-Rippling::Rippling(int w, int h, float dt)
+Fractal::Fractal(int w, int h, float dt, int n) :
+	variateurAnimation(IntervalF(0, 2 * PI), dt)
     {
-    assert(w == h);
-
     // Inputs
     this->w = w;
     this->h = h;
-    this->dt = dt;
+    this->n = n;
 
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
-        this->db = dim3(16, 16, 1); // disons a optimiser
+    this->db = dim3(16, 16, 1); // disons a optimiser
     this->t = 0;
+    ptrDomaineMathInit=new DomaineMath(0,0,2*PI,2*PI);
 
-    // Outputs
-    this->title = "Rippling Cuda";
+    //Outputs
+    this->title = "[API Image Fonctionelle] : Fractal zoomable CUDA";
 
+    // Check:
     //print(dg, db);
     Device::assertDim(dg, db);
+    assert(w == h);
     }
 
-Rippling::~Rippling()
+Fractal::~Fractal()
     {
-    // rien
+   delete ptrDomaineMathInit;
     }
 
 /*-------------------------*\
@@ -70,17 +69,17 @@ Rippling::~Rippling()
 /**
  * Override
  */
-void Rippling::animationStep()
+void Fractal::animationStep()
     {
-    t+=dt;
+    this->t = variateurAnimation.varierAndGet(); // in [0,2pi]
     }
 
 /**
  * Override
  */
-void Rippling::runGPU(uchar4* ptrDevPixels)
+void Fractal::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
-    rippling<<<dg,db>>>(ptrDevPixels,w,h,t);
+    //TODO
     }
 
 /*--------------*\
@@ -90,7 +89,15 @@ void Rippling::runGPU(uchar4* ptrDevPixels)
 /**
  * Override
  */
-float Rippling::getT(void)
+DomaineMath* Fractal::getDomaineMathInit(void)
+    {
+    return ptrDomaineMathInit;
+    }
+
+/**
+ * Override
+ */
+float Fractal::getT(void)
     {
     return t;
     }
@@ -98,7 +105,7 @@ float Rippling::getT(void)
 /**
  * Override
  */
-int Rippling::getW(void)
+int Fractal::getW(void)
     {
     return w;
     }
@@ -106,7 +113,7 @@ int Rippling::getW(void)
 /**
  * Override
  */
-int Rippling::getH(void)
+int Fractal::getH(void)
     {
     return h;
     }
@@ -114,7 +121,7 @@ int Rippling::getH(void)
 /**
  * Override
  */
-string Rippling::getTitle(void)
+string Fractal::getTitle(void)
     {
     return title;
     }
