@@ -1,11 +1,9 @@
-#include <iostream>
 #include <assert.h>
 
-#include "Rippling.h"
+#include "MandelbrotJulia.h"
 #include "Device.h"
-
-using std::cout;
-using std::endl;
+#include "MathTools.h"
+#include <stdio.h>
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -15,7 +13,8 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
+__global__ void fractale(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
+	int isJulia, double c1, double c2);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -37,30 +36,38 @@ extern __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
  |*	Constructeur	    *|
  \*-------------------------*/
 
-Rippling::Rippling(int w, int h, float dt)
+MandelbrotJulia::MandelbrotJulia(int w, int h, float dt, int n, int isJulia,
+	double c1, double c2, double x1, double y1, double x2, double y2) :
+	variateurAnimation(IntervalF(30, 100), dt)
     {
-    assert(w == h);
-
     // Inputs
     this->w = w;
     this->h = h;
-    this->dt = dt;
+    this->n = n;
+
+    this->c1 = c1;
+    this->c2 = c2;
+
+    this->isJulia = isJulia;
 
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
     this->db = dim3(16, 16, 1); // disons a optimiser
     this->t = 0;
+    ptrDomaineMathInit=new DomaineMath(x1,y1,x2,y2);
 
-    // Outputs
-    this->title = "Rippling Cuda";
+    //Outputs
+    this->title = "[API Image Fonctionelle] : Mandelbrot Julia zoomable CUDA";
 
+    // Check:
     //print(dg, db);
     Device::assertDim(dg, db);
+    assert(w == h);
     }
 
-Rippling::~Rippling()
+MandelbrotJulia::~MandelbrotJulia()
     {
-    // rien
+   delete ptrDomaineMathInit;
     }
 
 /*-------------------------*\
@@ -70,17 +77,18 @@ Rippling::~Rippling()
 /**
  * Override
  */
-void Rippling::animationStep()
+void MandelbrotJulia::animationStep()
     {
-    t+=dt;
+    this->t = variateurAnimation.varierAndGet(); // in [30,100]
     }
 
 /**
  * Override
  */
-void Rippling::runGPU(uchar4* ptrDevPixels)
+void MandelbrotJulia::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
-    rippling<<<dg,db>>>(ptrDevPixels,w,h,t);
+    fractale<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,getT(),t,isJulia,c1,c2);
+    //cudaDeviceSynchronize();
     }
 
 /*--------------*\
@@ -90,7 +98,15 @@ void Rippling::runGPU(uchar4* ptrDevPixels)
 /**
  * Override
  */
-float Rippling::getT(void)
+DomaineMath* MandelbrotJulia::getDomaineMathInit(void)
+    {
+    return ptrDomaineMathInit;
+    }
+
+/**
+ * Override
+ */
+float MandelbrotJulia::getT(void)
     {
     return t;
     }
@@ -98,7 +114,7 @@ float Rippling::getT(void)
 /**
  * Override
  */
-int Rippling::getW(void)
+int MandelbrotJulia::getW(void)
     {
     return w;
     }
@@ -106,7 +122,7 @@ int Rippling::getW(void)
 /**
  * Override
  */
-int Rippling::getH(void)
+int MandelbrotJulia::getH(void)
     {
     return h;
     }
@@ -114,7 +130,7 @@ int Rippling::getH(void)
 /**
  * Override
  */
-string Rippling::getTitle(void)
+string MandelbrotJulia::getTitle(void)
     {
     return title;
     }

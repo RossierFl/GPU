@@ -1,14 +1,5 @@
-#include <iostream>
-
-#include "Indice2D.h"
-#include "cudaTools.h"
-#include "Device.h"
-#include "IndiceTools.h"
-
-#include "RipplingMath.h"
-
-using std::cout;
-using std::endl;
+#include "MandelbrotJuliaProvider.h"
+#include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -22,8 +13,6 @@ using std::endl;
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
-
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
@@ -36,34 +25,44 @@ __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
  |*		Public			*|
  \*-------------------------------------*/
 
+/*-----------------*\
+ |*	static	   *|
+ \*----------------*/
+
+MandelbrotJulia* MandelbrotJuliaProvider::create()
+    {
+    int dw = 16 * 60; // =32*30=960
+    int dh = 16 * 60; // =32*30=960
+
+    int n = 102;
+
+    double c1 = -0.12;
+    double c2 = 0.85;
+
+    double x1 = -1.3968;
+    double y1 = -0.03362;
+    double x2 = -1.3578;
+    double y2 = 0.0013973;
+
+    // animation para
+    float dt = (100.0-30.0)/400.0;
+
+    int isJulia = 0;
+
+    return new MandelbrotJulia(dw, dh, dt, n, isJulia,c1,c2,x1,y1,x2,y2);
+    }
+
+ImageFonctionel* MandelbrotJuliaProvider::createGL(void)
+    {
+    ColorRGB_01* ptrColorTitre=new ColorRGB_01(0,0,0);
+
+    return new ImageFonctionel(create(),ptrColorTitre); // both ptr destroy by destructor of ImageFonctionel
+    }
+
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t)
-    {
-    RipplingMath* ripplingMath = new RipplingMath(w, h);
-    const int WH = w * h;
-
-    const int TID = Indice2D::tid();
-    const int NB_THREAD = Indice2D::nbThread();
-
-    int s = TID; // in [0,...
-
-    int i;
-    int j;
-    while (s < WH)
-	{
-	IndiceTools::toIJ(s, w, &i, &j); // s[0,W*H[ --> i[0,H[ j[0,W[
-
-	ripplingMath->color(i, j,t,ptrDevPixels[s]);
-
-	s += NB_THREAD;
-	}
-    delete ripplingMath;
-    }
-
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-

@@ -1,14 +1,13 @@
-#include <iostream>
-
 #include "Indice2D.h"
+#include "IndiceTools.h"
+#include "DomaineMath.h"
 #include "cudaTools.h"
 #include "Device.h"
-#include "IndiceTools.h"
+#include "Fractale.h"
+#include "MandelbrotMath.h"
+#include "JuliaMath.h"
 
-#include "RipplingMath.h"
 
-using std::cout;
-using std::endl;
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -22,11 +21,14 @@ using std::endl;
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
+__global__ void fractale(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
+	int isJulia, double c1, double c2);
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
+
+
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -40,27 +42,45 @@ __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t)
+__global__ void fractale(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
+	int isJulia, double c1, double c2)
     {
-    RipplingMath* ripplingMath = new RipplingMath(w, h);
-    const int WH = w * h;
+    Fractale* fractaleMath = 0;
+    if(isJulia)
+	fractaleMath = new JuliaMath(n,c1,c2);
+    else
+	fractaleMath = new MandelbrotMath(n);
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
 
-    int s = TID; // in [0,...
+    const int WH=w*h;
 
-    int i;
-    int j;
+    uchar4 color;
+
+    double x;
+    double y;
+
+    int pixelI;
+    int pixelJ;
+
+    int s = TID;
     while (s < WH)
 	{
-	IndiceTools::toIJ(s, w, &i, &j); // s[0,W*H[ --> i[0,H[ j[0,W[
+	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 
-	ripplingMath->color(i, j,t,ptrDevPixels[s]);
+	// (i,j) domaine ecran
+	// (x,y) domaine math
+	domaineMath.toXY(pixelI, pixelJ, &x, &y); //  (i,j) -> (x,y)
+
+	fractaleMath->colorXY(&color,x, y,t); // update color
+
+	ptrDevPixels[s] = color;
 
 	s += NB_THREAD;
 	}
-    delete ripplingMath;
+    delete fractaleMath;
+
     }
 
 /*----------------------------------------------------------------------*\
