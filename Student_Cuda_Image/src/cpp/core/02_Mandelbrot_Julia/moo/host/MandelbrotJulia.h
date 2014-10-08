@@ -22,7 +22,7 @@ class MandelbrotJulia: public AnimableFonctionel_I
 
     public:
 
-	MandelbrotJulia(int w, int h, float dt, int n);
+	MandelbrotJulia(int w, int h, float dt, int n,float xMin,float xMax,float yMin,float yMax,bool isJulia,float cX,float cY);
 	virtual ~MandelbrotJulia(void);
 
 	/*--------------------------------------*\

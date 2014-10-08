@@ -29,14 +29,14 @@
  |*	static	   *|
  \*----------------*/
 
-MandelbrotJulia* RipplingProvider::createMOO()
+Rippling* RipplingProvider::createMOO()
     {
     float dt = 1;
 
     int dw = 16 * 60; // =32*30=960
     int dh = 16 * 60; // =32*30=960
 
-    return new MandelbrotJulia(dw, dh, dt);
+    return new Rippling(dw, dh, dt);
     }
 
  Image* RipplingProvider::createGL(void)

@@ -16,7 +16,7 @@ class RipplingProvider
     {
     public:
 
-	static MandelbrotJulia* createMOO(void);
+	static Rippling* createMOO(void);
 	static Image* createGL(void);
 
     };

@@ -12,7 +12,7 @@
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJulia(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t);
+__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -34,7 +34,7 @@ __global__ void mandelbrotJulia(uchar4* ptrDevPixels, int w, int h, DomaineMath 
  |*	Constructeur	    *|
  \*-------------------------*/
 
-MandelbrotJulia::MandelbrotJulia(int w, int h, float dt, int n,float xMin,float xMax,float yMin,float yMax,,bool isJulia,float cX=0,float cY=0) :
+MandelbrotJulia::MandelbrotJulia(int w, int h, float dt, int n,float xMin,float xMax,float yMin,float yMax,bool isJulia,float cX=0,float cY=0) :
 	variateurAnimation(IntervalF(20, 200),dt)
     {
     // Inputs
@@ -81,7 +81,7 @@ void MandelbrotJulia::animationStep()
  */
 void MandelbrotJulia::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
-    mandelbrotJulia<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t, isJulia, cX, cY);
+    mandelbrotJuliaCu<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t, isJulia, cX, cY);
     }
 
 /*--------------*\

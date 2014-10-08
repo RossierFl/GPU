@@ -19,7 +19,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJulia(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX=0,float cY=0);
+__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -39,7 +39,7 @@ __global__ void mandelbrotJulia(uchar4* ptrDevPixels,int w, int h,DomaineMath do
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJulia(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,bool isJulia,float cX=0,float cY=0)
+__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,bool isJulia,float cX,float cY)
     {
     MandelbrotJuliaMath mandelbrotJuliaMath = MandelbrotJuliaMath(n,isJulia,cX,cY);
 

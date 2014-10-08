@@ -37,7 +37,7 @@ extern __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
  |*	Constructeur	    *|
  \*-------------------------*/
 
-MandelbrotJulia::MandelbrotJulia(int w, int h, float dt)
+Rippling::Rippling(int w, int h, float dt)
     {
     assert(w == h);
 
@@ -58,7 +58,7 @@ MandelbrotJulia::MandelbrotJulia(int w, int h, float dt)
     Device::assertDim(dg, db);
     }
 
-MandelbrotJulia::~MandelbrotJulia()
+Rippling::~Rippling()
     {
     // rien
     }
@@ -70,7 +70,7 @@ MandelbrotJulia::~MandelbrotJulia()
 /**
  * Override
  */
-void MandelbrotJulia::animationStep()
+void Rippling::animationStep()
     {
     // TODO
      t+=dt;
@@ -79,7 +79,7 @@ void MandelbrotJulia::animationStep()
 /**
  * Override
  */
-void MandelbrotJulia::runGPU(uchar4* ptrDevPixels)
+void Rippling::runGPU(uchar4* ptrDevPixels)
     {
     // TODO lancer le kernel avec <<<dg,db>>>
     rippling<<<dg,db>>>(ptrDevPixels,w,h,t);
@@ -92,7 +92,7 @@ void MandelbrotJulia::runGPU(uchar4* ptrDevPixels)
 /**
  * Override
  */
-float MandelbrotJulia::getT(void)
+float Rippling::getT(void)
     {
     return t;
     }
@@ -100,7 +100,7 @@ float MandelbrotJulia::getT(void)
 /**
  * Override
  */
-int MandelbrotJulia::getW(void)
+int Rippling::getW(void)
     {
     return w;
     }
@@ -108,7 +108,7 @@ int MandelbrotJulia::getW(void)
 /**
  * Override
  */
-int MandelbrotJulia::getH(void)
+int Rippling::getH(void)
     {
     return h;
     }
@@ -116,7 +116,7 @@ int MandelbrotJulia::getH(void)
 /**
  * Override
  */
-string MandelbrotJulia::getTitle(void)
+string Rippling::getTitle(void)
     {
     return title;
     }

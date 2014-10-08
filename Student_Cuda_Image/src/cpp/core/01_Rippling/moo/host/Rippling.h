@@ -13,7 +13,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class MandelbrotJulia: public Animable_I
+class Rippling: public Animable_I
     {
 	/*--------------------------------------*\
 	|*		Constructor		*|
@@ -21,8 +21,8 @@ class MandelbrotJulia: public Animable_I
 
     public:
 
-	MandelbrotJulia(int w, int h, float dt = 2 * PI / 10);
-	virtual ~MandelbrotJulia(void);
+	Rippling(int w, int h, float dt = 2 * PI / 10);
+	virtual ~Rippling(void);
 
 	/*--------------------------------------*\
 	 |*		Methodes		*|
