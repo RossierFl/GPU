@@ -1,18 +1,10 @@
-#include <iostream>
 #include <assert.h>
-
-
-#include "MathTools.h"
 
 #include "MandelbrotJulia.h"
 #include "Device.h"
-#include "DomaineMath.h"
-
-using std::cout;
-using std::endl;
+#include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
- |*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
 
@@ -20,7 +12,7 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void MandelbrotJulia(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t);
+__global__ void mandelbrotJulia(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -42,17 +34,16 @@ __global__ void MandelbrotJulia(uchar4* ptrDevPixels, int w, int h, DomaineMath 
  |*	Constructeur	    *|
  \*-------------------------*/
 
-MandelbrotJulia::MandelbrotJulia(unsigned int w, unsigned int h, float dt, int n, float xMin,float xMax,float yMin,float yMax,bool isJulia,float cX,float cY) :
-	variateurAnimation(IntervalF(10, 100), dt)
+MandelbrotJulia::MandelbrotJulia(int w, int h, float dt, int n,float xMin,float xMax,float yMin,float yMax,,bool isJulia,float cX=0,float cY=0) :
+	variateurAnimation(IntervalF(20, 200),dt)
     {
     // Inputs
     this->w = w;
     this->h = h;
     this->n = n;
-    this->cX=cX;
+	this->cX=cX;
     this->cY=cY;
     this->isJulia=isJulia;
-
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
     this->db = dim3(16, 16, 1); // disons a optimiser
@@ -60,7 +51,7 @@ MandelbrotJulia::MandelbrotJulia(unsigned int w, unsigned int h, float dt, int n
     ptrDomaineMathInit=new DomaineMath(xMin,yMin,xMax,yMax);
 
     //Outputs
-    this->title = "MandelbrotJulia  CUDA";
+    this->title = "[API Image Fonctionelle] : MandelbrotJulia zoomable CUDA";
 
     // Check:
     //print(dg, db);
@@ -90,11 +81,11 @@ void MandelbrotJulia::animationStep()
  */
 void MandelbrotJulia::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
-    mandelbrotJulia<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,t,cX,cY,isJulia);
+    mandelbrotJulia<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t, isJulia, cX, cY);
     }
 
 /*--------------*\
- |*	get	 *|
+ |*	get	 *|,
  \*--------------*/
 
 /**
@@ -144,3 +135,4 @@ string MandelbrotJulia::getTitle(void)
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
+

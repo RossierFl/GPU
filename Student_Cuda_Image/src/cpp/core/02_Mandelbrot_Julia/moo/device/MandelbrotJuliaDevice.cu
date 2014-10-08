@@ -1,14 +1,11 @@
-#include <iostream>
-
 #include "Indice2D.h"
+#include "IndiceTools.h"
+#include "DomaineMath.h"
 #include "cudaTools.h"
 #include "Device.h"
-
 #include "MandelbrotJuliaMath.h"
-#include "IndiceTools.h"
 
-using std::cout;
-using std::endl;
+
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -22,11 +19,13 @@ using std::endl;
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJulia(uchar4* ptrDevPixels,int w, int h, DomaineMath & domaineMath,float t,float cX,float cY,bool isJulia);
+__global__ void mandelbrotJulia(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX=0,float cY=0);
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
+
+
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -40,49 +39,38 @@ __global__ void mandelbrotJulia(uchar4* ptrDevPixels,int w, int h, DomaineMath &
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJulia(uchar4* ptrDevPixels,int w, int h, DomaineMath & domaineMath,float t,float cX,float cY,bool isJulia)
+__global__ void mandelbrotJulia(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,bool isJulia,float cX=0,float cY=0)
     {
-    MandelbrotJuliaMath MandelbrotJuliaMath(n,isJulia,cX,cY); // ici pour preparer cuda
+    MandelbrotJuliaMath mandelbrotJuliaMath = MandelbrotJuliaMath(n,isJulia,cX,cY);
 
-    // TODO pattern entrelacement
+    const int TID = Indice2D::tid();
+    const int NB_THREAD = Indice2D::nbThread();
 
+    const int WH=w*h;
 
+    uchar4 color;
 
+    double x;
+    double y;
 
-       const int WH = w * h;
+    int pixelI;
+    int pixelJ;
 
+    int s = TID;
+    while (s < WH)
+	{
+	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 
-       const int TID = Indice2D::tid();
-   	const int NB_THREAD = Indice2D::nbThread();// dans region parallel
+	// (i,j) domaine ecran
+	// (x,y) domaine math
+	domaineMath.toXY(pixelI, pixelJ, &x, &y); //  (i,j) -> (x,y)
+	
+	mandelbrotJuliaMath.colorXY(&color,x, y,domaineMath,t); // update color
 
-   	int s = TID; // in [0,...
+	ptrDevPixels[s] = color;
 
-   	int i;
-   	int j;
-   	while (s < WH)
-   	    {
-   	    IndiceTools::toIJ(s, w, &i, &j); // s[0,W*H[ --> i[0,H[ j[0,W[
-
-   	 // (i,j) domaine ecran dans N2
-   	   	    // (x,y) domaine math dans R2
-
-   	   	    double x;
-   	   	    double y;
-
-   	   	    domaineMath.toXY(i, j, &x, &y); // fill (x,y) from (i,j)
-
-   	   	   // float t=variateurT.get();
-   	   	   // float t=12;
-   	   	    ptrMandelbrotJuliaMath->colorXY(ptrColorIJ,x, y, domaineMath,t);
-
-   	    s += NB_THREAD;
-   	    }
-
-
-
-
-
-
+	s += NB_THREAD;
+	}
 
     }
 

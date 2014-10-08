@@ -1,9 +1,8 @@
-#ifndef MandelbrotJulia_PROVIDER_H_
-#define MandelbrotJulia_PROVIDER_H_
+#ifndef MANDELBROT_JULIA_PROVIDER_H_
+#define MANDELBROT_JULIA_PROVIDER_H_
+
 #include "MandelbrotJulia.h"
 #include "ImageFonctionel.h"
-
-
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -19,6 +18,7 @@ class MandelbrotJuliaProvider
 
 	static MandelbrotJulia* create(void);
 	static ImageFonctionel* createGL(void);
+
 
     };
 

@@ -1,10 +1,11 @@
-#ifndef RIPPLING_H_
-#define RIPPLING_H_
+#ifndef MANDELBROT_JULIA_H_
+#define HELLO_FONCTIONEL_H_
 
 #include "cudaTools.h"
 #include "AnimableFonctionel_I.h"
 #include "MathTools.h"
 #include "VariateurF.h"
+
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
@@ -15,12 +16,14 @@
 
 class MandelbrotJulia: public AnimableFonctionel_I
     {
+	/*--------------------------------------*\
+	|*		Constructor		*|
+	 \*-------------------------------------*/
 
     public:
-	MandelbrotJulia(unsigned int w, unsigned int h, float dt, int n, float xMin,float xMax,float yMin,float yMax,bool isJulia,float cX0,float cY);
-	~MandelbrotJulia();
-	void mandelbrotJulia(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t);
 
+	MandelbrotJulia(int w, int h, float dt, int n);
+	virtual ~MandelbrotJulia(void);
 
 	/*--------------------------------------*\
 	 |*		Methodes		*|
