@@ -37,31 +37,29 @@ extern __global__ void rippling(uchar4* ptrDevPixels, int w, int h, float t);
  |*	Constructeur	    *|
  \*-------------------------*/
 
-Rippling::Rippling(int w, int h, float dt)
-    {
-    assert(w == h);
+Rippling::Rippling(int w, int h, float dt) {
+	assert(w == h);
 
-    // Inputs
-    this->w = w;
-    this->h = h;
-    this->dt = dt;
+	// Inputs
+	this->w = w;
+	this->h = h;
+	this->dt = dt;
 
-    // Tools
-    //this->dg = // TODO
-    //this->db = // TODO
-    this->t = 0;
+	// Tools
+	this->dg = dim3(16, 16, 1);
+	this->db = dim3(8, 8, 1);
+	this->t = 0;
 
-    // Outputs
-    this->title = "Rippling Cuda";
+	// Outputs
+	this->title = "Rippling Cuda";
 
-    //print(dg, db);
-    Device::assertDim(dg, db);
-    }
+	//print(dg, db);
+	Device::assertDim(dg, db);
+}
 
-Rippling::~Rippling()
-    {
-    // rien
-    }
+Rippling::~Rippling() {
+	// rien
+}
 
 /*-------------------------*\
  |*	Methode		    *|
@@ -70,18 +68,16 @@ Rippling::~Rippling()
 /**
  * Override
  */
-void Rippling::animationStep()
-    {
-    // TODO
-    }
+void Rippling::animationStep() {
+	t += dt;
+}
 
 /**
  * Override
  */
-void Rippling::runGPU(uchar4* ptrDevPixels)
-    {
-    // TODO lancer le kernel avec <<<dg,db>>>
-    }
+void Rippling::runGPU(uchar4* ptrDevPixels) {
+rippling<<< db, db >>>(ptrDevPixels, w, h, t);
+}
 
 /*--------------*\
  |*	get	 *|
@@ -90,34 +86,30 @@ void Rippling::runGPU(uchar4* ptrDevPixels)
 /**
  * Override
  */
-float Rippling::getT(void)
-    {
-    return t;
-    }
+float Rippling::getT(void) {
+return t;
+}
 
 /**
  * Override
  */
-int Rippling::getW(void)
-    {
-    return w;
-    }
+int Rippling::getW(void) {
+return w;
+}
 
 /**
  * Override
  */
-int Rippling::getH(void)
-    {
-    return h;
-    }
+int Rippling::getH(void) {
+return h;
+}
 
 /**
  * Override
  */
-string Rippling::getTitle(void)
-    {
-    return title;
-    }
+string Rippling::getTitle(void) {
+return title;
+}
 
 /*--------------------------------------*\
  |*		Private			*|
