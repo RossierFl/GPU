@@ -1,9 +1,9 @@
-#ifndef FRACTAL_H_
-#define FRACTAL_H_
+#ifndef FRACTAL_MANDELBROT_H_
+#define FRACTAL_MANDELBROT_H_
 
 #include "ColorTools.h"
 #include <math.h>
-#include <iostream>
+
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
@@ -15,7 +15,7 @@
 /**
  * Dans un header only pour preparer la version cuda
  */
-class FractalMath
+class FractalMandelbrot : public FractalMath
     {
 	/*--------------------------------------*\
 	 |*		Constructeur		*|
@@ -26,18 +26,17 @@ class FractalMath
 	/**
 	 * calibreurColor : transformation affine entre [-1,1] (l'output de f(x,y)) et [0,1] (le spectre hsb)
 	 */
-  __device__ FractalMath(int n)
+      __device__ FractalMandelbrot(int n) :FractalMath(n)
 		//calibreur(IntervalF(-1, 1), IntervalF(0, 1))
 	    {
+
 	    this->n = n;
 	    }
 
-	__device__ virtual ~FractalMath(void)
+      __device__ virtual ~FractalMandelbrot(void)
 	    {
 	    // rien
 	    }
-
-	__device__ virtual void indiceArret(double x, double y,int* ret)=0;
 
 	/*--------------------------------------*\
 	|*		Methode			*|
@@ -45,27 +44,17 @@ class FractalMath
 
     public:
 
-	__device__ void colorXY(uchar4* ptrColor, double x, double y, const DomaineMath& domaineMath)
-	    {
-
-	    int* k ;
-	    this->indiceArret(x,y,k);
-
-	    if(*k==n){
-		//paint it black
-		ptrColor->x = 0;
-		ptrColor->y = 0;
-		ptrColor->z = 0;
-		//std::cout<<"black"<<std::endl;
-	    }else{
-		//HSB with h=h(k)
-		double col = 1.0/(float)n*(*k);
-		ColorTools::HSB_TO_RVB(col,ptrColor);
-
-	    }
-	    ptrColor->w = 255; // opaque
-
-	    }
+      __device__ void indiceArret(double x, double y,int* ret){
+	      double a = 0.0;
+	      double b = 0.0;
+	      *ret = 0;
+	      while(*ret<n&&a*a+b*b<4){
+		  double ca = a;
+		  a = (a*a-b*b)+x;
+		  b = 2*ca*b+y;
+		  *ret++;
+	      }
+	}
 
 	/*--------------------------------------*\
 	|*		Attribut		*|

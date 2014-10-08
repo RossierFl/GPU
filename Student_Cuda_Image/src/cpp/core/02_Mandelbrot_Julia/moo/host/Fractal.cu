@@ -12,7 +12,8 @@
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void fractal(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t);
+__global__ void fractal(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMath domaineMath, int n,double cx, double cy);
+//uchar4* ptrDevPixels,int w, int h,bool julia,DomaineMath domaineMath, int n,double cx, double cy
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -34,19 +35,20 @@ __global__ void fractal(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineM
  |*	Constructeur	    *|
  \*-------------------------*/
 
-Fractal::Fractal(int w, int h, float dt, int n) :
-	variateurAnimation(IntervalF(0, 2 * PI), dt)
+Fractal::Fractal(int w, int h, float dt,  int nMin,int nMax,bool julia,double cx,double cy,double xMin, double xMax, double yMin, double yMax) :
+	variateurAnimation(IntervalI(nMin,nMax), dt)
     {
     // Inputs
     this->w = w;
     this->h = h;
-    this->n = n;
-
+    this->julia = julia;
+    this->cx = cx;
+    this->cy = cy;
+    this->n = nMin;
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
     this->db = dim3(16, 16, 1); // disons a optimiser
-    this->t = 0;
-    ptrDomaineMathInit=new DomaineMath(0,0,2*PI,2*PI);
+    ptrDomaineMathInit=new DomaineMath(xMin,yMin,xMax,yMax);
 
     //Outputs
     this->title = "[API Image Fonctionelle] : Fractal zoomable CUDA";
@@ -54,7 +56,6 @@ Fractal::Fractal(int w, int h, float dt, int n) :
     // Check:
     //print(dg, db);
     Device::assertDim(dg, db);
-    assert(w == h);
     }
 
 Fractal::~Fractal()
@@ -71,7 +72,7 @@ Fractal::~Fractal()
  */
 void Fractal::animationStep()
     {
-    this->t = variateurAnimation.varierAndGet(); // in [0,2pi]
+    this->n = variateurAnimation.varierAndGet(); // in [0,2pi]
     }
 
 /**
@@ -79,7 +80,8 @@ void Fractal::animationStep()
  */
 void Fractal::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
-    //TODO
+    fractal<<<dg,db>>>(ptrDevPixels,this->w,this->h,this->julia,*ptrDomaineMathInit,this->n,this->cx,this->cy);
+    //uchar4* ptrDevPixels,int w, int h,bool julia,DomaineMath domaineMath, int n,double cx, double cy
     }
 
 /*--------------*\
@@ -99,6 +101,7 @@ DomaineMath* Fractal::getDomaineMathInit(void)
  */
 float Fractal::getT(void)
     {
+    t=n;
     return t;
     }
 

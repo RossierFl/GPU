@@ -4,6 +4,8 @@
 #include "cudaTools.h"
 #include "Device.h"
 #include "FractalMath.h"
+#include "FractalMandelbrot.h"
+#include "FractalJulia.h"
 
 
 
@@ -19,7 +21,8 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void fractal(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t);
+__global__ void fractal(uchar4* ptrDevPixels,int w, int h,bool julia,DomaineMath domaineMath, int n,double cx, double cy);
+__device__ void workPixel(uchar4* ptrColorIJ,int i, int j,int s, const DomaineMath& domaineMath,FractalMath* ptrFractalMath);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -39,14 +42,47 @@ __global__ void fractal(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMat
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void fractal(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t)
+__global__ void fractal(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMath domaineMath, int n,double cx, double cy)
     {
-    FractalMath fractalMath = FractalMath(n);
+    FractalMath* fractalMath;
+    if(julia){
+      	fractalMath = new FractalJulia(n,cx,cy);// ici pour preparer cuda
+    }else{
+      	fractalMath = new FractalMandelbrot(n);// ici pour preparer cuda
+    }
+    const int NB_THREAD = Indice2D::nbThread(); // dans region parallel
 
-    //TODO
+    const int TID = Indice2D::tid();
+    int s = TID; // in [0,...
+
+    int i;
+    int j;
+    int WH = w*h;
+    while (s < WH)
+	{
+	IndiceTools::toIJ(s,w,&i,&j); // s[0,W*H[ --> i[0,H[ j[0,W[
+
+	workPixel(&ptrDevPixels[s],i, j,s, domaineMath,fractalMath);
+
+	s += NB_THREAD;
+	}
 
     }
 
+
+__device__ void workPixel(uchar4* ptrColorIJ,int i, int j,int s, const DomaineMath& domaineMath,FractalMath* ptrFractalMath)
+    {
+
+    // (i,j) domaine ecran dans N2
+    // (x,y) domaine math dans R2
+   // std::cout<<"print"<<std::endl;
+    double x;
+    double y;
+
+    domaineMath.toXY(i, j, &x, &y); // fill (x,y) from (i,j)
+
+    ptrFractalMath->colorXY(ptrColorIJ,x, y, domaineMath); // in [01]
+    }
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/

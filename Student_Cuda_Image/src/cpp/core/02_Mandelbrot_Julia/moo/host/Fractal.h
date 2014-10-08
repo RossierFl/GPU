@@ -1,10 +1,10 @@
 #ifndef FRACTAL_H_
-#define HELLO_FONCTIONEL_H_
+#define FRACTAL_H_
 
 #include "cudaTools.h"
 #include "AnimableFonctionel_I.h"
 #include "MathTools.h"
-#include "VariateurF.h"
+#include "VariateurI.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -22,7 +22,7 @@ class Fractal: public AnimableFonctionel_I
 
     public:
 
-	Fractal(int w, int h, float dt, int n);
+	Fractal(int w, int h, float dt, int nMin,int nMax,bool julia,double cx,double cy,double xMin, double xMax, double yMin, double yMax);
 	virtual ~Fractal(void);
 
 	/*--------------------------------------*\
@@ -65,12 +65,14 @@ class Fractal: public AnimableFonctionel_I
 	int w;
 	int h;
 	int n;
+	bool julia;
+	double cx,cy;
 
 	// Tools
 	dim3 dg;
 	dim3 db;
 	float t; // para animation
-	VariateurF variateurAnimation; // varier t
+	VariateurI variateurAnimation; // varier t
 	DomaineMath* ptrDomaineMathInit;
 
 	//Outputs
