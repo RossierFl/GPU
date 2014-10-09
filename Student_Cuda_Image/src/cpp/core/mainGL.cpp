@@ -52,7 +52,7 @@ int mainGL(void)
     bool isSelection = true;
 
    // GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
-   // GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
+  //  GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
     // TODO : Insert here autres ImageViewers ...
     GLUTImageViewers mandelbrotJuliaViewer(ptrMandelbrotJulia, isAnimation, isSelection, 0, 0);
 
