@@ -200,9 +200,9 @@ class NewtonMath
 		}
 	    else if(couleur == NOT_CONVERGE_ERROR)
 		{
-		ptrColor->x = 255; // blanc
-		ptrColor->y = 165; // blanc
-		ptrColor->z = 0; // blanc
+		ptrColor->x = 255; // orange
+		ptrColor->y = 165; // orange
+		ptrColor->z = 0; // orange
 		}
 
 	    ptrColor->w = 255; // opaque
