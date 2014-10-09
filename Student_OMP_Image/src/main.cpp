@@ -36,36 +36,35 @@ static int run(void);
  |*		Public			*|
  \*-------------------------------------*/
 
-int main(int argc, char** argv)
-    {
-    cout << "main" << endl;
+int main(int argc, char** argv) {
+	cout << "main" << endl;
 
-    GLUTImageViewers::init(argc, argv); // call once
+	GLUTImageViewers::init(argc, argv); // call once
 
-    return run(); // Bloquant, Tant qu'une fenetre est ouverte
-    }
+	return run(); // Bloquant, Tant qu'une fenetre est ouverte
+}
 
-int run(void)
-    {
-    bool isAnimation = true;
-    bool isSelectionEnable = false;
+int run(void) {
+	bool isAnimation = true;
+	bool isSelectionEnable = false;
 
-    RipplingImage* ptrRippling = RipplingProvider::create();
+	RipplingImage* ptrRippling = RipplingProvider::create();
+	Julia
 
-    GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelectionEnable, 20, 20);
-    // Insert here other viewers ...
+	GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelectionEnable, 20, 20);
+	// Insert here other viewers ...
 
-    GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
+	GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
-    // destruction
+	// destruction
 	{
-	delete ptrRippling;
+		delete ptrRippling;
 
-	ptrRippling = NULL;
+		ptrRippling = NULL;
 	}
 
-    return EXIT_SUCCESS;
-    }
+	return EXIT_SUCCESS;
+}
 
 /*--------------------------------------*\
  |*		Private			*|
