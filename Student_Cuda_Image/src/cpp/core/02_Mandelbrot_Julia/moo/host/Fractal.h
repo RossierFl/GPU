@@ -22,7 +22,7 @@ class Fractal: public AnimableFonctionel_I
 
     public:
 
-	Fractal(int w, int h, float dt, int nMin,int nMax,bool julia,double cx,double cy,double xMin, double xMax, double yMin, double yMax);
+	Fractal(int w, int h, int dt, int nMin,int nMax,bool julia,double cx,double cy,double xMin, double xMax, double yMin, double yMax);
 	virtual ~Fractal(void);
 
 	/*--------------------------------------*\

@@ -44,16 +44,17 @@ class FractalMandelbrot : public FractalMath
 
     public:
 
-      __device__ void indiceArret(double x, double y,int* ret){
+      __device__ int indiceArret(double x, double y, int t){
 	      double a = 0.0;
 	      double b = 0.0;
-	      *ret = 0;
-	      while(*ret<n&&a*a+b*b<4){
+	      int ret = 0;
+	      while(ret<t&&a*a+b*b<4){
 		  double ca = a;
 		  a = (a*a-b*b)+x;
 		  b = 2*ca*b+y;
-		  *ret++;
+		  ret++;
 	      }
+	      return ret;
 	}
 
 	/*--------------------------------------*\

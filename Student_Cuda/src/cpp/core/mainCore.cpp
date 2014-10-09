@@ -14,6 +14,7 @@ using std::endl;
  \*-------------------------------------*/
 
 extern bool useHello(void);
+extern void use(void);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -39,6 +40,7 @@ int mainCore()
     {
     bool isOk = true;
     isOk &= useHello();
+    use();
 
     cout << "\nisOK = " << isOk << endl;
     cout << "\nEnd : mainCore" << endl;

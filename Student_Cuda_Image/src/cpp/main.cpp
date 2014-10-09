@@ -84,7 +84,7 @@ void initCuda(int deviceId)
     // Choose current device  (state of host-thread)
     HANDLE_ERROR(cudaSetDevice(deviceId));
 
-    // Enable Interoperabilité OpenGL:
+    // Enable Interoperabilitï¿½ OpenGL:
     //		- Create a cuda specifique contexte, shared between Cuda and GL
     //		- To be called before first call to kernel
     //		- cudaSetDevice ou cudaGLSetGLDevice are mutualy exclusive
@@ -99,7 +99,7 @@ int start(void)
     {
     Device::printCurrent();
 
-    bool IS_GL = true;
+    bool IS_GL = false;
 
     if (IS_GL)
 	{

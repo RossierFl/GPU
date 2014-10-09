@@ -32,12 +32,12 @@ class FractalMath
 	    this->n = n;
 	    }
 
-	__device__ virtual ~FractalMath(void)
+	__device__ ~FractalMath(void)
 	    {
 	    // rien
 	    }
 
-	__device__ virtual void indiceArret(double x, double y,int* ret)=0;
+	__device__ virtual int indiceArret(double x, double y,int t)=0;
 
 	/*--------------------------------------*\
 	|*		Methode			*|
@@ -45,13 +45,13 @@ class FractalMath
 
     public:
 
-	__device__ void colorXY(uchar4* ptrColor, double x, double y, const DomaineMath& domaineMath)
+	__device__ void colorXY(uchar4* ptrColor, double x, double y, const DomaineMath& domaineMath, float t)
 	    {
 
-	    int* k ;
-	    this->indiceArret(x,y,k);
+	    //int k =0;
+	    int k = this->indiceArret(x,y,t);
 
-	    if(*k==n){
+	    if(k==n){
 		//paint it black
 		ptrColor->x = 0;
 		ptrColor->y = 0;
@@ -59,7 +59,7 @@ class FractalMath
 		//std::cout<<"black"<<std::endl;
 	    }else{
 		//HSB with h=h(k)
-		double col = 1.0/(float)n*(*k);
+		double col = 1.0/t*(float)k;
 		ColorTools::HSB_TO_RVB(col,ptrColor);
 
 	    }

@@ -12,7 +12,7 @@
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void fractal(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMath domaineMath, int n,double cx, double cy);
+__global__ void fractal(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMath domaineMath, int n,float t,double cx, double cy);
 //uchar4* ptrDevPixels,int w, int h,bool julia,DomaineMath domaineMath, int n,double cx, double cy
 
 /*--------------------------------------*\
@@ -35,7 +35,7 @@ __global__ void fractal(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMa
  |*	Constructeur	    *|
  \*-------------------------*/
 
-Fractal::Fractal(int w, int h, float dt,  int nMin,int nMax,bool julia,double cx,double cy,double xMin, double xMax, double yMin, double yMax) :
+Fractal::Fractal(int w, int h, int dt,  int nMin,int nMax,bool julia,double cx,double cy,double xMin, double xMax, double yMin, double yMax) :
 	variateurAnimation(IntervalI(nMin,nMax), dt)
     {
     // Inputs
@@ -45,9 +45,11 @@ Fractal::Fractal(int w, int h, float dt,  int nMin,int nMax,bool julia,double cx
     this->cx = cx;
     this->cy = cy;
     this->n = nMin;
+    this->t=0;
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
     this->db = dim3(16, 16, 1); // disons a optimiser
+    Device::assertDim(dg, db);
     ptrDomaineMathInit=new DomaineMath(xMin,yMin,xMax,yMax);
 
     //Outputs
@@ -55,7 +57,7 @@ Fractal::Fractal(int w, int h, float dt,  int nMin,int nMax,bool julia,double cx
 
     // Check:
     //print(dg, db);
-    Device::assertDim(dg, db);
+    std::cout<<"construc"<<std::endl;
     }
 
 Fractal::~Fractal()
@@ -72,7 +74,7 @@ Fractal::~Fractal()
  */
 void Fractal::animationStep()
     {
-    this->n = variateurAnimation.varierAndGet(); // in [0,2pi]
+    this->t = variateurAnimation.varierAndGet(); // in [0,2pi]
     }
 
 /**
@@ -80,7 +82,10 @@ void Fractal::animationStep()
  */
 void Fractal::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
-    fractal<<<dg,db>>>(ptrDevPixels,this->w,this->h,this->julia,*ptrDomaineMathInit,this->n,this->cx,this->cy);
+    fractal<<<dg,db>>>(ptrDevPixels,w,h,julia,domaineMath,n,t,cx,cy);
+    Device::synchronize();
+    Device::checkKernelError("fractal");
+
     //uchar4* ptrDevPixels,int w, int h,bool julia,DomaineMath domaineMath, int n,double cx, double cy
     }
 
@@ -101,7 +106,6 @@ DomaineMath* Fractal::getDomaineMathInit(void)
  */
 float Fractal::getT(void)
     {
-    t=n;
     return t;
     }
 

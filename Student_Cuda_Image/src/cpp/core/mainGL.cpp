@@ -43,29 +43,29 @@ int mainGL(void);
 
 int mainGL(void)
     {
-    Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
+    //Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
     Image* ptrRippling = RipplingProvider::createGL();
-    ImageFonctionel* ptrFractal = FractalProvider::createGL();
+    //ImageFonctionel* ptrFractal = FractalProvider::createGL();
     // TODO : Insert  autres Images ...
 
     bool isAnimation = true;
     bool isSelection = true;
 
-    GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
+    //GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
     GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
-    GLUTImageViewers fractalViewer(ptrFractal,isAnimation,isSelection,20,20);
+    //GLUTImageViewers fractalViewer(ptrFractal,isAnimation,isSelection,20,20);
     // TODO : Insert here autres ImageViewers ...
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
     // destruction
 	{
-	delete ptrRippling0;
+	//delete ptrRippling0;
 	delete ptrRippling;
-	delete ptrFractal;
-	ptrRippling0 = NULL;
+	//delete ptrFractal;
+	//ptrRippling0 = NULL;
 	ptrRippling = NULL;
-	ptrFractal = NULL;
+	//ptrFractal = NULL;
 	}
 
     return EXIT_SUCCESS;

@@ -27,7 +27,6 @@ class FractalJulia : public FractalMath
 	 * calibreurColor : transformation affine entre [-1,1] (l'output de f(x,y)) et [0,1] (le spectre hsb)
 	 */
   __device__ FractalJulia(int n,double cx,double cy):FractalMath(n)
-		//calibreur(IntervalF(-1, 1), IntervalF(0, 1))
 	    {
 	    this->n = n;
 	    this->cx = cx;
@@ -47,16 +46,17 @@ class FractalJulia : public FractalMath
 
     public:
 
-  __device__ void indiceArret(double x, double y,int* ret){
+  __device__ int indiceArret(double x, double y,int t){
 	  double a = x;
 	  double b = y;
-	  *ret = 0;
-	  while(*ret<n&&a*a+b*b<4){
+	  int ret = 0;
+	  while(ret<t&&a*a+b*b<4){
 	      double ca = a;
 	      a = (a*a-b*b)+this->cx;
 	      b = 2*ca*b+this->cy;
-	      *ret++;
+	      ret++;
 	  }
+	  return ret;
 	}
 
 	/*--------------------------------------*\

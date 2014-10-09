@@ -1,9 +1,11 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
-
+#include "AnimateurFreeGL.h"
+#include "AnimateurFonctionelFreeGL.h"
 #include "Device.h"
 #include "cudaTools.h"
+#include "FractalProvider.h"
 
 using std::cout;
 using std::endl;
@@ -41,10 +43,10 @@ int mainFreeGL(void)
     {
     cout << "\n[FPS] :  Free GL, please wait ..." << endl;
 
-    rippling0FreeGL(1000); // bad technique
+    //rippling0FreeGL(1000); // bad technique
+    Fractal* ptrFractal = FractalProvider::create();
 
-    // TODO : add other tp here ...
-
+    AnimateurFonctionelFreeGL fractalFreeGL(ptrFractal);
     return EXIT_SUCCESS;
     }
 
