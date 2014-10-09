@@ -10,6 +10,7 @@
 #include "Rippling0Provider.h"
 #include "RipplingProvider.h"
 #include "MandelbrotJuliaProvider.h"
+#include "NewtonProvider.h"
 
 using std::cout;
 using std::endl;
@@ -46,13 +47,15 @@ int mainGL(void)
     //Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
     Image* ptrRippling = RipplingProvider::createGL();
     ImageFonctionel* ptrMandelbrot = MandelbrotJuliaProvider::createGL();
+    ImageFonctionel* ptrNewton = NewtonProvider::createGL();
 
     bool isAnimation = true;
     bool isSelection = true;
 
     //GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
     //GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
-    GLUTImageViewers mandelBrotViewer(ptrMandelbrot,isAnimation,isSelection,10,10);
+    //GLUTImageViewers mandelBrotViewer(ptrMandelbrot,isAnimation,isSelection,10,10);
+    GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,10,10);
     // TODO : Insert here autres ImageViewers ...
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
@@ -62,10 +65,12 @@ int mainGL(void)
 	//delete ptrRippling0;
 	delete ptrRippling;
 	delete ptrMandelbrot;
+	delete ptrNewton;
 
 	//ptrRippling0 = NULL;
 	ptrRippling = NULL;
 	ptrMandelbrot = NULL;
+	ptrNewton = NULL;
 	}
 
     return EXIT_SUCCESS;
