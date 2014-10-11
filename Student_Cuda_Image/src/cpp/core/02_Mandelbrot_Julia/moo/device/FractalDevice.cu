@@ -67,6 +67,8 @@ __global__ void fractal(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMa
 	s += NB_THREAD;
 	}
 
+    delete fractalMath;
+
     }
 
 

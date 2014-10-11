@@ -99,7 +99,7 @@ int start(void)
     {
     Device::printCurrent();
 
-    bool IS_GL = false;
+    bool IS_GL = true;
 
     if (IS_GL)
 	{
