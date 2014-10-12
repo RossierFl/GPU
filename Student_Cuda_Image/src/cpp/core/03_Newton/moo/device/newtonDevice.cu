@@ -20,7 +20,7 @@
  \*-------------------------------------*/
 
 __global__ void fractaleNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
-	float epsilonx, float* jacobiMatrix);
+	float epsilonx, float epsilonf, float epsilonxstar,float* jacobiMatrix);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -41,7 +41,7 @@ __global__ void fractaleNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath d
  \*-------------------------------------*/
 
 __global__ void fractaleNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
-	float epsilonx, float* jacobiMatrix)
+	float epsilonx, float epsilonf, float epsilonxstar,float* jacobiMatrix)
     {
     NewtonMath* newtonMath = new NewtonMath(n);
 
@@ -67,7 +67,7 @@ __global__ void fractaleNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath d
 	// (x,y) domaine math
 	domaineMath.toXY(pixelI, pixelJ, &x, &y); //  (i,j) -> (x,y)
 
-	newtonMath->colorXY(&color,x, y,t,epsilonx,jacobiMatrix); // update color
+	newtonMath->colorXY(&color,x, y,t,epsilonx,epsilonf,epsilonxstar,jacobiMatrix); // update color
 
 	ptrDevPixels[s] = color;
 

@@ -54,7 +54,8 @@ class NewtonMath
     public:
 
 	__device__
-	int indiceArret(float x1, float x2, float epsilonx, float* jacobiMatrix)
+	int indiceArret(float x1, float x2, float epsilonx, float epsilonf,
+		float epsilonxstar,float* jacobiMatrix)
 	    {
 
 	float crtX1 = x1;
@@ -63,30 +64,56 @@ class NewtonMath
 	float nextX1,nextX2;
 	float solX1, solX2;
 	int nbIters = 0;
-	while(nbIters < 500)
+	int itersNotConverge = 500;
+	while(nbIters < itersNotConverge)
 	    {
 	    jacobi(crtX1,crtX2,jacobiMatrix);
 	    inverse(jacobiMatrix);
 	    matrixVectorMult(jacobiMatrix,f1(crtX1,crtX2),f2(crtX1,crtX2),&solX1,&solX2);
 	    nextX1 = crtX1 - solX1;
 	    nextX2 = crtX2 - solX2;
-	    if(normSquare(crtX1-xa.x1,crtX2-xa.x2)/normSquare(xa.x1,xa.x2) < epsilonx)
+	    // current X is near solution a, b or c
+	    if(normSquare(crtX1-xa.x1,crtX2-xa.x2)/normSquare(xa.x1,xa.x2) < epsilonxstar)
 		{
-		return 0;
+		return NOIR;
 		}
-	    else if(normSquare(crtX1-xb.x1,crtX2-xb.x2)/normSquare(xb.x1,xb.x2) < epsilonx)
+	    else if(normSquare(crtX1-xb.x1,crtX2-xb.x2)/normSquare(xb.x1,xb.x2) < epsilonxstar)
 		{
-		return 1;
+		return GRIS;
 		}
-	    else if(normSquare(crtX1-xc.x1,crtX2-xc.x1)/normSquare(xc.x1,xc.x2) < epsilonx)
+	    else if(normSquare(crtX1-xc.x1,crtX2-xc.x1)/normSquare(xc.x1,xc.x2) < epsilonxstar)
 		{
-		return 2;
+		return BLANC;
+		}
+	    // iteration doesn't move enough OR solution is good enough
+	    if(normSquare(crtX1-nextX1,crtX2-nextX2)/normSquare(nextX1,nextX2) < epsilonx ||
+		    normSquare(f1(crtX1, crtX2)-f1(nextX1,nextX2),f2(crtX1, crtX2)-f2(nextX1,nextX2))/
+		    normSquare(f1(nextX1,nextX2),f2(nextX1,nextX2)) < epsilonf)
+		{
+		float diffA = normSquare(nextX1-xa.x1,nextX2-xa.x2)/normSquare(xa.x1,xa.x2);
+		float diffB = normSquare(nextX1-xb.x1,nextX2-xb.x2)/normSquare(xb.x1,xb.x2);
+		float diffC = normSquare(nextX1-xc.x1,nextX2-xc.x2)/normSquare(xc.x1,xc.x2);
+
+		if(diffA < diffB)
+		    {
+		    if(diffA < diffC)
+			return NOIR; // near xa
+		    else
+			return BLANC; // near xc
+		    }
+		else
+		    {
+		    if(diffB < diffC)
+			return GRIS; // near xb
+		    else
+			return BLANC; // near xc
+		    }
 		}
 	    crtX1 = nextX1;
 	    crtX2 = nextX2;
 	    nbIters++;
 	    }
-	return 3;
+	return NOT_CONVERGE_ERROR;
 	    }
 
 	__device__
@@ -172,13 +199,10 @@ class NewtonMath
 	 * y=pixelJ
 	 */
 	__device__
-	void colorXY(uchar4* ptrColor,float x, float y,float t,float epsilonx,float* jacobiMatrix)
+	void colorXY(uchar4* ptrColor,float x, float y,float t,float epsilonx,float epsilonf,
+		float epsilonxstar,float* jacobiMatrix)
 	    {
-	    const int  NOIR = 0;
-	    const int GRIS = 1;
-	    const int BLANC = 2;
-	    const int NOT_CONVERGE_ERROR = 3;
-	    int couleur = indiceArret(x,y,epsilonx,jacobiMatrix);
+	    int couleur = indiceArret(x,y,epsilonx,epsilonf,epsilonxstar,jacobiMatrix);
 	    //printf("%f\n",k);
 	    if(couleur == NOIR)
 		{
@@ -226,6 +250,11 @@ class NewtonMath
 	struct solutions xa;
 	struct solutions xb;
 	struct solutions xc;
+
+	const static int NOIR = 0;
+	const static int GRIS = 1;
+	const static int BLANC = 2;
+	const static int NOT_CONVERGE_ERROR = 3;
 
 	// Tools
 	//CalibreurF calibreur;

@@ -48,8 +48,10 @@ Newton* NewtonProvider::create()
     float dt = (100.0-30.0)/400.0;
 
     float epsilonx = 1.0e-3;
+    float epsilonf = 1.0e-3;
+    float epsilonxstar = 1.0e-3;
 
-    return new Newton(dw, dh, dt, n, epsilonx,c1,c2,x1,y1,x2,y2);
+    return new Newton(dw, dh, dt, n, epsilonx,epsilonf,epsilonxstar,c1,c2,x1,y1,x2,y2);
     }
 
 ImageFonctionel* NewtonProvider::createGL(void)

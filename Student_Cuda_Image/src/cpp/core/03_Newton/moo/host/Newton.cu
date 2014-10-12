@@ -14,7 +14,7 @@
  \*-------------------------------------*/
 
 __global__ void fractaleNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
-	float epsilonx, float* jacobiMatrix);
+	float epsilonx, float epsilonf, float epsilonxstar,float* jacobiMatrix);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -36,7 +36,7 @@ __global__ void fractaleNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath d
  |*	Constructeur	    *|
  \*-------------------------*/
 
-Newton::Newton(int w, int h, float dt, int n, float epsilonx,
+Newton::Newton(int w, int h, float dt, int n, float epsilonx, float epsilonf, float epsilonxstar,
 	double c1, double c2, double x1, double y1, double x2, double y2) :
 		variateurAnimation(IntervalF(30, 100), dt)
     {
@@ -49,6 +49,8 @@ Newton::Newton(int w, int h, float dt, int n, float epsilonx,
     this->c2 = c2;
 
     this->epsilonx = epsilonx;
+    this->epsilonf = epsilonf;
+    this->epsilonxstar = epsilonxstar;
 
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
@@ -89,7 +91,7 @@ void Newton::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
     float* jacobiMatrix;
     cudaMalloc((void**)&jacobiMatrix,4*sizeof(jacobiMatrix[0]));
-    fractaleNewton<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t,epsilonx,jacobiMatrix);
+    fractaleNewton<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t,epsilonx,epsilonf,epsilonxstar,jacobiMatrix);
     cudaFree(jacobiMatrix);
     //cudaDeviceSynchronize();
     }

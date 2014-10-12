@@ -22,7 +22,7 @@ class Newton: public AnimableFonctionel_I
 
     public:
 
-	Newton(int w, int h, float dt, int n, float epsilonx,
+	Newton(int w, int h, float dt, int n, float epsilonx, float epsilonf, float epsilonxstar,
 		double c1, double c2, double x1, double y1, double x2, double y2);
 	virtual ~Newton(void);
 
@@ -71,6 +71,8 @@ class Newton: public AnimableFonctionel_I
 	double c2;
 
 	float epsilonx;
+	float epsilonf;
+	float epsilonxstar;
 
 	// Tools
 	dim3 dg;
