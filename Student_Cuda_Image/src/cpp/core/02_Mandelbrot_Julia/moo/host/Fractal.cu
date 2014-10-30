@@ -1,6 +1,6 @@
 #include <iostream>
 #include <assert.h>
-
+#include "MathTools.h"
 #include "Fractal.h"
 #include "Device.h"
 
@@ -15,7 +15,7 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void fractal_gpu(uchar4* ptrDevPixels, int w, int h, int n, DomaineMath& domaineMath);
+extern __global__ void fractalGPU(uchar4* ptrDevPixels, int w, int h, int n, DomaineMath domaineMath);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -37,28 +37,28 @@ extern __global__ void fractal_gpu(uchar4* ptrDevPixels, int w, int h, int n, Do
  |*	Constructeur	    *|
  \*-------------------------*/
 
-Fractal::Fractal(int w, int h, float dt, int n, float x1, float y1, float x2, float y2) :
-		variateur(IntervalI(30, 100), dt) {
+Fractal::Fractal(int w, int h, float dt, int n, double x1, double y1, double x2, double y2) :
+		variateur(IntervalF(30, 100), dt) {
 
 	// Inputs
 	this->w = w;
 	this->h = h;
 	this->n = n;
-	this->x1 = x1;
-	this->y1 = y1;
-	this->x2 = x2;
-	this->y2 = y2;
 	this->domaineMath = new DomaineMath(x1, y1, x2, y2);
+	this->t = 0;
 
 	// Tools
-	this->dg = dim3(16, 16, 1);
-	this->db = dim3(8, 8, 1);
+	this->dg = dim3(8, 8, 1);
+	this->db = dim3(16, 16, 1);
+	Device::checkDimError(dg, db);
+	Device::checkDimOptimiser(dg, db);
 
 	// Outputs
 	this->title = "Fractal Cuda";
 
 	//print(dg, db);
 	Device::assertDim(dg, db);
+	assert(w == h);
 }
 
 Fractal::~Fractal() {
@@ -73,14 +73,16 @@ Fractal::~Fractal() {
  * Override
  */
 void Fractal::animationStep() {
-	n = variateur.varierAndGet();
+	t = variateur.varierAndGet();
 }
 
 /**
  * Override
  */
-void Fractal::runGPU(uchar4* ptrDevPixels, DomaineMath& useless) {
-	fractal_gpu<<< db, db >>>(ptrDevPixels, w, h, n, useless);
+void Fractal::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath) {
+	fractalGPU<<<dg,db>>>(ptrDevPixels, w, h, n, domaineMath);
+	//Device::synchronize();
+	//Device::checkKernelError("Error>> Fractal::runGPU");
 }
 
 /*--------------*\
@@ -88,23 +90,23 @@ void Fractal::runGPU(uchar4* ptrDevPixels, DomaineMath& useless) {
  \*--------------*/
 
 float Fractal::getT(void) {
-return n;
+	return t;
 }
 
 int Fractal::getW(void) {
-return w;
+	return w;
 }
 
 int Fractal::getH(void) {
-return h;
+	return h;
 }
 
 DomaineMath* Fractal::getDomaineMathInit() {
-return domaineMath;
+	return domaineMath;
 }
 
 string Fractal::getTitle(void) {
-return title;
+	return title;
 }
 
 /*--------------------------------------*\

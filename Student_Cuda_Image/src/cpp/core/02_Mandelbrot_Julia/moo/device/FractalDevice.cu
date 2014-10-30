@@ -1,13 +1,13 @@
 #include <iostream>
+#include <stdio.h>
 
 #include "Indice2D.h"
-#include "cudaTools.h"
-#include "Device.h"
-
-#include "FractalMath.h"
-#include "FractalMathMandelbrot.h"
 #include "IndiceTools.h"
 #include "DomaineMath.h"
+#include "cudaTools.h"
+#include "Device.h"
+#include "FractalMath.h"
+#include "FractalMathMandelbrot.h"
 
 using std::cout;
 using std::endl;
@@ -24,7 +24,7 @@ using std::endl;
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void fractal_gpu(uchar4* ptrDevPixels, int w, int h, int n, DomaineMath& domaineMath);
+__global__ void fractalGPU(uchar4* ptrDevPixels, int w, int h, int n, DomaineMath domaineMath);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -42,9 +42,8 @@ __global__ void fractal_gpu(uchar4* ptrDevPixels, int w, int h, int n, DomaineMa
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void fractal_gpu(uchar4* ptrDevPixels, int w, int h, int n, DomaineMath& domaineMath) {
+__global__ void fractalGPU(uchar4* ptrDevPixels, int w, int h, int n, DomaineMath domaineMath) {
 	FractalMath* fractalMath = new FractalMathMandelbrot(n);
-
 	const int TID = Indice2D::tid();
 	const int NB_THREAD = Indice2D::nbThread();
 	const int WH = w * h;
@@ -53,12 +52,14 @@ __global__ void fractal_gpu(uchar4* ptrDevPixels, int w, int h, int n, DomaineMa
 	int j = 0;
 	double x = 0;
 	double y = 0;
+	uchar4 color;
 
 	while (s < WH) {
 		// job
 		IndiceTools::toIJ(s, w, &i, &j);
 		domaineMath.toXY(i, j, &x, &y);
-		fractalMath->color(x, y, *ptrDevPixels);
+		fractalMath->color(x, y, &color);
+		ptrDevPixels[s] = color;
 		s += NB_THREAD;
 	}
 

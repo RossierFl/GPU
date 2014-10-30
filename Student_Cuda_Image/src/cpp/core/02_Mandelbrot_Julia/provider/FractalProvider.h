@@ -15,7 +15,7 @@
 class FractalProvider {
 	public:
 
-		static Fractal* createMOO(void);
+		static Fractal* create(void);
 		static ImageFonctionel* createGL(void);
 
 };

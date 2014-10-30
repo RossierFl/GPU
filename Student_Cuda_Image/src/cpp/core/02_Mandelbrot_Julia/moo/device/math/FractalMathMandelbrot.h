@@ -15,26 +15,25 @@ class FractalMathMandelbrot: public FractalMath {
 
 	public:
 
-		__device__ FractalMathMandelbrot(int n): FractalMath(n) {
+		__device__ FractalMathMandelbrot(int n) :
+				FractalMath(n) {
 		}
 
-		__device__ virtual ~FractalMathMandelbrot() {
+		__device__  virtual ~FractalMathMandelbrot() {
 
 		}
 
-		__device__ virtual int indiceArret(double x, double y) {
-			double a = 0;
-			double b = 0;
-			double aCopy = 0;
-			double k = 0;
-
-			while((k < n) && (a * a + b * b < 4)) {
-				aCopy = a;
-				a = (a * a - b * b) + x;
-				b = 2 * aCopy * b + y;
+		__device__
+		int indiceArret(double x, double y) {
+			int k = 0;
+			double a = 0.0;
+			double b = 0.0;
+			while (((a * a) + (b * b)) <= 4.0 && k <= n) {
+				double aCopy = a;
+				a = ((a * a) - (b * b)) + x;
+				b = (2.0 * aCopy * b) + y;
 				k++;
 			}
-
 			return k;
 		}
 };

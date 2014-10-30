@@ -28,21 +28,22 @@
  |*	static	   *|
  \*----------------*/
 
-Fractal* FractalProvider::createMOO() {
-	int dw = 16 * 60; // =32*30=960
-	int dh = 16 * 60; // =32*30=960
-	float dt = 1;
+Fractal* FractalProvider::create() {
+	int dw = 16; // =32*30=960
+	int dh = 16; // =32*30=960
+	float dt = 20;
 	int n = 12;
-	int x1 = -2.1;
-	int y1 = 0.8;
-	int x2 = -1.3;
-	int y2 = 1.3;
+	double x1 = -1.3968;
+	double y1 = -0.03362;
+	double x2 = -1.3578;
+	double y2 = 0.0013973;
 
 	return new Fractal(dw, dh, dt, n, x1, y1, x2, y2);
 }
 
 ImageFonctionel* FractalProvider::createGL(void) {
-	return new ImageFonctionel(createMOO());
+	ColorRGB_01* ptrColorTitre = new ColorRGB_01(0, 0, 0);
+	return new ImageFonctionel(create(), ptrColorTitre);
 }
 
 /*--------------------------------------*\

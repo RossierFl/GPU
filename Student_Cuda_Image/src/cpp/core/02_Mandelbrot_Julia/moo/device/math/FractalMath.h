@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include "ColorTools.h"
+#include <stdio.h>
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -22,6 +23,7 @@ class FractalMath {
 
 		__device__ FractalMath(int n) {
 			this->n = n;
+			this->n = 10;
 		}
 
 		__device__ virtual ~FractalMath() {
@@ -33,38 +35,31 @@ class FractalMath {
 
 	public:
 
-		/**
-		 * x=pixelI
-		 * y=pixelJ
-		 */
-		__device__ void color(double x, double y, uchar4& color) {
-			int k = this->indiceArret(x, y);
+		__device__
+		virtual int indiceArret(double x, double y) = 0;
 
-			if(k > n) {
-				color.x = 0;
-				color.y = 0;
-				color.z = 0;
-				color.w = 255;
+		__device__
+		void color(double x, double y, uchar4* ptrColor) {
+			float k = indiceArret(x, y);
+			if (k > n) {
+				ptrColor->x = 0;
+				ptrColor->y = 0;
+				ptrColor->z = 0;
 			} else {
-				float h = 1.0 / n;
-				ColorTools::HSB_TO_RVB(h, &color);
-				color.w = 255;
+				k = 1.0 / n * k;
+				ColorTools::HSB_TO_RVB(k, ptrColor);
 			}
+
+			ptrColor->w = 255; // opaque
 		}
-
-	private:
-
-
-		__device__ virtual int indiceArret(double x, double y) = 0;
 
 		/*--------------------------------------*\
 	|*		Attributs		*|
 		 \*-------------------------------------*/
 
-
 	protected:
 
-		// Tools
+// Tools
 		int n;
 };
 

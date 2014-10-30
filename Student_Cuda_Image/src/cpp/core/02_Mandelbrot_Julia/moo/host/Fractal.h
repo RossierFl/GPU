@@ -4,7 +4,7 @@
 #include "cudaTools.h"
 #include "AnimableFonctionel_I.h"
 #include "MathTools.h"
-#include "VariateurI.h"
+#include "VariateurF.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -14,14 +14,14 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class Fractal: public AnimableFonctionel_I {
+class Fractal : public AnimableFonctionel_I {
 		/*--------------------------------------*\
 	|*		Constructor		*|
 		 \*-------------------------------------*/
 
 	public:
 
-		Fractal(int w, int h, float dt, int n, float x1, float y1, float x2, float y2);
+		Fractal(int w, int h, float dt, int n, double x1, double y1, double x2, double y2);
 		virtual ~Fractal();
 
 		/*--------------------------------------*\
@@ -34,15 +34,15 @@ class Fractal: public AnimableFonctionel_I {
 	|*  Override	  *|
 		 \*---------------*/
 
-		virtual void runGPU(uchar4* ptrDevPixels, DomaineMath& domaineMath);
+		void runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath);
 		virtual void animationStep();
 
-		virtual float getT();
-		virtual int getW();
-		virtual int getH();
-		virtual DomaineMath* getDomaineMathInit();
+		 float getT();
+		 int getW();
+		 int getH();
+		 DomaineMath* getDomaineMathInit();
 
-		virtual string getTitle();
+		 string getTitle();
 
 	private:
 
@@ -56,19 +56,16 @@ class Fractal: public AnimableFonctionel_I {
 		int w;
 		int h;
 		int n;
-		float x1;
-		float y1;
-		float x2;
-		float y2;
 
 		// Tools
 		dim3 dg;
 		dim3 db;
 		DomaineMath* domaineMath;
-		VariateurI variateur;
+		VariateurF variateur;
 
 		//Outputs
 		string title;
+		float t;
 };
 
 #endif
