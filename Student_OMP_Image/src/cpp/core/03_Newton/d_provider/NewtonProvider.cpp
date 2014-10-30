@@ -30,7 +30,7 @@
 
 NewtonImage* NewtonProvider::create(void)
     {
-    int dw = 16 * 60; // =32*30=960
+    int dw = 16 * 80; // =32*30=960
     int dh = 16 * 60; // =32*30=960
 
     int n = 2;
