@@ -3,8 +3,8 @@
 #
 # Attention
 #
-#	(A1)	Dans les d�finitions de variables ci-dessous, m�fiez-vous des espaces � la fin!
-#	(A2)	Laisser espace  apr�s le += de surcharge : exemple : xxx+= yyyy
+#	(A1)	Dans les d���finitions de variables ci-dessous, m���fiez-vous des espaces ��� la fin!
+#	(A2)	Laisser espace  apr���s le += de surcharge : exemple : xxx+= yyyy
 #
 
 ifndef __CUDA_GCC_MK__
@@ -23,7 +23,7 @@ COMPILATEUR:=g++
 include ${ROOT_MAKEFILE_PRIVATE_COMMON}/commonLinux.mk
 
 include ${ROOT_MAKEFILE_PUBLIC_CUDA}/cudaGCC.mk
-#include cudaGCC.mk
+-include cudaLinux.mk
 
 include ${ROOT_MAKEFILE_PRIVATE_CUDA}/makeCudaGCC.mk
 
