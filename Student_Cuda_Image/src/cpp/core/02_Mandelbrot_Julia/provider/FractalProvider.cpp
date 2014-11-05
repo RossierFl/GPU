@@ -41,9 +41,8 @@ Fractal* FractalProvider::create() {
 	return new Fractal(dw, dh, dt, n, x1, y1, x2, y2);
 }
 
-ImageFonctionel* FractalProvider::createGL(void) {
-	ColorRGB_01* ptrColorTitre = new ColorRGB_01(0, 0, 0);
-	return new ImageFonctionel(create(), ptrColorTitre);
+ImageFonctionel* FractalProvider::createGL() {
+	return new ImageFonctionel(create());
 }
 
 /*--------------------------------------*\
