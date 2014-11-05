@@ -54,7 +54,7 @@ __global__ void fractalNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath do
 		domaineMath.toXY(i, j, &x, &y);
 
 		// Compute the color
-		newtonMath->colorXY(&color, x, y, epsilonx, epsilonf, epsilonxstar);
+		newtonMath.colorXY(&color, x, y, epsilonx, epsilonf, epsilonxstar);
 
 		// Apply the color
 		ptrDevPixels[s] = color;

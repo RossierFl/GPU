@@ -41,36 +41,37 @@ int mainGL(void);
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainGL(void)
-    {
-    //Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
-    //Image* ptrRippling = RipplingProvider::createGL();
-    ImageFonctionel* ptrFractal = FractalProvider::createGL();
-    // TODO : Insert  autres Images ...
+int mainGL(void) {
+	Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
+	Image* ptrRippling = RipplingProvider::createGL();
+	ImageFonctionel* ptrFractal = FractalProvider::createGL();
+	ImageFonctionel* ptrNewton = FractalProvider::createGL();
 
-    bool isAnimation = true;
-    bool isSelection = true;
+	bool isAnimation = true;
+	bool isSelection = true;
 
-    //GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
-    //GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
-    GLUTImageViewers fractalViewer(ptrFractal, isAnimation, isSelection, 10, 10);
-    // TODO : Insert here autres ImageViewers ...
+	GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
+	GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 0, 100);
+	// GLUTImageViewers fractalViewer(ptrFractal, isAnimation, isSelection, 10, 10);
+	GLUTImageViewers newtonViewer(ptrNewton, isAnimation, isSelection, 100, 0);
 
-    GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
+	GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
-    // destruction
+	// destruction
 	{
-	//delete ptrRippling0;
-	//delete ptrRippling;
-	delete ptrFractal;
+		delete ptrRippling0;
+		delete ptrRippling;
+		delete ptrFractal;
+		delete ptrNewton;
 
-	//ptrRippling0 = NULL;
-	//ptrRippling = NULL;
-	ptrFractal = NULL;
+		ptrRippling0 = NULL;
+		ptrRippling = NULL;
+		ptrFractal = NULL;
+		ptrNewton = NULL;
 	}
 
-    return EXIT_SUCCESS;
-    }
+	return EXIT_SUCCESS;
+}
 
 /*--------------------------------------*\
  |*		Private			*|

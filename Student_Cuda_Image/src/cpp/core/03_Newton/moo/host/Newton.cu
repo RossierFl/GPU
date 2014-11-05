@@ -13,7 +13,7 @@
 |*		Imported					 	*|
 \*--------------------------------------*/
 
-__global__ void fractaleNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float epsilonx, float epsilonf, float epsilonxstar, float* jacobiMatrix);
+__global__ void fractalNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float epsilonx, float epsilonf, float epsilonxstar);
 
 /*--------------------------------------*\
 |*		Public							*|
@@ -45,8 +45,8 @@ Newton::Newton(int w, int h, float dt, int n, float epsilonx, float epsilonf, fl
 	this->epsilonxstar = epsilonxstar;
 
 	// Tools
-	this->dg = dim3(8, 8, 1); // TODO à optimiser
-	this->db = dim3(16, 16, 1); // TODO à optimiser
+	this->dg = dim3(8, 8, 1); // TODO �� optimiser
+	this->db = dim3(16, 16, 1); // TODO �� optimiser
 	this->t = 0;
 	ptrDomaineMathInit = new DomaineMath(x1, y1, x2, y2);
 

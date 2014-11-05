@@ -3,13 +3,10 @@
 
 #include <math.h>
 
-#include "CalibreurF.h"
-#include "ColorTools.h"
-
 #define NOIR 0
-#define GRIS 1;
-#define BLANC 2;
-#define NOT_CONVERGE_ERROR 3;
+#define GRIS 1
+#define BLANC 2
+#define NOT_CONVERGE_ERROR 3
 
 /*----------------------------------------------------------------------*\
 |*			Declaration 												*|
@@ -45,9 +42,9 @@ public:
 		xa.x1 = 1.0;
 		xa.x2 = 0.0;
 		xb.x1 = -0.5;
-		xb.x2 = sqrt(3) / 2;
+		xb.x2 = sqrt(3.0) / 2;
 		xc.x1 = -0.5;
-		xc.x2 = -sqrt(3) / 2;
+		xc.x2 = -sqrt(3.0) / 2;
 	}
 
 	__device__ virtual ~NewtonMath()
@@ -90,15 +87,15 @@ private:
 
 	__device__ inline void inverse(float* matrix)
 	{
-		float det = det(matrix);
+		float determinant = det(matrix);
 		float aCopy = matrix[0];
 		float bCopy = matrix[1];
 		float cCopy = matrix[2];
 		float dCopy = matrix[3];
-		matrix[0] = dCopy / det;
-		matrix[1] = -bCopy / det;
-		matrix[2] = -cCopy / det;
-		matrix[3] = aCopy / det;
+		matrix[0] = dCopy / determinant;
+		matrix[1] = -bCopy / determinant;
+		matrix[2] = -cCopy / determinant;
+		matrix[3] = aCopy / determinant;
 	}
 
 	__device__ inline void matrixVectorMult(float* matrix, float x1, float x2, float* solX1, float* solX2)
@@ -118,18 +115,18 @@ private:
 		float solX2;
 		int i = 0;
 		const int CONVERGE_LIMIT = 200;
-		float jacobienne[4];
+		float jacob[4];
 		while (i < CONVERGE_LIMIT)
 		{
 			// Compute the jacobienne
-			jacobienne(crtX1, crtX2, jacobienne);
+			jacobienne(crtX1, crtX2, jacob);
 
 			// Inverse the jacobienne
-			inverse(jacobienne);
+			inverse(jacob);
 
-			float f1 = f1(crtX1, crtX2);
-			float f2 = f2(crtX1, crtX2);
-			matrixVectorMult(jacobienne, f1, f2, &solX1, &solX2);
+			float resF1 = f1(crtX1, crtX2);
+			float resF2 = f2(crtX1, crtX2);
+			matrixVectorMult(jacob, resF1, resF2, &solX1, &solX2);
 			nextX1 = crtX1 - solX1;
 			nextX2 = crtX2 - solX2;
 
@@ -163,9 +160,13 @@ private:
 						return BLANC; // near xc
 				}
 				else if (diffB < diffC)
+				{
 					return GRIS; // near xb
+				}
 				else
+				{
 					return BLANC; // near xc
+				}
 			}
 			crtX1 = nextX1;
 			crtX2 = nextX2;
