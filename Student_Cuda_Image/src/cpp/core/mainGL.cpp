@@ -10,6 +10,7 @@
 #include "Rippling0Provider.h"
 #include "RipplingProvider.h"
 #include "FractalProvider.h"
+#include "NewtonProvider.h"
 
 using std::cout;
 using std::endl;
@@ -45,12 +46,12 @@ int mainGL(void) {
 	Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
 	Image* ptrRippling = RipplingProvider::createGL();
 	ImageFonctionel* ptrFractal = FractalProvider::createGL();
-	ImageFonctionel* ptrNewton = FractalProvider::createGL();
+	ImageFonctionel* ptrNewton = NewtonProvider::createGL();
 
 	bool isAnimation = true;
 	bool isSelection = true;
 
-	GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
+	//GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
 	GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 0, 100);
 	// GLUTImageViewers fractalViewer(ptrFractal, isAnimation, isSelection, 10, 10);
 	GLUTImageViewers newtonViewer(ptrNewton, isAnimation, isSelection, 100, 0);

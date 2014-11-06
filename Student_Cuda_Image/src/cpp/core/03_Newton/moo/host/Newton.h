@@ -23,7 +23,7 @@ class Newton : public AnimableFonctionel_I
 
 public:
 
-	Newton(int w, int h, float dt, int n, float epsilonx, float epsilonf, float epsilonxstar, double x1, double y1, double x2, double y2);
+	Newton(int w, int h, float dt, float epsilonx, float epsilonf, float epsilonxstar, double x1, double y1, double x2, double y2);
 
 	virtual ~Newton();
 
@@ -88,6 +88,7 @@ private:
 	dim3 dg; // configuration of the grid
 	dim3 db; // configuration of the blocks
 	float t; // animation parameter
+	bool tAdd;
 	VariateurF animationVariator; // used to variate t
 	DomaineMath* ptrDomaineMathInit;
 };

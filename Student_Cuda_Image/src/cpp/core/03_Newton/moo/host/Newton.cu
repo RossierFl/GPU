@@ -5,6 +5,9 @@
 #include "MathTools.h"
 #include <stdio.h>
 
+#define MAX_T 40
+#define MAX_N 25
+
 /*----------------------------------------------------------------------*\
 |*			Declaration 												*|
 \*----------------------------------------------------------------------*/
@@ -31,7 +34,7 @@ __global__ void fractalNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath do
 |*	Constructor		       *|
 \*-------------------------*/
 
-Newton::Newton(int w, int h, float dt, int n, float epsilonx, float epsilonf, float epsilonxstar, double x1, double y1, double x2, double y2)
+Newton::Newton(int w, int h, float dt, float epsilonx, float epsilonf, float epsilonxstar, double x1, double y1, double x2, double y2)
 		:
 		animationVariator(IntervalF(30, 100), dt)
 {
@@ -45,9 +48,10 @@ Newton::Newton(int w, int h, float dt, int n, float epsilonx, float epsilonf, fl
 	this->epsilonxstar = epsilonxstar;
 
 	// Tools
-	this->dg = dim3(8, 8, 1); // TODO �� optimiser
-	this->db = dim3(16, 16, 1); // TODO �� optimiser
+	this->dg = dim3(8, 8, 1); // TODO à optimiser
+	this->db = dim3(16, 16, 1); // TODO à optimiser
 	this->t = 0;
+	this->tAdd = true;
 	ptrDomaineMathInit = new DomaineMath(x1, y1, x2, y2);
 
 	Device::assertDim(dg, db);
@@ -65,7 +69,21 @@ Newton::~Newton()
 
 void Newton::animationStep()
 {
-	this->t = animationVariator.varierAndGet(); // in [30,100]
+	t++;
+	if(t > MAX_T) {
+		t = 0;
+		if(tAdd) {
+			this->n++;
+			if(this->n >= MAX_N) {
+				this->tAdd = !this->tAdd;
+			}
+		} else {
+			this->n--;
+			if(this->n <= 0) {
+				this->tAdd = !this->tAdd;
+			}
+		}
+	}
 }
 
 void Newton::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
@@ -83,7 +101,7 @@ DomaineMath* Newton::getDomaineMathInit()
 
 float Newton::getT()
 {
-	return t;
+	return n;
 }
 
 int Newton::getW()
