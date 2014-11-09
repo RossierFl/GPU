@@ -1,7 +1,7 @@
-#ifndef RIPPLING_PROVIDER_H_
-#define RIPPLING_PROVIDER_H_
+#ifndef VAGUE_PROVIDER_H_
+#define VAGUE_PROVIDER_H_
 
-#include "Rippling.h"
+#include "Vague.h"
 #include "Image.h"
 
 /*----------------------------------------------------------------------*\
@@ -12,12 +12,13 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class RipplingProvider
+class VagueProvider
     {
     public:
 
-	static Rippling* createMOO(void);
+	static Vague* create(void);
 	static Image* createGL(void);
+
 
     };
 

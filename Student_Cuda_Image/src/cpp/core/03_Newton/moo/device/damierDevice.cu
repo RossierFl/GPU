@@ -3,7 +3,7 @@
 #include "DomaineMath.h"
 #include "cudaTools.h"
 #include "Device.h"
-#include "MandelbrotJuliaMath.h"
+#include "DamierMath.h"
 
 
 
@@ -19,7 +19,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY);
+__global__ void damier(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -39,9 +39,9 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath 
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,bool isJulia,float cX,float cY)
+__global__ void damier(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t)
     {
-    MandelbrotJuliaMath mandelbrotJuliaMath = MandelbrotJuliaMath(n,isJulia,cX,cY);
+    DamierMath damierMath = DamierMath(n);
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
@@ -64,8 +64,8 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels, int w, int h, DomaineMat
 	// (i,j) domaine ecran
 	// (x,y) domaine math
 	domaineMath.toXY(pixelI, pixelJ, &x, &y); //  (i,j) -> (x,y)
-	
-	mandelbrotJuliaMath.colorXY(&color,x, y,domaineMath,t); // update color
+
+	damierMath.colorXY(&color,x, y,t); // update color
 
 	ptrDevPixels[s] = color;
 

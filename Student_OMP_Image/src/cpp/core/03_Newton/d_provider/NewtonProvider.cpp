@@ -1,6 +1,5 @@
-#include "RipplingProvider.h"
-
-
+#include "NewtonProvider.h"
+#include "MathTools.h"
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
@@ -29,20 +28,18 @@
  |*	static	   *|
  \*----------------*/
 
-Rippling* RipplingProvider::createMOO()
+NewtonImage* NewtonProvider::create(void)
     {
-    float dt = 1;
-
-    int dw = 16 * 60; // =32*30=960
+    int dw = 16 * 80; // =32*30=960
     int dh = 16 * 60; // =32*30=960
 
-    return new Rippling(dw, dh, dt);
-    }
+    int n = 2;
 
- Image* RipplingProvider::createGL(void)
-     {
-     return new Image(createMOO());
-     }
+    // animation para
+    float dt = 2 * PI / 400;
+
+    return new NewtonImage(dw, dh, dt, n);
+    }
 
 /*--------------------------------------*\
  |*		Private			*|

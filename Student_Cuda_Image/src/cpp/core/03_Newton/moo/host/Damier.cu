@@ -1,6 +1,6 @@
 #include <assert.h>
 
-#include "MandelbrotJulia.h"
+#include "Damier.h"
 #include "Device.h"
 #include "MathTools.h"
 
@@ -12,7 +12,7 @@
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY);
+__global__ void damier(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -34,24 +34,22 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath 
  |*	Constructeur	    *|
  \*-------------------------*/
 
-MandelbrotJulia::MandelbrotJulia(int w, int h, float dt, int n,float xMin,float xMax,float yMin,float yMax,bool isJulia,float cX=0,float cY=0) :
-	variateurAnimation(IntervalF(20, 200),dt)
+Damier::Damier(int w, int h, float dt, int n) :
+	variateurAnimation(IntervalF(0, 2 * PI), dt)
     {
     // Inputs
     this->w = w;
     this->h = h;
     this->n = n;
-	this->cX=cX;
-    this->cY=cY;
-    this->isJulia=isJulia;
+
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
     this->db = dim3(16, 16, 1); // disons a optimiser
     this->t = 0;
-    ptrDomaineMathInit=new DomaineMath(xMin,yMin,xMax,yMax);
+    ptrDomaineMathInit=new DomaineMath(0,0,2*PI,2*PI);
 
     //Outputs
-    this->title = "[API Image Fonctionelle] : MandelbrotJulia zoomable CUDA";
+    this->title = "[API Image Fonctionelle] : Damier zoomable CUDA";
 
     // Check:
     //print(dg, db);
@@ -59,7 +57,7 @@ MandelbrotJulia::MandelbrotJulia(int w, int h, float dt, int n,float xMin,float 
     assert(w == h);
     }
 
-MandelbrotJulia::~MandelbrotJulia()
+Damier::~Damier()
     {
    delete ptrDomaineMathInit;
     }
@@ -71,7 +69,7 @@ MandelbrotJulia::~MandelbrotJulia()
 /**
  * Override
  */
-void MandelbrotJulia::animationStep()
+void Damier::animationStep()
     {
     this->t = variateurAnimation.varierAndGet(); // in [0,2pi]
     }
@@ -79,19 +77,19 @@ void MandelbrotJulia::animationStep()
 /**
  * Override
  */
-void MandelbrotJulia::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
+void Damier::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
-    mandelbrotJuliaCu<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t, isJulia, cX, cY);
+    damier<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t);
     }
 
 /*--------------*\
- |*	get	 *|,
+ |*	get	 *|
  \*--------------*/
 
 /**
  * Override
  */
-DomaineMath* MandelbrotJulia::getDomaineMathInit(void)
+DomaineMath* Damier::getDomaineMathInit(void)
     {
     return ptrDomaineMathInit;
     }
@@ -99,7 +97,7 @@ DomaineMath* MandelbrotJulia::getDomaineMathInit(void)
 /**
  * Override
  */
-float MandelbrotJulia::getT(void)
+float Damier::getT(void)
     {
     return t;
     }
@@ -107,7 +105,7 @@ float MandelbrotJulia::getT(void)
 /**
  * Override
  */
-int MandelbrotJulia::getW(void)
+int Damier::getW(void)
     {
     return w;
     }
@@ -115,7 +113,7 @@ int MandelbrotJulia::getW(void)
 /**
  * Override
  */
-int MandelbrotJulia::getH(void)
+int Damier::getH(void)
     {
     return h;
     }
@@ -123,7 +121,7 @@ int MandelbrotJulia::getH(void)
 /**
  * Override
  */
-string MandelbrotJulia::getTitle(void)
+string Damier::getTitle(void)
     {
     return title;
     }

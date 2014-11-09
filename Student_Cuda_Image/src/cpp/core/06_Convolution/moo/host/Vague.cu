@@ -1,8 +1,12 @@
+#include <iostream>
 #include <assert.h>
 
-#include "MandelbrotJulia.h"
+#include "Vague.h"
 #include "Device.h"
 #include "MathTools.h"
+
+using std::cout;
+using std::endl;
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -12,7 +16,7 @@
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY);
+extern __global__ void vague(uchar4* ptrDevPixels,int w, int h,float t);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -34,34 +38,32 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath 
  |*	Constructeur	    *|
  \*-------------------------*/
 
-MandelbrotJulia::MandelbrotJulia(int w, int h, float dt, int n,float xMin,float xMax,float yMin,float yMax,bool isJulia,float cX=0,float cY=0) :
-	variateurAnimation(IntervalF(20, 200),dt)
+Vague::Vague(int w, int h,float dt)
     {
     // Inputs
     this->w = w;
     this->h = h;
-    this->n = n;
-	this->cX=cX;
-    this->cY=cY;
-    this->isJulia=isJulia;
+    this->dt=dt;
+
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
     this->db = dim3(16, 16, 1); // disons a optimiser
-    this->t = 0;
-    ptrDomaineMathInit=new DomaineMath(xMin,yMin,xMax,yMax);
+    this->t=0;
 
     //Outputs
-    this->title = "[API Image Fonctionelle] : MandelbrotJulia zoomable CUDA";
+    this->title="[API Image Cuda] : Vague CUDA";
 
     // Check:
     //print(dg, db);
     Device::assertDim(dg, db);
-    assert(w == h);
+    assert(w== h);
+
+    cout << endl<<"[CBI] Vague dt =" << dt;
     }
 
-MandelbrotJulia::~MandelbrotJulia()
+Vague::~Vague()
     {
-   delete ptrDomaineMathInit;
+    // rien
     }
 
 /*-------------------------*\
@@ -70,36 +72,29 @@ MandelbrotJulia::~MandelbrotJulia()
 
 /**
  * Override
+ * Call periodicly by the API
  */
-void MandelbrotJulia::animationStep()
+void Vague::animationStep()
     {
-    this->t = variateurAnimation.varierAndGet(); // in [0,2pi]
+    t+=dt;
     }
 
 /**
  * Override
  */
-void MandelbrotJulia::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
+void Vague::runGPU(uchar4* ptrDevPixels)
     {
-    mandelbrotJuliaCu<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t, isJulia, cX, cY);
+    rippling<<<dg,db>>>(ptrDevPixels,w,h,t);
     }
 
 /*--------------*\
- |*	get	 *|,
+ |*	get	 *|
  \*--------------*/
 
 /**
  * Override
  */
-DomaineMath* MandelbrotJulia::getDomaineMathInit(void)
-    {
-    return ptrDomaineMathInit;
-    }
-
-/**
- * Override
- */
-float MandelbrotJulia::getT(void)
+float Vague::getT(void)
     {
     return t;
     }
@@ -107,7 +102,7 @@ float MandelbrotJulia::getT(void)
 /**
  * Override
  */
-int MandelbrotJulia::getW(void)
+int Vague::getW(void)
     {
     return w;
     }
@@ -115,15 +110,15 @@ int MandelbrotJulia::getW(void)
 /**
  * Override
  */
-int MandelbrotJulia::getH(void)
+int Vague::getH(void)
     {
-    return h;
+    return  h;
     }
 
 /**
  * Override
  */
-string MandelbrotJulia::getTitle(void)
+string Vague::getTitle(void)
     {
     return title;
     }

@@ -1,8 +1,8 @@
-#ifndef RIPPLING_PROVIDER_H_
-#define RIPPLING_PROVIDER_H_
+#ifndef DAMIER_PROVIDER_H_
+#define DAMIER_PROVIDER_H_
 
-#include "Rippling.h"
-#include "Image.h"
+#include "Damier.h"
+#include "ImageFonctionel.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -12,12 +12,13 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class RipplingProvider
+class DamierProvider
     {
     public:
 
-	static Rippling* createMOO(void);
-	static Image* createGL(void);
+	static Damier* create(void);
+	static ImageFonctionel* createGL(void);
+
 
     };
 

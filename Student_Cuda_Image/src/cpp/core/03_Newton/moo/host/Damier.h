@@ -1,9 +1,10 @@
-#ifndef RIPPLING_H_
-#define RIPPLING_H_
+#ifndef DAMIER_H_
+#define HELLO_FONCTIONEL_H_
 
 #include "cudaTools.h"
-#include "Animable_I.h"
+#include "AnimableFonctionel_I.h"
 #include "MathTools.h"
+#include "VariateurF.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -13,7 +14,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class Rippling: public Animable_I
+class Damier: public AnimableFonctionel_I
     {
 	/*--------------------------------------*\
 	|*		Constructor		*|
@@ -21,8 +22,8 @@ class Rippling: public Animable_I
 
     public:
 
-	Rippling(int w, int h, float dt = 2 * PI / 10);
-	virtual ~Rippling(void);
+	Damier(int w, int h, float dt, int n);
+	virtual ~Damier(void);
 
 	/*--------------------------------------*\
 	 |*		Methodes		*|
@@ -32,18 +33,27 @@ class Rippling: public Animable_I
 
 	/*----------------*\
 	|*  Override	  *|
-	 \*---------------*/
+	\*---------------*/
 
-	virtual void runGPU(uchar4* ptrDevPixels);
+
+	/**
+	 * Override
+	 * Call periodicly by the API
+	 */
 	virtual void animationStep(void);
 
-	virtual float getT(void);
-	virtual int getW(void);
-	virtual int getH(void);
+	void runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath); // Override
 
-	virtual string getTitle(void);
+	/**
+	 * Para animation
+	 */
+	float getT(void); // Override
+	int getW(void); // Override
+	int getH(void); // Override
+	DomaineMath* getDomaineMathInit(void); // Override
+	string getTitle(void); // Override
 
-    private:
+
 
 	/*--------------------------------------*\
 	 |*		Attributs		*|
@@ -54,12 +64,14 @@ class Rippling: public Animable_I
 	// Inputs
 	int w;
 	int h;
-	float dt;
+	int n;
 
 	// Tools
 	dim3 dg;
 	dim3 db;
-	float t;
+	float t; // para animation
+	VariateurF variateurAnimation; // varier t
+	DomaineMath* ptrDomaineMathInit;
 
 	//Outputs
 	string title;

@@ -1,5 +1,5 @@
-#ifndef RIPPLING_H_
-#define RIPPLING_H_
+#ifndef VAGUE_H_
+#define VAGUE_H_
 
 #include "cudaTools.h"
 #include "Animable_I.h"
@@ -13,7 +13,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class Rippling: public Animable_I
+class Vague: public Animable_I
     {
 	/*--------------------------------------*\
 	|*		Constructor		*|
@@ -21,8 +21,8 @@ class Rippling: public Animable_I
 
     public:
 
-	Rippling(int w, int h, float dt = 2 * PI / 10);
-	virtual ~Rippling(void);
+	Vague(int w, int h, float dt = 2 * PI / 1000);
+	virtual ~Vague(void);
 
 	/*--------------------------------------*\
 	 |*		Methodes		*|
@@ -32,18 +32,21 @@ class Rippling: public Animable_I
 
 	/*----------------*\
 	|*  Override	  *|
-	 \*---------------*/
+	\*---------------*/
 
-	virtual void runGPU(uchar4* ptrDevPixels);
+	/**
+	 * Override
+	 * Call periodicly by the API
+	 */
 	virtual void animationStep(void);
 
-	virtual float getT(void);
-	virtual int getW(void);
-	virtual int getH(void);
+	virtual void runGPU(uchar4* ptrDevPixels); // Override
 
-	virtual string getTitle(void);
+	virtual float getT(void); // Override
+	virtual int getW(void); // Override
+	virtual int getH(void); // Override
 
-    private:
+	virtual string getTitle(void); // Override
 
 	/*--------------------------------------*\
 	 |*		Attributs		*|

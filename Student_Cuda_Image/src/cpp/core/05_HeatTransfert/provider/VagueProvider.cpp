@@ -1,5 +1,5 @@
-#include "RipplingProvider.h"
-
+#include "VagueProvider.h"
+#include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -29,19 +29,19 @@
  |*	static	   *|
  \*----------------*/
 
-Rippling* RipplingProvider::createMOO()
+Vague* VagueProvider::create()
     {
-    float dt = 1;
+    float dt = 2*PI/1000;
 
     int dw = 16 * 60; // =32*30=960
     int dh = 16 * 60; // =32*30=960
 
-    return new Rippling(dw, dh, dt);
+    return new Vague(dw, dh, dt);
     }
 
- Image* RipplingProvider::createGL(void)
+ Image* VagueProvider::createGL(void)
      {
-     return new Image(createMOO());
+     return new Image(create());
      }
 
 /*--------------------------------------*\

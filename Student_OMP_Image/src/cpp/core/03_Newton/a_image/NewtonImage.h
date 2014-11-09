@@ -1,9 +1,8 @@
-#ifndef RIPPLING_H_
-#define RIPPLING_H_
+#ifndef NEWTON_IMAGE_H_
+#define NEWTON_IMAGE_H_
 
-#include "cudaTools.h"
-#include "Animable_I.h"
-#include "MathTools.h"
+#include "ImageFonctionelMOOs_A.h"
+#include "NewtonMOO.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -13,59 +12,56 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class Rippling: public Animable_I
+class NewtonImage: public ImageFonctionelMOOs_A
     {
 	/*--------------------------------------*\
-	|*		Constructor		*|
+	 |*		Constructeur		*|
 	 \*-------------------------------------*/
 
     public:
 
-	Rippling(int w, int h, float dt = 2 * PI / 10);
-	virtual ~Rippling(void);
+	NewtonImage(unsigned int w, unsigned int h, float dt, int n);
+	virtual ~NewtonImage(void);
 
 	/*--------------------------------------*\
-	 |*		Methodes		*|
+	|*		Methode			*|
 	 \*-------------------------------------*/
 
-    public:
+    protected:
 
 	/*----------------*\
 	|*  Override	  *|
-	 \*---------------*/
+	\*---------------*/
 
-	virtual void runGPU(uchar4* ptrDevPixels);
-	virtual void animationStep(void);
+	/**
+	 * Override, call periodicly by the api
+	 */
+	virtual void fillImageGL(uchar4* ptrTabPixels, int w, int h, const DomaineMath& domaineMath);
 
-	virtual float getT(void);
-	virtual int getW(void);
-	virtual int getH(void);
+	/**
+	 * Override, call periodicly by the api
+	 */
+	virtual void animationStep(bool& isNeedUpdateView);
 
-	virtual string getTitle(void);
+	/**
+	 * Override, call periodicly by the api
+	 */
+	virtual void paintPrimitives(Graphic2Ds& graphic2D);
 
-    private:
 
 	/*--------------------------------------*\
-	 |*		Attributs		*|
+	|*		Attribut		*|
 	 \*-------------------------------------*/
 
-    private:
-
-	// Inputs
-	int w;
-	int h;
-	float dt;
+    protected:
 
 	// Tools
-	dim3 dg;
-	dim3 db;
-	float t;
+	NewtonMOO* ptrNewtonMOO;
 
-	//Outputs
-	string title;
+
     };
 
-#endif
+#endif 
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|

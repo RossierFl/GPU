@@ -1,5 +1,5 @@
-#include "RipplingProvider.h"
-
+#include "DamierProvider.h"
+#include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -29,20 +29,23 @@
  |*	static	   *|
  \*----------------*/
 
-Rippling* RipplingProvider::createMOO()
+Damier* DamierProvider::create()
     {
-    float dt = 1;
-
     int dw = 16 * 60; // =32*30=960
     int dh = 16 * 60; // =32*30=960
 
-    return new Rippling(dw, dh, dt);
+    float dt = 2 * PI / 8000;
+    int n = 2;
+
+    return new Damier(dw, dh, dt, n);
     }
 
- Image* RipplingProvider::createGL(void)
-     {
-     return new Image(createMOO());
-     }
+ImageFonctionel* DamierProvider::createGL(void)
+    {
+    ColorRGB_01* ptrColorTitre=new ColorRGB_01(0,0,0);
+
+    return new ImageFonctionel(create(),ptrColorTitre); // both ptr destroy by destructor of ImageFonctionel
+    }
 
 /*--------------------------------------*\
  |*		Private			*|

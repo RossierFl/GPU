@@ -1,31 +1,28 @@
 #include "Indice2D.h"
 #include "IndiceTools.h"
-#include "DomaineMath.h"
 #include "cudaTools.h"
 #include "Device.h"
-#include "MandelbrotJuliaMath.h"
 
+#include "VagueMath.h"
 
+// Attention : 	Choix du nom est impotant!
+//		VagueDevice.cu et non Vague.cu
+// 		Dans ce dernier cas, problème de linkage, car le nom du .cu est le meme que le nom d'un .cpp (host)
+//		On a donc ajouter Device (ou n'importequoi) pour que les noms soient différents!
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Imported	 	*|
- \*-------------------------------------*/
-
-/*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY);
+__global__ void vague(uchar4* ptrDevPixels,int w, int h,float t);
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
-
-
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -35,13 +32,9 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath 
  |*		Public			*|
  \*-------------------------------------*/
 
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,bool isJulia,float cX,float cY)
+__global__ void vague(uchar4* ptrDevPixels, int w, int h, float t)
     {
-    MandelbrotJuliaMath mandelbrotJuliaMath = MandelbrotJuliaMath(n,isJulia,cX,cY);
+    VagueMath vagueMath = VagueMath(w, h);
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
@@ -49,9 +42,6 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels, int w, int h, DomaineMat
     const int WH=w*h;
 
     uchar4 color;
-
-    double x;
-    double y;
 
     int pixelI;
     int pixelJ;
@@ -61,18 +51,16 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels, int w, int h, DomaineMat
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 
-	// (i,j) domaine ecran
-	// (x,y) domaine math
-	domaineMath.toXY(pixelI, pixelJ, &x, &y); //  (i,j) -> (x,y)
-	
-	mandelbrotJuliaMath.colorXY(&color,x, y,domaineMath,t); // update color
-
+	vagueMath.colorIJ(&color,pixelI, pixelJ, t); 	// update color
 	ptrDevPixels[s] = color;
 
 	s += NB_THREAD;
 	}
-
     }
+
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
