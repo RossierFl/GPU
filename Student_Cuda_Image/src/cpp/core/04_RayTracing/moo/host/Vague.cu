@@ -1,7 +1,7 @@
 #include <iostream>
 #include <assert.h>
 
-#include "Vague.h"
+#include "RayTracing.h"
 #include "Device.h"
 #include "MathTools.h"
 
@@ -16,7 +16,7 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void vague(uchar4* ptrDevPixels,int w, int h,float t);
+extern __global__ void rayTracing(uchar4* ptrDevPixels,int w, int h,float t);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -38,7 +38,7 @@ extern __global__ void vague(uchar4* ptrDevPixels,int w, int h,float t);
  |*	Constructeur	    *|
  \*-------------------------*/
 
-Vague::Vague(int w, int h,float dt)
+RayTracing::RayTracing(int w, int h,float dt)
     {
     // Inputs
     this->w = w;
@@ -51,17 +51,17 @@ Vague::Vague(int w, int h,float dt)
     this->t=0;
 
     //Outputs
-    this->title="[API Image Cuda] : Vague CUDA";
+    this->title="[API Image Cuda] : RayTracing CUDA";
 
     // Check:
     //print(dg, db);
     Device::assertDim(dg, db);
     assert(w== h);
 
-    cout << endl<<"[CBI] Vague dt =" << dt;
+    cout << endl<<"[CBI] RayTracing dt =" << dt;
     }
 
-Vague::~Vague()
+RayTracing::~RayTracing()
     {
     // rien
     }
@@ -74,7 +74,7 @@ Vague::~Vague()
  * Override
  * Call periodicly by the API
  */
-void Vague::animationStep()
+void RayTracing::animationStep()
     {
     t+=dt;
     }
@@ -82,7 +82,7 @@ void Vague::animationStep()
 /**
  * Override
  */
-void Vague::runGPU(uchar4* ptrDevPixels)
+void RayTracing::runGPU(uchar4* ptrDevPixels)
     {
     rippling<<<dg,db>>>(ptrDevPixels,w,h,t);
     }
@@ -94,7 +94,7 @@ void Vague::runGPU(uchar4* ptrDevPixels)
 /**
  * Override
  */
-float Vague::getT(void)
+float RayTracing::getT(void)
     {
     return t;
     }
@@ -102,7 +102,7 @@ float Vague::getT(void)
 /**
  * Override
  */
-int Vague::getW(void)
+int RayTracing::getW(void)
     {
     return w;
     }
@@ -110,7 +110,7 @@ int Vague::getW(void)
 /**
  * Override
  */
-int Vague::getH(void)
+int RayTracing::getH(void)
     {
     return  h;
     }
@@ -118,7 +118,7 @@ int Vague::getH(void)
 /**
  * Override
  */
-string Vague::getTitle(void)
+string RayTracing::getTitle(void)
     {
     return title;
     }

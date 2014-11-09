@@ -1,4 +1,4 @@
-#include "VagueProvider.h"
+#include "RayTracingProvider.h"
 #include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
@@ -29,17 +29,17 @@
  |*	static	   *|
  \*----------------*/
 
-Vague* VagueProvider::create()
+RayTracing* RayTracingProvider::create()
     {
     float dt = 2*PI/1000;
 
     int dw = 16 * 60; // =32*30=960
     int dh = 16 * 60; // =32*30=960
 
-    return new Vague(dw, dh, dt);
+    return new RayTracing(dw, dh, dt);
     }
 
- Image* VagueProvider::createGL(void)
+ Image* RayTracingProvider::createGL(void)
      {
      return new Image(create());
      }

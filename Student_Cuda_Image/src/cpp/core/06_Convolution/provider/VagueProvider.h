@@ -1,7 +1,7 @@
-#ifndef VAGUE_PROVIDER_H_
-#define VAGUE_PROVIDER_H_
+#ifndef CONVOLUTION_PROVIDER_H_
+#define CONVOLUTION_PROVIDER_H_
 
-#include "Vague.h"
+#include "Convolution.h"
 #include "Image.h"
 
 /*----------------------------------------------------------------------*\
@@ -12,11 +12,11 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class VagueProvider
+class ConvolutionProvider
     {
     public:
 
-	static Vague* create(void);
+	static Convolution* create(void);
 	static Image* createGL(void);
 
 

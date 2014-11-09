@@ -1,5 +1,5 @@
-#ifndef VAGUE_H_
-#define VAGUE_H_
+#ifndef RAYTRACING_H_
+#define RAYTRACING_H_
 
 #include "cudaTools.h"
 #include "Animable_I.h"
@@ -13,7 +13,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class Vague: public Animable_I
+class RayTracing: public Animable_I
     {
 	/*--------------------------------------*\
 	|*		Constructor		*|
@@ -21,8 +21,8 @@ class Vague: public Animable_I
 
     public:
 
-	Vague(int w, int h, float dt = 2 * PI / 1000);
-	virtual ~Vague(void);
+	RayTracing(int w, int h, float dt = 2 * PI / 1000);
+	virtual ~RayTracing(void);
 
 	/*--------------------------------------*\
 	 |*		Methodes		*|
