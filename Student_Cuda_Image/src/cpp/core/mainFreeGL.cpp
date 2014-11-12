@@ -38,15 +38,15 @@ int mainFreeGL(void);
  \*-------------------------------------*/
 
 int mainFreeGL(void)
-    {
-    cout << "\n[FPS] :  Free GL, please wait ..." << endl;
+{
+	cout << "\n[FPS] :  Free GL, please wait ..." << endl;
 
-    rippling0FreeGL(1000); // bad technique
+	rippling0FreeGL(1000); // bad technique
 
-    // TODO : add other tp here ...
+	// TODO : add other tp here ...
 
-    return EXIT_SUCCESS;
-    }
+	return EXIT_SUCCESS;
+}
 
 /*--------------------------------------*\
  |*		Private			*|
