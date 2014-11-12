@@ -23,7 +23,7 @@ COMPILATEUR:=g++
 include ${ROOT_MAKEFILE_PRIVATE_COMMON}/commonLinux.mk
 
 include ${ROOT_MAKEFILE_PUBLIC_CUDA}/cudaGCC.mk
-#include cudaGCC.mk
+-include cudaLinux.mk
 
 include ${ROOT_MAKEFILE_PRIVATE_CUDA}/makeCudaGCC.mk
 
