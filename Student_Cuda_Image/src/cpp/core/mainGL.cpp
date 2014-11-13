@@ -49,7 +49,7 @@ int mainGL()
 	Image* ptrRippling = RipplingProvider::createGL();
 	ImageFonctionel* ptrFractal = FractalProvider::createGL();
 	ImageFonctionel* ptrNewton = NewtonProvider::createGL();
-	Image* ptrRayTracing = RacTracingProvider::createGL();
+	Image* ptrRayTracing = RayTracingProvider::createGL();
 
 
 	bool isAnimation = true;

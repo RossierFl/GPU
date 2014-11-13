@@ -91,7 +91,7 @@ void RayTracing::runGPU(uchar4* ptrDevPixels)
 	// @formatter:on
 
 	/* Free memory */
-	cudaFree(spheresToDev);
+	cudaFree(ptrSpheresDevGM);
 
 	/* DEBUG */
 	cudaDeviceSynchronize();
