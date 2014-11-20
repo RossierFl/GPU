@@ -1,7 +1,7 @@
-#ifndef VAGUE_PROVIDER_H_
-#define VAGUE_PROVIDER_H_
+#ifndef HEAT_TRANSFERT_PROVIDER_H_
+#define HEAT_TRANSFERT_PROVIDER_H_
 
-#include "Vague.h"
+#include "HeatTransfert.h"
 #include "Image.h"
 
 /*----------------------------------------------------------------------*\
@@ -12,11 +12,11 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class VagueProvider
+class HeatTransfertProvider
     {
     public:
 
-	static Vague* create(void);
+	static HeatTransfert* create(void);
 	static Image* createGL(void);
 
 

@@ -1,5 +1,5 @@
-#ifndef VAGUE_MATH_H_
-#define VAGUE_MATH_H_
+#ifndef HEAT_TRANSFERT_MATH_H_
+#define HEAT_TRANSFERT_MATH_H_
 
 #include "MathTools.h"
 
@@ -11,7 +11,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class VagueMath
+class HeatTransfertMath
     {
 
 	/*--------------------------------------*\
@@ -20,12 +20,12 @@ class VagueMath
 
     public:
 
-	__device__ VagueMath(int w, int h)
+	__device__ HeatTransfertMath(int w, int h)
 	    {
 	    this->factor = 4 * PI / (float) w;
 	    }
 
-	__device__ VagueMath(const VagueMath& source)
+	__device__ HeatTransfertMath(const HeatTransfertMath& source)
 	    {
 	    // rien
 	    }

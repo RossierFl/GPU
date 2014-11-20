@@ -1,7 +1,7 @@
-#ifndef VAGUE_PROVIDER_H_
-#define VAGUE_PROVIDER_H_
+#ifndef RAYTRACING_PROVIDER_H_
+#define RAYTRACING_PROVIDER_H_
 
-#include "Vague.h"
+#include "RayTracing.h"
 #include "Image.h"
 
 /*----------------------------------------------------------------------*\
@@ -12,11 +12,11 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class VagueProvider
+class RayTracingProvider
     {
     public:
 
-	static Vague* create(void);
+	static RayTracing* create(void);
 	static Image* createGL(void);
 
 

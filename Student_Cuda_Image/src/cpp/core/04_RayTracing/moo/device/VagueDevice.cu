@@ -3,10 +3,10 @@
 #include "cudaTools.h"
 #include "Device.h"
 
-#include "VagueMath.h"
+#include "RayTracingMath.h"
 
 // Attention : 	Choix du nom est impotant!
-//		VagueDevice.cu et non Vague.cu
+//		RayTracingDevice.cu et non RayTracing.cu
 // 		Dans ce dernier cas, problème de linkage, car le nom du .cu est le meme que le nom d'un .cpp (host)
 //		On a donc ajouter Device (ou n'importequoi) pour que les noms soient différents!
 
@@ -18,7 +18,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void vague(uchar4* ptrDevPixels,int w, int h,float t);
+__global__ void rayTracing(uchar4* ptrDevPixels,int w, int h,float t);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -32,9 +32,9 @@ __global__ void vague(uchar4* ptrDevPixels,int w, int h,float t);
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void vague(uchar4* ptrDevPixels, int w, int h, float t)
+__global__ void rayTracing(uchar4* ptrDevPixels, int w, int h, float t)
     {
-    VagueMath vagueMath = VagueMath(w, h);
+    RayTracingMath rayTracingMath = RayTracingMath(w, h);
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
@@ -51,7 +51,7 @@ __global__ void vague(uchar4* ptrDevPixels, int w, int h, float t)
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 
-	vagueMath.colorIJ(&color,pixelI, pixelJ, t); 	// update color
+	rayTracingMath.colorIJ(&color,pixelI, pixelJ, t); 	// update color
 	ptrDevPixels[s] = color;
 
 	s += NB_THREAD;
