@@ -105,6 +105,6 @@ double piCuda(const int n) {
 }
 
 bool usePI() {
-	const int N = 2000;
+	const int N = 200000;
 	return isAlgoPI_OK(piCuda, N, "Pi cuda");
 }
