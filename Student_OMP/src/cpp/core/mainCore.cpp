@@ -15,6 +15,7 @@ using std::endl;
 
 extern bool usePI(void);
 extern bool useHello(void);
+extern bool useMontecarlo();
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -41,8 +42,9 @@ int mainCore(void)
     Chronos chrono;
     chrono.start();
 
-    isOk &= useHello();
-   isOk &= usePI();
+    //isOk &= useHello();
+    //isOk &= usePI();
+    isOk &= useMontecarlo();
 
     cout << "\n-------------------------------------------------" << endl;
     cout << "End Main : isOk = " << isOk << endl;
