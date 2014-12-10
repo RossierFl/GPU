@@ -1,19 +1,48 @@
 #include "Indice1D.h"
 #include "cudaTools.h"
-#include "PiDevice.h"
+#include "ProduitScalaireDevice.h"
+#include "Lock.h"
 #include <iostream>
+#include "Device.h"
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
+#define M_W 50
+#define M_V 50
+#define VI 1.442249570307408
+#define WI 0.7390851332151607
 
-static __global__ void calculPi(int n,int nTabSM,float* ptrDevResult);
+__device__ int mutex=0;
+static __global__ void calculeProduitScalaire(int n,int nTabSM,double* ptrDevResult);
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
 
 
+static __device__ double w(long i){
+    double x = abs(cos((double)i));
+    for(long j =1;j<=M_W;j++){
+	x=x-(cos(x)-x)/(-sin(x)-1);
 
-static __device__ void ecrasement(float * tabSM,int moitier){
+    }
+    return (x/WI)*sqrt((double)i);
+   // return sqrt((double)i);
+
+}
+
+
+static __device__ double v(long i){
+    double x =1.5 + abs(cos((double) i));
+    for(long j = 1;j < M_V;j++){
+	double xCarre=x*x;
+	x = x-(xCarre * x-3)/(3*xCarre);
+    }
+    return (x/VI)*sqrt((double) i);
+  //  return sqrt((double) i);
+}
+
+
+static __device__ void ecrasement(double * tabSM,int moitier){
 
     const int NBR_THREAD = Indice1D::nbThreadBlock();
     const int TID_LOCAL = Indice1D::tidLocalBlock();
@@ -31,16 +60,14 @@ static __device__ void ecrasement(float * tabSM,int moitier){
 
 
 
-static __device__ void reduction_intra_block(float * tabSM,int n){
+static __device__ void reduction_intra_block(double * tabSM,int n){
     const int NBR_THREAD = Indice1D::nbThread();
-           // const int TID = Indice1D::tid();
-           // const int TID_LOCAL = Indice1D::tidLocalBlock();
+
             int moitier = n/2;
-            //int s = TID_LOCAL;
-          //  float sommeThread=0;
+
             while(moitier>=1){
         	ecrasement(tabSM,moitier);
-               // s+=NBR_THREAD;
+
                 moitier/=2;
                 __syncthreads;//Faire attention
             }
@@ -50,11 +77,14 @@ static __device__ void reduction_intra_block(float * tabSM,int n){
 
 }
 
-static __device__ void reduction_inter_block(float * tabSM,float * ptrDevResult){
+static __device__ void reduction_inter_block(double * tabSM,double * ptrDevResult){
     const int TID_LOCAL = Indice1D::tidLocalBlock();
     if(threadIdx.x==0){
-
-	atomicAdd(ptrDevResult,tabSM[0]);
+	Lock lock(&mutex);
+	lock.lock();
+	*ptrDevResult+=tabSM[0];
+	//atomicAdd(ptrDevResult,tabSM[0]);
+	lock.unlock();
 
     }
 
@@ -63,33 +93,31 @@ static __device__ void reduction_inter_block(float * tabSM,float * ptrDevResult)
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
-static __device__ float fpi(float x)
+static __device__ float prodScalaire(long i)
     {
-    return 4 / (1 + x * x);
+	return w(i)*v(i);
     }
 
-static __device__ void reduction_intra_thread(float * tabSM,int nSausisson){
+static __device__ void reduction_intra_thread(double * tabSM,long vectorLenght){
     //Executer par thread
        const int NBR_THREAD = Indice1D::nbThread();
        const int NBR_THREAD_LOCAL = Indice1D::nbThreadBlock();
            const int TID = Indice1D::tid();
            const int TID_LOCAL = Indice1D::tidLocalBlock();
-           const float DX = 1.0/(float)nSausisson;
-           float xs=0;
-           int s = TID;
-           float sommeThread=0;
-           while(s<nSausisson){
-               xs= s*DX;
-               sommeThread+=fpi(xs);
+           long s = TID;
+           double sommeThread=0;
+           while(s<vectorLenght){
+
+               sommeThread+=prodScalaire(s);
                s+=NBR_THREAD;
 
            }
-           sommeThread*=DX;
+
 
            tabSM[TID_LOCAL]=sommeThread;
            __syncthreads;
 }
-__device__ static void init_tabSM(float * tabSM,int nTabSM){
+__device__ static void init_tabSM(double * tabSM,int nTabSM){
     const int NB_THREAD_LOCAL = Indice1D::nbThreadBlock();
     int s = Indice1D::tidLocal();
     while(s<nTabSM){
@@ -102,9 +130,9 @@ __device__ static void init_tabSM(float * tabSM,int nTabSM){
 
 }
 
-static __global__ void calculPi(int n, int nTabSM,float* ptrDevResult){
+static __global__ void calculeProduitScalaire(int n, int nTabSM,double* ptrDevResult){
    //Une instance par bloc
-     extern __shared__ float tabSM[];
+     extern __shared__ double tabSM[];
 
     init_tabSM(tabSM,nTabSM);
     reduction_intra_thread(tabSM,n);
@@ -115,9 +143,10 @@ static __global__ void calculPi(int n, int nTabSM,float* ptrDevResult){
 }
 
 
- void PiDevice::runPi(int n,int  nTabSM,float * ptrDevResult,dim3 dg,dim3 db){
-
-    calculPi<<<dg,db,nTabSM>>>(n,nTabSM,ptrDevResult);//asynchronous
+ void ProduitScalaireDevice::runProduitScalaire(int n,int  nTabSM,double * ptrDevResult,dim3 dg,dim3 db){
+     size_t size = nTabSM*sizeof(double);
+     calculeProduitScalaire<<<dg,db,size>>>(n,nTabSM,ptrDevResult);//asynchronous
+     Device::checkKernelError("calculeProduitScalaire");
 
 }
 

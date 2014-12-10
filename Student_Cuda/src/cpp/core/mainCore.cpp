@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include "PiHost.h"
+#include "ProduitScalaireHost.h"
 
 
 using std::cout;
@@ -42,7 +43,8 @@ int mainCore()
     bool isOk = true;
     //isOk &= useHello();
     //useAdd();
-    PiHost::MyCalculatePI();
+   // PiHost::MyCalculatePI();
+    ProduitScalaireHost::MyCalculateProduitScalaire();
    // cout << "\nisOK = " << isOk << endl;
   //  cout << "\nEnd : mainCore" << endl;
 
