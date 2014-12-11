@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "PiHost.h"
 #include "ProduitScalaireHost.h"
+#include "HistogrammeHost.h"
 
 
 using std::cout;
@@ -44,7 +45,8 @@ int mainCore()
     //isOk &= useHello();
     //useAdd();
    // PiHost::MyCalculatePI();
-    ProduitScalaireHost::MyCalculateProduitScalaire();
+ //   ProduitScalaireHost::MyCalculateProduitScalaire();
+    HistogrammeHost::MyCalculateHistogramme();
    // cout << "\nisOK = " << isOk << endl;
   //  cout << "\nEnd : mainCore" << endl;
 

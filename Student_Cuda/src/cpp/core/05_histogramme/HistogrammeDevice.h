@@ -24,7 +24,7 @@ class HistogrammeDevice
     {
     public:
 
-	static void runHistogramme(int n, int nTabSM,double * ptrDevResult,dim3 dg,dim3 db);
+	static void runHistogramme(int nEntrees,int  nTabSM,int * ptrDevResult,int * tabEntrees,dim3 dg,dim3 db);
     };
 
 

@@ -1,4 +1,5 @@
 #include "Indice1D.h"
+#include "Indice2D.h"
 #include "cudaTools.h"
 #include "HistogrammeDevice.h"
 #include "Lock.h"
@@ -13,36 +14,16 @@
 #define WI 0.7390851332151607
 
 __device__ int mutex=0;
-static __global__ void calculeHistogramme(int n,int nTabSM,double* ptrDevResult);
+static __global__ void calculeHistogramme(int n,int nTabSM,int* ptrDevResult);
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
 
 
-static __device__ double w(long i){
-    double x = abs(cos((double)i));
-    for(long j =1;j<=M_W;j++){
-	x=x-(cos(x)-x)/(-sin(x)-1);
-
-    }
-    return (x/WI)*sqrt((double)i);
-   // return sqrt((double)i);
-
-}
 
 
-static __device__ double v(long i){
-    double x =1.5 + abs(cos((double) i));
-    for(long j = 1;j < M_V;j++){
-	double xCarre=x*x;
-	x = x-(xCarre * x-3)/(3*xCarre);
-    }
-    return (x/VI)*sqrt((double) i);
-  //  return sqrt((double) i);
-}
 
-
-static __device__ void ecrasement(double * tabSM,int moitier){
+static __device__ void ecrasement(int * tabSM,int moitier){
 
     const int NBR_THREAD = Indice1D::nbThreadBlock();
     const int TID_LOCAL = Indice1D::tidLocalBlock();
@@ -60,7 +41,7 @@ static __device__ void ecrasement(double * tabSM,int moitier){
 
 
 
-static __device__ void reduction_intra_block(double * tabSM,int n){
+static __device__ void reduction_intra_block(int * tabSM,int n){
     const int NBR_THREAD = Indice1D::nbThread();
 
             int moitier = n/2;
@@ -77,14 +58,18 @@ static __device__ void reduction_intra_block(double * tabSM,int n){
 
 }
 
-static __device__ void reduction_inter_block(double * tabSM,double * ptrDevResult){
+static __device__ void reduction_inter_block(int * tabSM,int * ptrDevResult,int nTabSM){
     const int TID_LOCAL = Indice1D::tidLocalBlock();
-    if(threadIdx.x==0){
-	Lock lock(&mutex);
-	lock.lock();
-	*ptrDevResult+=tabSM[0];
-	//atomicAdd(ptrDevResult,tabSM[0]);
-	lock.unlock();
+    const int NBR_THREAD_LOCAL = Indice1D::nbThreadBlock();
+    int s = TID_LOCAL;
+
+    while(s<nTabSM){
+	//Lock lock(&mutex);
+	//lock.lock();
+	//*ptrDevResult+=tabSM[0];
+	atomicAdd(&ptrDevResult[s],tabSM[s]);
+	s+=NBR_THREAD_LOCAL;
+	//lock.unlock();
 
     }
 
@@ -93,31 +78,30 @@ static __device__ void reduction_inter_block(double * tabSM,double * ptrDevResul
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
-static __device__ float prodScalaire(long i)
-    {
-	return w(i)*v(i);
-    }
 
-static __device__ void reduction_intra_thread(double * tabSM,long vectorLenght){
+
+static __device__ void reduction_intra_thread(int * tabSM,int nTabSM,int * tabEntrees,int nTabEntrees){
     //Executer par thread
-       const int NBR_THREAD = Indice1D::nbThread();
-       const int NBR_THREAD_LOCAL = Indice1D::nbThreadBlock();
-           const int TID = Indice1D::tid();
-           const int TID_LOCAL = Indice1D::tidLocalBlock();
+       const int NBR_THREAD = Indice2D::nbThread();
+       //const int NBR_THREAD_LOCAL = Indice1D::nbThreadBlock();
+           const int TID = Indice2D::tid();
+          // const int TID_LOCAL = Ind::tidLocalBlock();
            long s = TID;
-           double sommeThread=0;
-           while(s<vectorLenght){
+     //      float sommeThread=0;
+           while(s<nTabEntrees){
 
-               sommeThread+=prodScalaire(s);
+             //  sommeThread+=prodScalaire(s);
+              atomicAdd(&tabSM[tabEntrees[s]],1);
+
                s+=NBR_THREAD;
 
            }
 
 
-           tabSM[TID_LOCAL]=sommeThread;
+           //tabSM[TID_LOCAL]=sommeThread;
            __syncthreads;
 }
-__device__ static void init_tabSM(double * tabSM,int nTabSM){
+__device__ static void init_tabSM(int * tabSM,int nTabSM){
     const int NB_THREAD_LOCAL = Indice1D::nbThreadBlock();
     int s = Indice1D::tidLocal();
     while(s<nTabSM){
@@ -130,22 +114,22 @@ __device__ static void init_tabSM(double * tabSM,int nTabSM){
 
 }
 
-static __global__ void calculeHistogramme(int n, int nTabSM,double* ptrDevResult){
+static __global__ void calculeHistogramme(int nEntrees, int nTabSM,int* ptrDevResult,int * tabEntrees){
    //Une instance par bloc
-     extern __shared__ double tabSM[];
+     extern __shared__ int tabSM[];
 
     init_tabSM(tabSM,nTabSM);
-    reduction_intra_thread(tabSM,n);
-    reduction_intra_block(tabSM,nTabSM);
-    reduction_inter_block(tabSM,ptrDevResult);
+    reduction_intra_thread(tabSM,nTabSM,tabEntrees,nEntrees);
+    //reduction_intra_block(tabSM,nTabSM);
+    reduction_inter_block(tabSM,ptrDevResult,nTabSM);
 
 
 }
 
 
- void HistogrammeDevice::runHistogramme(int n,int  nTabSM,double * ptrDevResult,dim3 dg,dim3 db){
-     size_t size = nTabSM*sizeof(double);
-     calculeHistogramme<<<dg,db,size>>>(n,nTabSM,ptrDevResult);//asynchronous
+ void HistogrammeDevice::runHistogramme(int nEntrees,int  nTabSM,int * ptrDevResult,int * tabEntrees,dim3 dg,dim3 db){
+     size_t size = nTabSM*sizeof(int);
+     calculeHistogramme<<<dg,db,size>>>(nEntrees,nTabSM,ptrDevResult,tabEntrees);//asynchronous
      Device::checkKernelError("calculeHistogramme");
 
 }
