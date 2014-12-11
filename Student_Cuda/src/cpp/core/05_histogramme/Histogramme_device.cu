@@ -63,7 +63,7 @@ static __device__ void reduction_inter_block(int * tabSM,int * ptrDevResult,int 
     const int NBR_THREAD_LOCAL = Indice1D::nbThreadBlock();
     int s = TID_LOCAL;
 
-    while(s<nTabSM){
+    while(s<=nTabSM){
 	//Lock lock(&mutex);
 	//lock.lock();
 	//*ptrDevResult+=tabSM[0];

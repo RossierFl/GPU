@@ -15,7 +15,7 @@ class HistogrammeHost
 	HistogrammeHost();
 	virtual ~HistogrammeHost();
 	static void MyCalculateHistogramme();
-	static double ResultatTheorique(long n);
+	static bool isGoodHistogramme(int histogramme[],int sizeTableValues);
     };
 
 #endif 
