@@ -11,6 +11,7 @@
 #include "RipplingProvider.h"
 #include "FractalProvider.h"
 #include "NewtonProvider.h"
+#include "RayTracingProvider.h"
 
 using std::cout;
 using std::endl;
@@ -48,6 +49,9 @@ int mainGL(void)
     Image* ptrRippling = RipplingProvider::createGL();
     ImageFonctionel* ptrFractal = FractalProvider::createGL();
     ImageFonctionel* ptrNewton = NewtonProvider::createGL();
+    //ImageFonctionel* ptrRayTracing = ::createGL();
+    Image* ptrRayTracing = RayTracingProvider::createGL();
+
     // TODO : Insert  autres Images ...
 
     bool isAnimation = true;
@@ -57,6 +61,7 @@ int mainGL(void)
     GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
     GLUTImageViewers fractalViewer(ptrFractal,isAnimation,isSelection,20,20);
     GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,20,20);
+    GLUTImageViewers rayTracingViewer(ptrRayTracing,isAnimation,isSelection,20,20);
 
     // TODO : Insert here autres ImageViewers ...
 
@@ -68,10 +73,12 @@ int mainGL(void)
 	delete ptrRippling;
 	delete ptrFractal;
 	delete ptrNewton;
+	delete ptrRayTracing;
 	//ptrRippling0 = NULL;
 	ptrRippling = NULL;
 	ptrFractal = NULL;
 	ptrNewton = NULL;
+	ptrRayTracing=NULL;
 	}
 
     return EXIT_SUCCESS;

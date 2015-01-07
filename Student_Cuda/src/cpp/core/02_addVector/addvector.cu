@@ -80,6 +80,8 @@ __global__ void add(float* ptrDevV1,float* ptrDevV2, int n, float* ptrDevResult)
   }
 }
 
+
+
 __device__ float work(float v1,float v2){
     return v1+v2;
 }

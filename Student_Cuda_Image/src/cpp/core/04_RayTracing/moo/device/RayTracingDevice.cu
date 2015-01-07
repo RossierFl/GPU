@@ -1,9 +1,10 @@
-#include <iostream>
-#include <stdlib.h>
-
-
-using std::cout;
-using std::endl;
+#include "Indice2D.h"
+#include "IndiceTools.h"
+#include "DomaineMath.h"
+#include "cudaTools.h"
+#include "Device.h"
+#include "RayTracingMath.h"
+#include "Sphere.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -13,19 +14,11 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern bool useHello(void);
-extern bool useSaucisson(void);
-extern void use(void);
-extern void isPiGPU_Ok(void);
-extern bool useScalarProduct(void);
-extern bool useHistogram(void);
-extern bool useMontecarlo(void);
-
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainCore();
+__global__ void rayTracing(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, float t, Sphere* spheres, int n);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -41,37 +34,35 @@ int mainCore();
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainCore()
-    {
-    /*bool isOK = true;
-    isOk &= useHello();
-    use();*/
-
-    /*bool isOK = true;
-    isOK = useSaucisson();*/
-
-    /*bool isOK = true;
-    isOK = useScalarProduct();*/
-
-    /*bool isOK = true;
-    isOK = useHistogram();*/
-
-    bool isOK = true;
-    isOK = useMontecarlo();
-
-    cout << "\nisOK = " << isOK << endl;
-    cout << "\nEnd : mainCore" << endl;
-
-    return isOK ? EXIT_SUCCESS : EXIT_FAILURE;
-    }
-
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
 
+__global__ void rayTracing(uchar4* ptrDevPixels, int w, int h, float t, Sphere* spheres, int n)
+    {
+    RayTracingMath* rayTracingMath = new RayTracingMath();
 
+    const int TID = Indice2D::tid();
+    const int NB_THREAD = Indice2D::nbThread();
+
+    const int WH=w*h;
+
+    uchar4 color;
+
+    int x;
+    int y;
+
+    int s = TID;
+    while (s < WH)
+	{
+	IndiceTools::toIJ(s, w, &x, &y );
+	rayTracingMath->colorXY(&color,x, y,t,spheres, n);
+	ptrDevPixels[s] = color;
+	s += NB_THREAD;
+	}
+    delete rayTracingMath;
+    }
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-
