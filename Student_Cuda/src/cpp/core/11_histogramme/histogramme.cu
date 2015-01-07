@@ -15,34 +15,35 @@
 
 #define DEBUG 1
 
-__host__ void swap(uint* image);
-__host__ void fillImage(uint* image);
+__host__ void swap(uint* image, const uint IMAGE_SIZE);
+__host__ void fillImage(uint* image, const uint IMAGE_SIZE);
 __host__ void useHistogramme();
 __global__ void hist(uint* ptrImageDevGM, size_t sizeImage, uint* ptrHistogrammeDevGM, size_t sizeHistogramme);
 
-__host__ void swap(uint* image)
+__host__ void swap(uint* image, const uint IMAGE_SIZE)
 {
 	AleaTools r;
-	uint a = r.uniformeAB(0, SIZE - 1);
-	uint b = r.uniformeAB(0, SIZE - 1);
+	uint a = r.uniformeAB(0, IMAGE_SIZE - 1);
+	uint b = r.uniformeAB(0, IMAGE_SIZE - 1);
 
 	uint temp = image[a];
 	image[a] = image[b];
 	image[b] = temp;
 }
 
-__host__ void fillImage(uint* image)
+__host__ void fillImage(uint* image, const uint IMAGE_SIZE)
 {
 	// rempli
-	for(int i = 0; i < SIZE; i++)
+	for(int i = 0; i < IMAGE_SIZE; i++)
 	{
-		*image++ = i%256;
+		*image = i % (MAX + 1);
+		image++;
 	}
 
 	// mélange les données
 	for(int i = 0; i < SIZE * 10; i++)
 	{
-		swap(image);
+		//swap(image, IMAGE_SIZE);
 	}
 }
 
@@ -61,8 +62,8 @@ __host__ void useHistogramme()
 
 	// Image
 	size_t sizeImage = sizeof(uint) * SIZE;
-	uint* imageRAM = new uint[SIZE];
-	fillImage(imageRAM);
+	uint* ptrImageRAM = new uint[SIZE];
+	fillImage(ptrImageRAM, SIZE);
 #ifdef DEBUG
 	printf("Fill image\n");
 #endif
@@ -70,13 +71,13 @@ __host__ void useHistogramme()
 	// Image en GRAM
 	uint* ptrImageDevGM = NULL;
 	HANDLE_ERROR(cudaMalloc(&ptrImageDevGM, sizeImage));
-	HANDLE_ERROR(cudaMemcpy(ptrImageDevGM, imageRAM, sizeImage, cudaMemcpyHostToDevice));
+	HANDLE_ERROR(cudaMemcpy(ptrImageDevGM, ptrImageRAM, sizeImage, cudaMemcpyHostToDevice));
 #ifdef DEBUG
 	printf("Image en GRAM\n");
 #endif
 
 	// Histogramme en RAM
-	uint* histogrammeRAM = new uint[MAX - MIN + 1];
+	uint* ptrHistogrammeRAM = new uint[MAX - MIN + 1];
 #ifdef DEBUG
 	printf("histogramme en RAM\n");
 #endif
@@ -98,7 +99,7 @@ __host__ void useHistogramme()
 #endif
 
 	// Récupération du résultat
-	HANDLE_ERROR(cudaMemcpy(histogrammeRAM, ptrHistogrammeDevGM, sizeHistogramme, cudaMemcpyDeviceToHost)); // barrière de synchronisation
+	HANDLE_ERROR(cudaMemcpy(ptrHistogrammeRAM, ptrHistogrammeDevGM, sizeHistogramme, cudaMemcpyDeviceToHost)); // barrière de synchronisation
 #ifdef DEBUG
 	printf("final histogramme copied\n");
 #endif
@@ -107,25 +108,27 @@ __host__ void useHistogramme()
 	uint sum = 0;
 	for(uint i = MIN; i <= MAX; i++)
 	{
-		sum += histogrammeRAM[i];
-		printf("hist(%d) = %d\n", i, histogrammeRAM[i]);
+		sum += ptrHistogrammeRAM[i];
+		printf("hist(%d) = %d\n", i, ptrHistogrammeRAM[i]);
 	}
-	if(sum == SIZE) printf("sum == SIZE\n");
-	else printf("!!!!!!!!!! sum != SIZE\n");
+	if(sum == SIZE) printf("OK, sum == SIZE\n");
+	else printf("ERROR !!!!!!!!!!, sum != SIZE\n");
 }
 
-__global__ void hist(uint* ptrImageDevGM, size_t sizeImage, uint* ptrHistogrammeDevGM, size_t sizeHistogramme)
+__global__ void hist(uint* ptrImageDevGM, size_t sizeImageByte, uint* ptrHistogrammeDevGM, size_t sizeHistogrammeByte)
 {
 	// @formatter:off
 	extern __shared__ float tabSM[]; // 1 instance per block !
 	// @formatter:on
+
+	initTabSM(tabSM, MAX + 1, 0);
 
 	const uint TID = Indice1D::tid();
 	const uint TID_LOCAL = Indice1D::tidLocal();
 	const uint NB_THREAD = Indice1D::nbThread();
 
 	uint s = TID;
-	while(s < sizeImage)
+	while(s < SIZE)
 	{
 		// work >>>>
 		uint value = ptrImageDevGM[s];
@@ -140,12 +143,11 @@ __global__ void hist(uint* ptrImageDevGM, size_t sizeImage, uint* ptrHistogramme
 
 	// merge local hist with global hist
 	s = TID;
-	while(s <= MAX)
+	while(s < MAX + 1)
 	{
 		// work >>>>
 		atomicAdd(&ptrHistogrammeDevGM[s], tabSM[s]);
 		// <<<< end work
-
 		s += NB_THREAD;
 	}
 }
