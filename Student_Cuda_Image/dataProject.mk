@@ -47,6 +47,7 @@ SRC_AUX+= ../BilatTools_Cuda_Image/src/core
 SRC_AUX+= ../BilatTools_OpenCV/src/core
 SRC_AUX+= ../BilatTools_Cuda_smart_switch/src/core
 
+
 #################
 #  API Ext 		#
 #################

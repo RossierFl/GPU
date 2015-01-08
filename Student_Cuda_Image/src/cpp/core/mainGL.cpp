@@ -11,6 +11,7 @@
 #include "RipplingProvider.h"
 #include "MandelbrotJuliaProvider.h"
 #include "NewtonProvider.h"
+#include "ConvolutionProvider.h"
 
 using std::cout;
 using std::endl;
@@ -46,6 +47,7 @@ int mainGL(void)
     {
     //Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
     Image* ptrRippling = RipplingProvider::createGL();
+    Image* ptrConvolution = ConvolutionProvider::createGL();
     ImageFonctionel* ptrMandelbrot = MandelbrotJuliaProvider::createGL();
     ImageFonctionel* ptrNewton = NewtonProvider::createGL();
 
@@ -55,7 +57,8 @@ int mainGL(void)
     //GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
     //GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
     //GLUTImageViewers mandelBrotViewer(ptrMandelbrot,isAnimation,isSelection,10,10);
-    GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,10,10);
+    //GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,10,10);
+    GLUTImageViewers newtonViewer(ptrConvolution,isAnimation,isSelection,10,10);
     // TODO : Insert here autres ImageViewers ...
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
@@ -66,11 +69,13 @@ int mainGL(void)
 	delete ptrRippling;
 	delete ptrMandelbrot;
 	delete ptrNewton;
+	delete ptrConvolution;
 
 	//ptrRippling0 = NULL;
 	ptrRippling = NULL;
 	ptrMandelbrot = NULL;
 	ptrNewton = NULL;
+	ptrConvolution = NULL;
 	}
 
     return EXIT_SUCCESS;
