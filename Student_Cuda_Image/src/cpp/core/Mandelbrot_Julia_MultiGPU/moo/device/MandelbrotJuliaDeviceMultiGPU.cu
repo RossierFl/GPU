@@ -4,6 +4,7 @@
 #include "cudaTools.h"
 #include "Device.h"
 #include "MandelbrotJuliaMultiGPU.h"
+#include "MandelbrotJuliaMathMultiGPU.h"
 
 
 
@@ -41,7 +42,7 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath 
 
 __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,bool isJulia,float cX,float cY)
     {
-    MandelbrotJuliaMultiGPU mandelbrotJuliaMath = MandelbrotJuliaMultiGPU(n,isJulia,cX,cY);
+    MandelbrotJuliaMultiGPUMath mandelbrotJuliaMath = MandelbrotJuliaMultiGPUMath(n,isJulia,cX,cY);
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();

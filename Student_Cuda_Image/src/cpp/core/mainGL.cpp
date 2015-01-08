@@ -10,6 +10,7 @@
 #include "Rippling0Provider.h"
 #include "RipplingProvider.h"
 #include "MandelbrotJuliaProvider.h"
+#include "MandelbrotJuliaProviderMultiGPU.h"
 
 using std::cout;
 using std::endl;
@@ -46,7 +47,10 @@ int mainGL(void)
     Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
     Image* ptrRippling = RipplingProvider::createGL();
     // TODO : Insert  autres Images ...
-    ImageFonctionel* ptrMandelbrotJulia = MandelbrotJuliaProvider::createGL();
+    //ImageFonctionel* ptrMandelbrotJulia = MandelbrotJuliaProvider::createGL();
+
+    ImageFonctionel* ptrMandelbrotJuliaMultiGPU =  MandelbrotJuliaProviderMultiGPU::createGL();
+
 
     bool isAnimation = true;
     bool isSelection = true;
@@ -54,7 +58,9 @@ int mainGL(void)
    // GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
   //  GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
     // TODO : Insert here autres ImageViewers ...
-    GLUTImageViewers mandelbrotJuliaViewer(ptrMandelbrotJulia, isAnimation, isSelection, 0, 0);
+    //GLUTImageViewers mandelbrotJuliaViewer(ptrMandelbrotJulia, isAnimation, isSelection, 0, 0);
+
+    GLUTImageViewers mandelbrotJuliaViewerMultiGPU(ptrMandelbrotJuliaMultiGPU, isAnimation, isSelection, 0, 0);
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
@@ -62,11 +68,13 @@ int mainGL(void)
 	{
 	delete ptrRippling0;
 	delete ptrRippling;
-	delete ptrMandelbrotJulia;
+	delete ptrMandelbrotJuliaMultiGPU;
+	//delete ptrMandelbrotJulia;
 
 	ptrRippling0 = NULL;
 	ptrRippling = NULL;
-	ptrMandelbrotJulia = NULL;
+	ptrMandelbrotJuliaMultiGPU=NULL;
+	//ptrMandelbrotJulia = NULL;
 	}
 
     return EXIT_SUCCESS;

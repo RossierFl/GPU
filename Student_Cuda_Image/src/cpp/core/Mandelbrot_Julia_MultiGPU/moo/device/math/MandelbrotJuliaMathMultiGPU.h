@@ -26,7 +26,7 @@ class MandelbrotJuliaMultiGPUMath
     public:
 
 	__device__
-	MandelbrotJuliaMultiGPUMath(int n,bool isJulia,float cX=0, float cY=0):calibreur(IntervalF(-1, 1), IntervalF(0, 1))
+	MandelbrotJuliaMultiGPUMath(int n,bool isJulia,float cX=0, float cY=0):calibreur(gpu::IntervalF(-1, 1), gpu::IntervalF(0, 1))
 	    {
 	     this->n = n;
 	    this->cX=cX;
