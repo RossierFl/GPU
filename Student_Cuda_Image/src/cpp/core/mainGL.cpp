@@ -10,6 +10,7 @@
 #include "Rippling0Provider.h"
 #include "RipplingProvider.h"
 #include "FractalProvider.h"
+#include "FractalProviderMulti.h"
 #include "NewtonProvider.h"
 #include "RayTracingProvider.h"
 
@@ -46,11 +47,12 @@ int mainGL(void);
 int mainGL(void)
     {
     //Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
-    Image* ptrRippling = RipplingProvider::createGL();
-    ImageFonctionel* ptrFractal = FractalProvider::createGL();
-    ImageFonctionel* ptrNewton = NewtonProvider::createGL();
+    //Image* ptrRippling = RipplingProvider::createGL();
+    //ImageFonctionel* ptrFractal = FractalProvider::createGL();
+    ImageFonctionel* ptrFractalMulti = FractalProviderMulti::createGL();
+    //ImageFonctionel* ptrNewton = NewtonProvider::createGL();
     //ImageFonctionel* ptrRayTracing = ::createGL();
-    Image* ptrRayTracing = RayTracingProvider::createGL();
+    //Image* ptrRayTracing = RayTracingProvider::createGL();
 
     // TODO : Insert  autres Images ...
 
@@ -58,11 +60,11 @@ int mainGL(void)
     bool isSelection = true;
 
     //GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
-    GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
-    GLUTImageViewers fractalViewer(ptrFractal,isAnimation,isSelection,20,20);
-    GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,20,20);
-    GLUTImageViewers rayTracingViewer(ptrRayTracing,isAnimation,isSelection,20,20);
-
+    //GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
+    //GLUTImageViewers fractalViewer(ptrFractal,isAnimation,isSelection,20,20);
+    //GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,20,20);
+    //GLUTImageViewers rayTracingViewer(ptrRayTracing,isAnimation,isSelection,20,20);
+    GLUTImageViewers fractalViewerMulti(ptrFractalMulti,isAnimation,isSelection,20,20);
     // TODO : Insert here autres ImageViewers ...
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
@@ -70,15 +72,17 @@ int mainGL(void)
     // destruction
 	{
 	//delete ptrRippling0;
-	delete ptrRippling;
-	delete ptrFractal;
-	delete ptrNewton;
-	delete ptrRayTracing;
+	//delete ptrRippling;
+	//delete ptrFractal;
+	//delete ptrNewton;
+	//delete ptrRayTracing;
+	delete ptrFractalMulti;
 	//ptrRippling0 = NULL;
-	ptrRippling = NULL;
-	ptrFractal = NULL;
-	ptrNewton = NULL;
-	ptrRayTracing=NULL;
+	//ptrRippling = NULL;
+	//ptrFractal = NULL;
+	//ptrNewton = NULL;
+	//ptrRayTracing=NULL;
+	ptrFractalMulti=NULL;
 	}
 
     return EXIT_SUCCESS;

@@ -80,6 +80,7 @@ class FractalMulti: public AnimableFonctionel_I
 	//std::vector<uchar4*> bandeI;
 	//Outputs
 	string title;
+	bool first;
     };
 
 #endif

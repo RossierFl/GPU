@@ -20,8 +20,8 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void fractalMulti(uchar4* ptrDevPixels,int w, int h,bool julia,DomaineMath domaineMath, int n,float t,double cx, double cy);
-__device__ void workPixel(uchar4* ptrColorIJ,int i, int j,int s, const DomaineMath& domaineMath,FractalMathMulti* ptrFractalMath,float t);
+__global__ void fractalMulti(uchar4* ptrDevPixels,int w, int h,bool julia,DomaineMath domaineMath, int n,float t,double cx, double cy, int offset);
+__device__ void workPixel(uchar4* ptrColorIJ,int i, int j,int s, const DomaineMath& domaineMath,FractalMathMulti* ptrFractalMath,float t, int offset);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -41,7 +41,7 @@ __device__ void workPixel(uchar4* ptrColorIJ,int i, int j,int s, const DomaineMa
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void fractalMulti(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMath domaineMath, int n,float t,double cx, double cy)
+__global__ void fractalMulti(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMath domaineMath, int n,float t,double cx, double cy,int offset)
     {
     FractalMathMulti* fractalMath;
     fractalMath = new FractalMandelbrotMulti(n);// ici pour preparer cuda
@@ -57,7 +57,7 @@ __global__ void fractalMulti(uchar4* ptrDevPixels, int w, int h,bool julia, Doma
 	{
 	IndiceTools::toIJ(s,w,&i,&j); // s[0,W*H[ --> i[0,H[ j[0,W[
 
-	workPixel(&ptrDevPixels[s],i, j,s, domaineMath,fractalMath,t);
+	workPixel(&ptrDevPixels[s],i, j,s, domaineMath,fractalMath,t,offset);
 
 	s += NB_THREAD;
 	}
@@ -67,7 +67,7 @@ __global__ void fractalMulti(uchar4* ptrDevPixels, int w, int h,bool julia, Doma
     }
 
 
-__device__ void workPixel(uchar4* ptrColorIJ,int i, int j,int s, const DomaineMath& domaineMath,FractalMathMulti* ptrFractalMath, float t)
+__device__ void workPixel(uchar4* ptrColorIJ,int i, int j,int s, const DomaineMath& domaineMath,FractalMathMulti* ptrFractalMath, float t, int offset)
     {
 
     // (i,j) domaine ecran dans N2
@@ -76,7 +76,7 @@ __device__ void workPixel(uchar4* ptrColorIJ,int i, int j,int s, const DomaineMa
     double x;
     double y;
 
-    domaineMath.toXY(i, j, &x, &y); // fill (x,y) from (i,j)
+    domaineMath.toXY(i+offset, j, &x, &y); // fill (x,y) from (i,j)
 
     ptrFractalMath->colorXY(ptrColorIJ,x, y, domaineMath, t); // in [01]
     }

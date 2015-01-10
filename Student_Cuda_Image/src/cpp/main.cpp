@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 	// Server Cuda1: in [0,5]
 	// Server Cuda2: in [0,2]
 	int deviceId = 0;
-
+	//initCuda(deviceId);
 	int isOk = start();
 
 	//cudaDeviceReset causes the driver to clean up all state.

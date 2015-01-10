@@ -13,7 +13,7 @@
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void fractalMulti(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMath domaineMath, int n,float t,double cx, double cy);
+__global__ void fractalMulti(uchar4* ptrDevPixels, int w, int h,bool julia, DomaineMath domaineMath, int n,float t,double cx, double cy, int imgOffset);
 //uchar4* ptrDevPixels,int w, int h,bool julia,DomaineMath domaineMath, int n,double cx, double cy
 
 /*--------------------------------------*\
@@ -40,6 +40,7 @@ FractalMulti::FractalMulti(int w, int h, int dt,  int nMin,int nMax,bool julia,d
 	variateurAnimation(IntervalI(nMin,nMax), dt)
     {
     // Inputs
+    this->first = true;
     this->w = w;
     this->h = h;
     this->julia = julia;
@@ -54,20 +55,22 @@ FractalMulti::FractalMulti(int w, int h, int dt,  int nMin,int nMax,bool julia,d
     ptrDomaineMathInit=new DomaineMath(xMin,yMin,xMax,yMax);
 
     //Outputs
-    this->title = "[API Image Fonctionelle] : Fractal zoomable CUDA";
+    this->title = "[API Image Fonctionelle] : Fractal zoomable CUDA MULTIGPU Rossier";
     this->nbGPU = 6;
     this->heightBande = h/nbGPU;
     //memory management for 5 GPU
     this->sizeBande=this->heightBande*w*sizeof(uchar4);
     this->bandeI = new uchar4*[5];
-    for(int i=1;i<nbGPU;i++)
+
+    for(int i=0;i<nbGPU-1;i++)
       {
 	cudaSetDevice(i);
-	uchar4* ptrDevBande;
-	bandeI[i] = ptrDevBande;
-	HANDLE_ERROR(cudaMalloc((void**) bandeI[i], sizeBande)); // Device memory allocation (*)
+	//uchar4* ptrDevBande;
+	//bandeI[i] = ptrDevBande;
+	HANDLE_ERROR(cudaMalloc((void**) &bandeI[i], sizeBande)); // Device memory allocation (*)
 	HANDLE_ERROR(cudaMemset(bandeI[i],0,sizeBande)) ;
       }
+    cudaSetDevice(5);
     // Check:
     //print(dg, db);
     std::cout<<"construc"<<std::endl;
@@ -103,26 +106,35 @@ void FractalMulti::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
   omp_set_num_threads(nbGPU);
 /*#pragma omp parallel
 	{*/
+#pragma omp parralel for
   for(int i=0;i<nbGPU;i++)
     {
-      cudaSetDevice(i);
+     // if(!this->first){
+	  cudaSetDevice(i);
+      /*}else{
+	  this->first = false;
+      }*/
 
+      int offset = w*h/nbGPU;
+      int imgOffset = (h/6)*i;
+      if(i==5){
+	  fractalMulti<<<dg,db>>>(ptrDevPixels+offset*i,w,this->heightBande,julia,domaineMath,n,t,cx,cy,imgOffset);
+	  Device::synchronize();
 
-      if(i==0){
-	  fractalMulti<<<dg,db>>>(ptrDevPixels,w,this->heightBande,julia,domaineMath,n,t,cx,cy);
       }else{
-	  int offset = w*h/nbGPU;
+
 	  uchar4* ptrDevBandeInitialGPU = ptrDevPixels+offset*i;
-	  fractalMulti<<<dg,db>>>(bandeI[i],w,this->heightBande,julia,domaineMath,n,t,cx,cy);
+	  fractalMulti<<<dg,db>>>(bandeI[i],w,this->heightBande,julia,domaineMath,n,t,cx,cy,imgOffset);
 	  HANDLE_ERROR(cudaMemcpy(ptrDevBandeInitialGPU,  bandeI[i], sizeBande, cudaMemcpyDeviceToDevice));// Device -> Host
       }
+      Device::checkKernelError("fractalMulti");
       //HANDLE_ERROR(cudaFree(ptrDevRes)); // device dispose memory in (*)
     }
 
-  for(int i=0;i<nbGPU;i++)
+  /*for(int i=0;i<nbGPU;i++)
     {
       HANDLE_ERROR(cudaMemset(bandeI[i],0,sizeBande)) ;
-    }
+    }*/
 	  /*const int TID = omp_get_thread_num();
 	  if(TID==0){
 	      cudaSetDevice(0);
