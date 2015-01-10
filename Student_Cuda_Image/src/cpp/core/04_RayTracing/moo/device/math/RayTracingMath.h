@@ -43,31 +43,19 @@ class RayTracingMath
 
     public:
 
-	__device__ //linear interpolation, good to replace simple if inside GPU/shader :D
-		float lerp(float v0, float v1, float t) {
+	__device__ float lerp(float v0, float v1, float t) {
 		  return (1-t)*v0 + t*v1;
 		}
 
-	__device__ //linear interpolation, good to replace simple if inside GPU/shader :D
-		float3 float3Lerp(float3 c0, float3 c1, float f) {
-		float3 res;
-		  res.x = lerp(c0.x,c1.x,f);
-		  res.y = lerp(c0.y,c1.y,f);
-		  res.z = lerp(c0.z,c1.z,f);
-		  return res;
-		}
 
-	__device__
-	void colorXY(uchar4* ptrColor,int x, int y,float t, Sphere* spheres, int n)
+
+	__device__ void colorXY(uchar4* ptrColor,int x, int y,float t, Sphere* spheres, int n)
 	    {
-
-	    //this function is faster using the if than the lerps because so little is done in the ifs !
 		int i = 0;
 		float2 solXY;
 		solXY.x =x;
 		solXY.y =y;
 		float minDist = FLT_MAX;
-		//float3 minDistColor{0.0f,0.0f,0.0f};
 		ptrColor->x=0;
 		ptrColor->y=0;
 		ptrColor->z=0;
@@ -84,17 +72,18 @@ class RayTracingMath
 				ColorTools::HSB_TO_RVB(fmodf(spheres[i].getHueStart()+t,1.0f), 1, spheres[i].brightness(dz), ptrColor);
 				minDist=dist;
 			    }
-			    /*float3 newColor;
-			    newColor.x = fmodf(spheres[i].getHueStart()+t,1.0f);
-			    newColor.y = 1;
-			    newColor.z = spheres[i].brightness(dz);
-			    minDistColor = float3Lerp(minDistColor, newColor,isUnder && (dist!=NAN && dist<minDist));
-			    minDist = lerp(minDist, dist, isUnder && (dist!=NAN && dist<minDist));*/
 			}
 			i++;
 		    }
-		//ColorTools::HSB_TO_RVB(minDistColor, ptrColor);
 	    }
+
+	__device__ float3 float3Lerp(float3 c0, float3 c1, float f) {
+	  float3 res;
+	    res.x = lerp(c0.x,c1.x,f);
+	    res.y = lerp(c0.y,c1.y,f);
+	    res.z = lerp(c0.z,c1.z,f);
+	    return res;
+	}
 
 	/*--------------------------------------*\
 	|*		Attributs		*|

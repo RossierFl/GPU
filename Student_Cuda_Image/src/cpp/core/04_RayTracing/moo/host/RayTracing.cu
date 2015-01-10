@@ -13,7 +13,7 @@
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void rayTracing(uchar4* ptrDevPixels, int w, int h, float t, Sphere* spheres, int n);
+__global__ void rayTracingGPU(uchar4* ptrDevPixels, int w, int h, float t, Sphere* spheres, int n);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -83,7 +83,7 @@ void RayTracing::runGPU(uchar4* ptrDevPixels)
     Sphere* spheresToDev = NULL; //create pointer
     HANDLE_ERROR(cudaMalloc(&spheresToDev,n*sizeof(Sphere)));//malloc all spheres
     HANDLE_ERROR(cudaMemcpy(spheresToDev,spheres,n*sizeof(Sphere),cudaMemcpyHostToDevice));//fill with spheres
-    rayTracing<<<dg,db>>>(ptrDevPixels,w,h,t,spheresToDev,n);//call
+    rayTracingGPU<<<dg,db>>>(ptrDevPixels,w,h,t,spheresToDev,n);//call
     cudaFree(spheresToDev);//free mat
     cudaDeviceSynchronize(); // in case of issues
     //printf("\n");

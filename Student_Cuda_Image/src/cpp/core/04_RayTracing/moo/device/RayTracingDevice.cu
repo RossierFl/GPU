@@ -18,7 +18,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void rayTracing(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, float t, Sphere* spheres, int n);
+__global__ void rayTracingGPU(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, float t, Sphere* spheres, int n);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -38,7 +38,7 @@ __global__ void rayTracing(uchar4* ptrDevPixels, int w, int h, DomaineMath domai
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void rayTracing(uchar4* ptrDevPixels, int w, int h, float t, Sphere* spheres, int n)
+__global__ void rayTracingGPU(uchar4* ptrDevPixels, int w, int h, float t, Sphere* spheres, int n)
     {
     RayTracingMath* rayTracingMath = new RayTracingMath();
 
