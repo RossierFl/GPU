@@ -12,13 +12,13 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern bool isMontecarlo_Ok(long n, float xMin, float xMax, int m);
+extern bool isMontecarloMulti_Ok(long n, float xMin, float xMax, int m);
 
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
 
-bool useMontecarlo(void);
+bool useMontecarloMulti(void);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -36,9 +36,9 @@ bool useMontecarlo(void);
 
 
 
-bool useMontecarlo(void)
+bool useMontecarloMulti(void)
     {
-    cout << endl << "[Montecarlo]" << endl;
+    cout << endl << "[MontecarloMulti]" << endl;
 
     bool isOk = true;
 
@@ -46,7 +46,7 @@ bool useMontecarlo(void)
     float xMin = 0.0;
     float xMax = 2.0;
     int m = 1;
-    isOk&= isMontecarlo_Ok(n, xMin, xMax, m);
+    isOk&= isMontecarloMulti_Ok(n, xMin, xMax, m);
 
     return isOk;
     }

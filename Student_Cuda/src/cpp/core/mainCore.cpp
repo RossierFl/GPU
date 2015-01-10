@@ -20,6 +20,7 @@ extern void isPiGPU_Ok(void);
 extern bool useScalarProduct(void);
 extern bool useHistogram(void);
 extern bool useMontecarlo(void);
+extern bool useMontecarloMulti(void);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -56,8 +57,10 @@ int mainCore()
     /*bool isOK = true;
     isOK = useHistogram();*/
 
+    /*bool isOK = true;
+    isOK = useMontecarlo();*/
     bool isOK = true;
-    isOK = useMontecarlo();
+    isOK = useMontecarloMulti();
 
     cout << "\nisOK = " << isOK << endl;
     cout << "\nEnd : mainCore" << endl;
