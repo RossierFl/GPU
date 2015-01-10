@@ -67,9 +67,9 @@ __global__ void mandelbrotJuliaCuMltiGPU(uchar4* ptrDevPixels, int w, int h, Dom
 	
 	mandelbrotJuliaMath.colorXY(&color,x, y,domaineMath,t); // update color
 
-	int newS = IndiceTools::toS(w,pixelI+offset,pixelJ);
-	ptrDevPixels[newS] = color;
-
+	//int newS = IndiceTools::toS(w,pixelI+offset,pixelJ);
+	//ptrDevPixels[newS] = color;
+	ptrDevPixels[s] = color;
 	s += NB_THREAD;
 	}
 

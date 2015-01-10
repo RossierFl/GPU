@@ -78,6 +78,17 @@ class MandelbrotJuliaMultiGPU: public AnimableFonctionel_I
 
 	//Outputs
 	string title;
+
+	//Morceau MultiGPU
+
+
+	//Share mutli GPU
+	    uchar4* ptrDevPixels1;
+	    uchar4* ptrDevPixels2;
+	    uchar4* ptrDevPixels3;
+	    uchar4* ptrDevPixels4;
+	    uchar4* ptrDevPixels5;
+
     };
 
 #endif
