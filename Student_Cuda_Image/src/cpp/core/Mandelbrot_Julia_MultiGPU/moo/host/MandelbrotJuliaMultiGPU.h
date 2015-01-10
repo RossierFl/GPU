@@ -53,6 +53,9 @@ class MandelbrotJuliaMultiGPU: public AnimableFonctionel_I
 	DomaineMath* getDomaineMathInit(void); // Override
 	string getTitle(void); // Override
 
+    private :
+
+	int setAndGetNaturalGranularity();
 
 
 	/*--------------------------------------*\

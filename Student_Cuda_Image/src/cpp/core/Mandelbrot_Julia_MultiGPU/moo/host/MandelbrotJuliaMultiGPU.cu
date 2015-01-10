@@ -3,6 +3,8 @@
 #include "MandelbrotJuliaMultiGPU.h"
 #include "Device.h"
 #include "MathTools.h"
+#include <omp.h>
+
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -117,47 +119,82 @@ void MandelbrotJuliaMultiGPU::animationStep()
     this->t = variateurAnimation.varierAndGet(); // in [0,2pi]
     }
 
+
+int MandelbrotJuliaMultiGPU::setAndGetNaturalGranularity()
+    {
+    // ko sur ARM, 1 core detecte only
+//    {
+//    int nbThread = omp_get_num_procs();
+//    omp_set_num_threads(nbThread);
+//    return nbThread;
+//    }
+
+#ifndef __arm__
+
+    int nbThread = omp_get_num_procs();
+
+#else
+
+    //omp_get_num_procs ne donne pas la bonne valeurs sur kayla
+
+    int nbThread=4;//4 car kayla � 4 coeurs.
+
+#endif
+
+    omp_set_num_threads(nbThread);
+    return nbThread;
+    }
+
 /**
  * Override
  */
 void MandelbrotJuliaMultiGPU::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
-   // cudaSetDevice(1);
-   // cudaSetDevice(0);
-   // double x0 =domaineMath.x0;
-   // double y0 =domaineMath.y0;
-   // double x1 =domaineMath.x1;
-    //double y1 =domaineMath.y1;
-    //double dx = (x1-x0)/6;
-    //double dy = (y1-y0)/6;
+
     const size_t SIZE_RESULT = h/6*w*(size_t)sizeof(uchar4);
 
-
-    //DomaineMath dm(x0,y0,x0+dx,y0+dy);
-    //INIT CUDA MEMORY
-    //std::cout<<"Steps"<<std::endl;
-    cudaSetDevice(0);
-    //std::cout<<"Steps1"<<std::endl;
-    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels,w,h/6,domaineMath,n,t, isJulia, cX, cY,0);
-    cudaSetDevice(1);
-    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels1,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6);
-    HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w),ptrDevPixels1,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
-
-    //std::cout<<"Steps"<<std::endl;
+    const int NBTHREAD = setAndGetNaturalGranularity();
 
 
-   cudaSetDevice(2);
-    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels2,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*2);
-    HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*2),ptrDevPixels2,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
-    cudaSetDevice(3);
-    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels3,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*3);
-    HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*3),ptrDevPixels3,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
-    cudaSetDevice(4);
-    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels4,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*4);
-    HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*4),ptrDevPixels4,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
-    cudaSetDevice(5);
-       mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels5,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*5);
-       HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*5),ptrDevPixels5,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
+
+
+        #pragma omp parallel
+        {
+	  const int TID = omp_get_thread_num();
+	  switch(TID){
+	      case 0 :
+		  cudaSetDevice(0);
+		  		     mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels,w,h/6,domaineMath,n,t, isJulia, cX, cY,0);
+		  break;
+	      case 1 :
+		  cudaSetDevice(1);
+		 		    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels1,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6);
+		 		    HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w),ptrDevPixels1,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
+		  break;
+	      case 2 :  cudaSetDevice(2);
+	      mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels2,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*2);
+	      HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*2),ptrDevPixels2,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
+      	      	      break;
+	      case 3 :
+		  cudaSetDevice(3);
+		  		     mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels3,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*3);
+		  		     HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*3),ptrDevPixels3,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
+		      break;
+	      case 4 :
+		  cudaSetDevice(4);
+		      mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels4,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*4);
+		      HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*4),ptrDevPixels4,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
+	      	      break;
+	      case 5 :
+		  cudaSetDevice(5);
+		         mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels5,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*5);
+		         HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*5),ptrDevPixels5,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
+	      	      break;
+	      default :
+		  break;
+	  }
+        }
+
     cudaSetDevice(0);
 
     }
