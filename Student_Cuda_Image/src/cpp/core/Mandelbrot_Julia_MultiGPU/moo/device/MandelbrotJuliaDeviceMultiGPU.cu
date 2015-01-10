@@ -20,7 +20,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY);
+__global__ void mandelbrotJuliaCuMltiGPU(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY,float offset);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -40,7 +40,7 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath 
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,bool isJulia,float cX,float cY)
+__global__ void mandelbrotJuliaCuMltiGPU(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,bool isJulia,float cX,float cY,float offset)
     {
     MandelbrotJuliaMultiGPUMath mandelbrotJuliaMath = MandelbrotJuliaMultiGPUMath(n,isJulia,cX,cY);
 
@@ -61,14 +61,14 @@ __global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels, int w, int h, DomaineMat
     while (s < WH)
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
-
 	// (i,j) domaine ecran
 	// (x,y) domaine math
-	domaineMath.toXY(pixelI, pixelJ, &x, &y); //  (i,j) -> (x,y)
+	domaineMath.toXY(pixelI+offset, pixelJ, &x, &y); //  (i,j) -> (x,y)
 	
 	mandelbrotJuliaMath.colorXY(&color,x, y,domaineMath,t); // update color
 
-	ptrDevPixels[s] = color;
+	int newS = IndiceTools::toS(w,pixelI+offset,pixelJ);
+	ptrDevPixels[newS] = color;
 
 	s += NB_THREAD;
 	}

@@ -12,7 +12,7 @@
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-__global__ void mandelbrotJuliaCu(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY);
+__global__ void mandelbrotJuliaCuMltiGPU(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t,bool isJulia,float cX,float cY,float offset);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -81,7 +81,24 @@ void MandelbrotJuliaMultiGPU::animationStep()
  */
 void MandelbrotJuliaMultiGPU::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
-    mandelbrotJuliaCu<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t, isJulia, cX, cY);
+   // cudaSetDevice(1);
+   // cudaSetDevice(0);
+   // double x0 =domaineMath.x0;
+   // double y0 =domaineMath.y0;
+   // double x1 =domaineMath.x1;
+    //double y1 =domaineMath.y1;
+    //double dx = (x1-x0)/6;
+    //double dy = (y1-y0)/6;
+
+
+    //DomaineMath dm(x0,y0,x0+dx,y0+dy);
+
+    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels,w,h/6,domaineMath,n,t, isJulia, cX, cY,0);
+    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels,w,h/6*2,domaineMath,n,t, isJulia, cX, cY,h/6);
+    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*2);
+    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*3);
+    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*4);
+    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*5);
     }
 
 /*--------------*\
