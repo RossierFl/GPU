@@ -11,6 +11,7 @@
 #include "RipplingProvider.h"
 #include "MandelbrotJuliaProvider.h"
 #include "MandelbrotJuliaProviderMultiGPU.h"
+#include "HeatTransfertProvider.h"
 
 using std::cout;
 using std::endl;
@@ -49,31 +50,36 @@ int mainGL(void)
     // TODO : Insert  autres Images ...
     //ImageFonctionel* ptrMandelbrotJulia = MandelbrotJuliaProvider::createGL();
 
-    ImageFonctionel* ptrMandelbrotJuliaMultiGPU =  MandelbrotJuliaProviderMultiGPU::createGL();
+  //  ImageFonctionel* ptrMandelbrotJuliaMultiGPU =  MandelbrotJuliaProviderMultiGPU::createGL();
+
+    Image* ptrHeatTransfert =  HeatTransfertProvider::createGL();
 
 
     bool isAnimation = true;
-    bool isSelection = true;
+    bool isSelection = false;
 
    // GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
   //  GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
     // TODO : Insert here autres ImageViewers ...
     //GLUTImageViewers mandelbrotJuliaViewer(ptrMandelbrotJulia, isAnimation, isSelection, 0, 0);
 
-    GLUTImageViewers mandelbrotJuliaViewerMultiGPU(ptrMandelbrotJuliaMultiGPU, isAnimation, isSelection, 0, 0);
-
+    //-----------------------------JULIA MANDELBROT MULTI GPU
+   // GLUTImageViewers mandelbrotJuliaViewerMultiGPU(ptrMandelbrotJuliaMultiGPU, isAnimation, isSelection, 0, 0);
+    GLUTImageViewers heatTransfertViewer(ptrHeatTransfert, isAnimation, isSelection, 0, 0);
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
     // destruction
 	{
 	delete ptrRippling0;
 	delete ptrRippling;
-	delete ptrMandelbrotJuliaMultiGPU;
+	//delete ptrMandelbrotJuliaMultiGPU;
 	//delete ptrMandelbrotJulia;
+	delete ptrHeatTransfert;
 
 	ptrRippling0 = NULL;
 	ptrRippling = NULL;
-	ptrMandelbrotJuliaMultiGPU=NULL;
+	ptrHeatTransfert=NULL;
+	//ptrMandelbrotJuliaMultiGPU=NULL;
 	//ptrMandelbrotJulia = NULL;
 	}
 

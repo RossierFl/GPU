@@ -49,8 +49,8 @@ class HeatTransfertMath
 
 	}
 	__device__
-	void convertFloatToColor(float colorFloat , uchar4* color){
-	    float hue = calibreur.calibrate(colorFloat);
+	void convertFloatToColor(CalibreurCudas* calibreur,float colorFloat , uchar4* color){
+	    float hue = calibreur->calibrate(colorFloat);
 	    ColorTools::HSB_TO_RVB(colorFloat,color);
 	}
 
@@ -63,7 +63,7 @@ class HeatTransfertMath
 	 \*-------------------------------------*/
 
     private:
-	CalibreurCudas calibreur(0,1,0.7,0);
+
 
 
 

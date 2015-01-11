@@ -4,6 +4,7 @@
 #include "HeatTransfert.h"
 #include "Device.h"
 #include "MathTools.h"
+#include "CalibreurCudas.h"
 
 using std::cout;
 using std::endl;
@@ -16,9 +17,9 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutput,int w, int h);
+extern __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutput,int w, int h, float k);
 extern __global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters ,float* ptrDevImageOutput,int w,int h);
-extern __global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImageGL, int w, int h);
+extern __global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImageGL, int w, int h,CalibreurCudas calibreur);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -52,6 +53,7 @@ HeatTransfert::HeatTransfert(int w, int h, float dt, float k)
     this->dg = dim3(8, 8, 1); // disons a optimiser
     this->db = dim3(16, 16, 1); // disons a optimiser
     this->t = 0;
+    this->iteration_aveugle_counter=0;
 
     //Outputs
     this->title = "[API Image Cuda] : HeatTransfert CUDA";
@@ -63,7 +65,7 @@ HeatTransfert::HeatTransfert(int w, int h, float dt, float k)
 
     cout << endl << "[CBI] HeatTransfert dt =" << dt;
 
-    initGPUMemory();
+    initGPUMemory(h,w);
     createDataForGPU(h, w);
     initGPUFirstStep(h, w, k);
 
@@ -92,18 +94,19 @@ void HeatTransfert::animationStep()
  */
 void HeatTransfert::runGPU(uchar4* ptrDevPixels)
     {
+    CalibreurCudas calibreur = CalibreurCudas(0.0f,0.1f,0.7f,0.0f);
     iteration_aveugle_counter++;
     heatTransfert<<<dg,db>>>( ptrImageDeviceA,ptrImageDeviceB, w, h,k);
     Device::synchronize();
-    heatEcrasement<<<dg,db>>>( ptrImageDeviceB, ptrDevImageHeaters , ptrImageDeviceA, w, h);
+    heatEcrasement<<<dg,db>>>( ptrImageDeviceB, prtImageHeats , ptrImageDeviceA, w, h);
     Device::synchronize();
     heatTransfert<<<dg,db>>>( ptrImageDeviceB,ptrImageDeviceA, w, h,k);
     Device::synchronize();
-    heatEcrasement<<<dg,db>>>( ptrImageDeviceA, ptrDevImageHeaters , ptrImageDeviceA, w, h);
+    heatEcrasement<<<dg,db>>>( ptrImageDeviceA, prtImageHeats , ptrImageDeviceA, w, h);
     Device::synchronize();
     if (iteration_aveugle_counter == NB_ITERATION_AVEUGLE)
 	{
-	heatToScreenImageHSB<<<dg,db>>>( ptrImageDeviceA, ptrDevPixels, w, h);
+	heatToScreenImageHSB<<<dg,db>>>( ptrImageDeviceA, ptrDevPixels, w, h,calibreur);
 	Device::synchronize();
 	iteration_aveugle_counter = 0;
 	}
@@ -211,16 +214,16 @@ void HeatTransfert::createDataForGPU(int h, int w)
 		}
 	    }
 	}
-    HANDLE_ERROR(cudaMemcpy(ptrDevImageHeaters, tableHostHeat, SIZE_IMAGE, cudaMemcpyHostToDevice)); //barriere implicite de sync
+    HANDLE_ERROR(cudaMemcpy(prtImageHeats, tableHostHeat, SIZE_IMAGE, cudaMemcpyHostToDevice)); //barriere implicite de sync
     }
 
 void HeatTransfert::initGPUFirstStep(int h, int w, float k)
     {
-    heatEcrasement<<<dg,db>>>(ptrImageDeviceB,ptrDevImageHeaters ,ptrImageDeviceB, w, h);
+    heatEcrasement<<<dg,db>>>(ptrImageDeviceB,prtImageHeats ,ptrImageDeviceB, w, h);
     Device::synchronize();
-    heatTransfert<<<dg,db>>>(ptrImageDeviceA,ptrImageDeviceB, w, h);
+    heatTransfert<<<dg,db>>>(ptrImageDeviceA,ptrImageDeviceB, w, h,k);
     Device::synchronize();
-    heatEcrasement<<<dg,db>>>(ptrImageDeviceB,ptrDevImageHeaters ,ptrImageDeviceA, w, h);
+    heatEcrasement<<<dg,db>>>(ptrImageDeviceB,prtImageHeats ,ptrImageDeviceA, w, h);
     Device::synchronize();
 
     }

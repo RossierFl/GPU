@@ -2,7 +2,7 @@
 #include "IndiceTools.h"
 #include "cudaTools.h"
 #include "Device.h"
-
+#include "CalibreurCudas.h"
 
 #include "HeatTransfertMath.h"
 
@@ -19,9 +19,9 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutput,int w, int h);
+__global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutput,int w, int h, float k);
 __global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters ,float* ptrDevImageOutput,int w,int h);
-__global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImageGL, int w, int h);
+__global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImageGL, int w, int h,CalibreurCudas calibreur);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -36,7 +36,7 @@ __global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImag
  \*-------------------------------------*/
 
 //Diffusion
-__global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutput,int w, int h)
+__global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutput,int w, int h,float k)
     {
     HeatTransfertMath heatTransfertMath = HeatTransfertMath();
 
@@ -67,8 +67,8 @@ __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutpu
 	colorEst = ptrDevImageAInput[sE];
 	colorNord= ptrDevImageAInput[sN];
 	colorOuest = ptrDevImageAInput[sO];
-	heatTransfertMath.calculeColorTransfert(&color,colorSud,colorEst,colorNord,colorOuest)
-	heatTransfertMath.colorIJ(&color,pixelI, pixelJ, t); 	// update color
+	heatTransfertMath.calculeColorTransfert(&color,colorSud,colorEst,colorNord,colorOuest,k);
+	//heatTransfertMath.colorIJ(&color,pixelI, pixelJ, t); 	// update color
 	ptrDevImageBOutput[s] = color;
 	}
 
@@ -79,11 +79,11 @@ __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutpu
 //Ecrasement entre les heater et le résulat des diffusion
 __global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters ,float* ptrDevImageOutput,int w,int h)
     {
-    HeatTransfertMath heatTransfertMath = HeatTransfertMath(w, h);
+    HeatTransfertMath heatTransfertMath = HeatTransfertMath();
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
-
+    const int WH = w*h;
 
     int s = TID;
     while (s < WH)
@@ -102,9 +102,9 @@ __global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters
 
 
 //Ecrasement entre les heater et le résulat des diffusion
-__global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImageGL, int w, int h)
+__global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImageGL, int w, int h,CalibreurCudas calibreur)
     {
-    HeatTransfertMath heatTransfertMath = HeatTransfertMath(w, h);
+    HeatTransfertMath heatTransfertMath = HeatTransfertMath();
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
@@ -121,8 +121,8 @@ __global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImag
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 
-	heatTransfertMath.convertFloatToColor(ptrDevImageInput[s],&color);	// update color
-	ptrDevPixels[s] = color;
+	heatTransfertMath.convertFloatToColor(&calibreur,ptrDevImageInput[s],&color);	// update color
+	ptrDevImageGL[s] = color;
 
 	s += NB_THREAD;
 	}

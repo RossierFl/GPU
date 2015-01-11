@@ -2,7 +2,6 @@
 #ifndef CALIBREURCUDAS_H
 #define CALIBREURCUDAS_H
 
-#include "bilatCudaTools.h"
 
 class CalibreurCudas
     {
