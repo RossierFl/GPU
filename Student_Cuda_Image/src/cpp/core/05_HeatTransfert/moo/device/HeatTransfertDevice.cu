@@ -3,6 +3,7 @@
 #include "cudaTools.h"
 #include "Device.h"
 #include "CalibreurCudas.h"
+#include "cstdio"
 
 #include "HeatTransfertMath.h"
 
@@ -58,11 +59,11 @@ __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutpu
     while (s < WH)
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
-	if(pixelI!=0 || pixelJ!=0 || pixelI<w-1 || pixelJ<h-1){
-	int sS = IndiceTools::toS(w,pixelI,pixelJ-1);
-	int sE = IndiceTools::toS(w,pixelI+1,pixelJ);
-	int sN = IndiceTools::toS(w,pixelI,pixelJ+1);
-	int sO = IndiceTools::toS(w,pixelI-1,pixelJ);
+	if(pixelI!=0 || pixelJ!=0 || pixelI<h-1 || pixelJ<w-1){
+	int sS = IndiceTools::toS(w,pixelI-1,pixelJ);
+	int sE = IndiceTools::toS(w,pixelI,pixelJ+1);
+	int sN = IndiceTools::toS(w,pixelI+1,pixelJ);
+	int sO = IndiceTools::toS(w,pixelI,pixelJ-1);
 	colorSud = ptrDevImageAInput[sS];
 	colorEst = ptrDevImageAInput[sE];
 	colorNord= ptrDevImageAInput[sN];
@@ -95,6 +96,7 @@ __global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters
 	}else{
 	    ptrDevImageOutput[s] = ptrDevImageInput[s];
 	}
+
 
 	s += NB_THREAD;
 	}
