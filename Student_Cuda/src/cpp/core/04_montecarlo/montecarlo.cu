@@ -8,24 +8,24 @@
 
 // #define DEBUG 1
 
-__device__ float uniform(const float MIN, const float MAX, curandState& localState);
-__global__ void setup_kernel_rand(curandState* tabGeneratorThread, const int DEVICE_ID);
-__device__ float f(float x);
-__global__ void kernel(float* ptrDevGM, const int nTabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long long N,
+static __device__ float uniform(const float MIN, const float MAX, curandState& localState);
+static __global__ void setup_kernel_rand(curandState* tabGeneratorThread, const int DEVICE_ID);
+static __device__ float f(float x);
+static __global__ void kernel(float* ptrDevGM, const int nTabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long long N,
         curandState* tabGeneratorThread);
-__device__ void reduceIntraThread(float* tabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long long N, curandState* tabGeneratorThread);
+static __device__ void reduceIntraThread(float* tabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long long N, curandState* tabGeneratorThread);
 __host__ bool useMontecarlo();
 
 /*---------------------------------------------------------------------------*
  * Nombres aléatoires
  *---------------------------------------------------------------------------*/
 
-__device__ float uniform(const float MIN, const float MAX, curandState& localState) {
+static __device__ float uniform(const float MIN, const float MAX, curandState& localState) {
 	float r = curand_uniform(&localState);
 	return MIN + r * (MAX - MIN);
 }
 
-__global__ void setup_kernel_rand(curandState* tabGeneratorThread, const int DEVICE_ID) {
+static __global__ void setup_kernel_rand(curandState* tabGeneratorThread, const int DEVICE_ID) {
 	const int TID = Indice1D::tid();
 
 	int deltaSeed = DEVICE_ID * INT_MAX;
@@ -42,11 +42,11 @@ __global__ void setup_kernel_rand(curandState* tabGeneratorThread, const int DEV
  * Montecarlo
  *---------------------------------------------------------------------------*/
 
-__device__ float f(float x) {
+static __device__ float f(float x) {
 	return 0.3;
 }
 
-__global__ void kernel(float* ptrDevGM, const int nTabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long long N,
+static __global__ void kernel(float* ptrDevGM, const int nTabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long long N,
         curandState* tabGeneratorThread) {
 	// @formatter:off
 	extern __shared__ float tabSM[];// 1 instance per block !
@@ -89,7 +89,7 @@ __global__ void kernel(float* ptrDevGM, const int nTabSM, const float X_MIN, con
 #endif
 }
 
-__device__ void reduceIntraThread(float* tabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long long N,
+static __device__ void reduceIntraThread(float* tabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long long N,
         curandState* tabGeneratorThread) {
 	const int TID = Indice1D::tid();
 	const int TID_LOCAL = Indice1D::tidLocal();
@@ -158,7 +158,7 @@ __host__ bool useMontecarlo() {
 	HANDLE_ERROR(cudaMemcpy(&resultRAM, ptrDevGM, size, cudaMemcpyDeviceToHost)); // barrière de synchronisation
 
 	// Affichage du résultat
-	printf("Montecarlo[n=%d, min=%f, max=%f, m=%d] = %f\n", N, X_MIN, X_MAX, M, resultRAM);
+	printf("Montecarlo[n=%llu, min=%f, max=%f, m=%d] = %f\n", N, X_MIN, X_MAX, M, resultRAM);
 
 	return true;
 }
