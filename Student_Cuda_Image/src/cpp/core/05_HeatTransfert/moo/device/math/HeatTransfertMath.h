@@ -2,6 +2,10 @@
 #define HEAT_TRANSFERT_MATH_H_
 
 #include "MathTools.h"
+#include "ColorTools_GPU.h"
+#include "CalibreurCudas.h"
+
+
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -44,6 +48,11 @@ class HeatTransfertMath
 	   *centralColorOutput = *centralColorOutput + k*(colorSud+colorEst+colorNord+colorOuest);
 
 	}
+	__device__
+	void convertFloatToColor(float colorFloat , uchar4* color){
+	    float hue = calibreur.calibrate(colorFloat);
+	    ColorTools::HSB_TO_RVB(colorFloat,color);
+	}
 
     private:
 
@@ -54,6 +63,7 @@ class HeatTransfertMath
 	 \*-------------------------------------*/
 
     private:
+	CalibreurCudas calibreur(0,1,0.7,0);
 
 
 

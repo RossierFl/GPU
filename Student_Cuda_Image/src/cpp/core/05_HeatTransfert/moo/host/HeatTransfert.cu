@@ -16,7 +16,9 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void heatTransfert(uchar4* ptrDevPixels,int w, int h,float t);
+extern __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutput,int w, int h);
+extern __global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters ,float* ptrDevImageOutput,int w,int h);
+extern __global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImageGL, int w, int h);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -38,12 +40,13 @@ extern __global__ void heatTransfert(uchar4* ptrDevPixels,int w, int h,float t);
  |*	Constructeur	    *|
  \*-------------------------*/
 
-HeatTransfert::HeatTransfert(int w, int h,float dt)
+HeatTransfert::HeatTransfert(int w, int h,float dt,float k)
     {
     // Inputs
     this->w = w;
     this->h = h;
     this->dt=dt;
+    this->k=k;
 
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
@@ -84,7 +87,10 @@ void HeatTransfert::animationStep()
  */
 void HeatTransfert::runGPU(uchar4* ptrDevPixels)
     {
-    heatTransfert<<<dg,db>>>(ptrDevPixels,w,h,t);
+
+    heatTransfert<<<dg,db>>>(float* ptrDevImageAInput, float* ptrDevImageBOutput,int w, int h);
+   heatEcrasement<<<dg,db>>>(float* ptrDevImageInput,float* ptrDevImageHeaters ,float* ptrDevImageOutput,int w,int h);
+     heatToScreenImageHSB<<<dg,db>>>(float* ptrDevImageInput, uchar4* ptrDevImageGL, int w, int h);
     }
 
 /*--------------*\

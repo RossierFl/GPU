@@ -3,6 +3,7 @@
 #include "cudaTools.h"
 #include "Device.h"
 
+
 #include "HeatTransfertMath.h"
 
 // Attention : 	Choix du nom est impotant!
@@ -19,7 +20,7 @@
  \*-------------------------------------*/
 
 __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutput,int w, int h);
-__global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters ,float* ptrDevImageOutput);
+__global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters ,float* ptrDevImageOutput,int w,int h);
 __global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImageGL, int w, int h);
 
 /*--------------------------------------*\
@@ -76,7 +77,7 @@ __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutpu
     }
 
 //Ecrasement entre les heater et le résulat des diffusion
-__global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters ,float* ptrDevImageOutput)
+__global__ void heatEcrasement(float* ptrDevImageInput,float* ptrDevImageHeaters ,float* ptrDevImageOutput,int w,int h)
     {
     HeatTransfertMath heatTransfertMath = HeatTransfertMath(w, h);
 
@@ -120,7 +121,7 @@ __global__ void heatToScreenImageHSB(float* ptrDevImageInput, uchar4* ptrDevImag
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 
-	heatTransfertMath.colorIJ(&color,pixelI, pixelJ, t); 	// update color
+	heatTransfertMath.convertFloatToColor(ptrDevImageInput[s],&color);	// update color
 	ptrDevPixels[s] = color;
 
 	s += NB_THREAD;

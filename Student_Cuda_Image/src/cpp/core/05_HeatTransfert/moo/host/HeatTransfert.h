@@ -58,6 +58,9 @@ class HeatTransfert: public Animable_I
 	int w;
 	int h;
 	float dt;
+	float k;
+
+	const int NB_ITERATION_AVEUGLE = 50;
 
 	// Tools
 	dim3 dg;
@@ -66,6 +69,11 @@ class HeatTransfert: public Animable_I
 
 	//Outputs
 	string title;
+
+	//Images memory
+	uchar4* ptrImageDeviceA;
+	uchar4* ptrImageDeviceB;
+
     };
 
 #endif
