@@ -64,6 +64,7 @@ __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutpu
 	int sE = IndiceTools::toS(w,pixelI,pixelJ+1);
 	int sN = IndiceTools::toS(w,pixelI+1,pixelJ);
 	int sO = IndiceTools::toS(w,pixelI,pixelJ-1);
+	color=ptrDevImageAInput[s];
 	colorSud = ptrDevImageAInput[sS];
 	colorEst = ptrDevImageAInput[sE];
 	colorNord= ptrDevImageAInput[sN];
