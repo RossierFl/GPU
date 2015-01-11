@@ -172,7 +172,7 @@ void HeatTransfert::initGPUMemory(int h, int w)
 void HeatTransfert::createDataForGPU(int h, int w)
     {
     const int SIZE_IMAGE = h * w * sizeof(float);
-    /*float tableHostHeat[h][w];
+    float tableHostHeat[h][w];
     for (int i = 0; i < h; i++)
 	{
 	for (int j = 0; j < w; j++)
@@ -218,68 +218,9 @@ void HeatTransfert::createDataForGPU(int h, int w)
 		tableHostHeat[i][j] = 0;
 		}
 	    }
-	}*/
-    float *imageHeaterCPU = new float[w*h];
+	}
 
-       // ary[i][j] is then rewritten as
-       //imageHeaterCPU[i*h+j]
-       for(int i=0;i<=h;i++)//take it to zero to avoid something strange
-         {
-   	for(int j=0;j<=w;j++)
-   	  {
-   	    imageHeaterCPU[i*h+j]=0.0;
-   	  }
-         }
-       //single cooler point
-       imageHeaterCPU[295*h+400] = 0.2;
-       imageHeaterCPU[400*h+295] = 0.2;
-       imageHeaterCPU[505*h+400] = 0.2;
-       imageHeaterCPU[400*h+505] = 0.2;
-
-       //up cooler
-       for(int i=179;i<=195;i++)
-         {
-   	for(int j=179;j<=195;j++)
-   	  {
-   	    imageHeaterCPU[i*h+j] = 0.2;
-   	  }
-   	for(int j=605;j<=621;j++)
-   	  {
-   	    imageHeaterCPU[i*h+j] = 0.2;
-   	  }
-         }
-
-       //down cooler
-       for(int i=605;i<=621;i++)
-       {
-         for(int j=179;j<=195;j++)
-   	{
-   	  imageHeaterCPU[i*h+j] = 0.2;
-   	}
-         for(int j=605;j<=621;j++)
-   	{
-   	  imageHeaterCPU[i*h+j] = 0.2;
-   	}
-       }
-
-       //main heater
-       for(int i=300;i<=500;i++)
-         {
-   	for(int j=300;j<=500;j++)
-   	  {
-   	    imageHeaterCPU[i*h+j] = 1.0;
-   	  }
-         }
-
-
-       /* for(int i =0; i<h;i++){
-            for(int j=0;j<w;j++){
-    	float v = tableHostHeat[i][j];
-    	  std::cout<<v<<";";
-            }
-            std::cout<<sdt;
-        }*/
-    HANDLE_ERROR(cudaMemcpy(prtImageHeats, imageHeaterCPU, SIZE_IMAGE, cudaMemcpyHostToDevice)); //barriere implicite de sync
+    HANDLE_ERROR(cudaMemcpy(prtImageHeats, tableHostHeat, SIZE_IMAGE, cudaMemcpyHostToDevice)); //barriere implicite de sync
     }
 
 void HeatTransfert::initGPUFirstStep(int h, int w, float k)
