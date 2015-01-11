@@ -96,14 +96,14 @@ void HeatTransfert::runGPU(uchar4* ptrDevPixels)
     {
     CalibreurCudas calibreur = CalibreurCudas(0.0f,1.0f,0.7f,0.0f);
     iteration_aveugle_counter++;
-    /*heatTransfert<<<dg,db>>>( ptrImageDeviceA,ptrImageDeviceB, w, h,k);
+    heatTransfert<<<dg,db>>>( ptrImageDeviceA,ptrImageDeviceB, w, h,k);
     Device::synchronize();
-    heatEcrasement<<<dg,db>>>( ptrImageDeviceB, prtImageHeats , ptrImageDeviceA, w, h);
+    heatEcrasement<<<dg,db>>>( ptrImageDeviceB, prtImageHeats , ptrImageDeviceB, w, h);
     Device::synchronize();
     heatTransfert<<<dg,db>>>( ptrImageDeviceB,ptrImageDeviceA, w, h,k);
     Device::synchronize();
     heatEcrasement<<<dg,db>>>( ptrImageDeviceA, prtImageHeats , ptrImageDeviceA, w, h);
-    Device::synchronize();*/
+    Device::synchronize();
 
 
     if (iteration_aveugle_counter == NB_ITERATION_AVEUGLE)
@@ -231,16 +231,16 @@ void HeatTransfert::initGPUFirstStep(int h, int w, float k)
     {
 
 
-    heatEcrasement<<<dg,db>>>(ptrImageDeviceB,prtImageHeats ,ptrImageDeviceA, w, h);
-        Device::synchronize();
+   /* heatEcrasement<<<dg,db>>>(ptrImageDeviceB,prtImageHeats ,ptrImageDeviceA, w, h);
+        Device::synchronize();*/
 
 
-    /*heatEcrasement<<<dg,db>>>(ptrImageDeviceB,prtImageHeats ,ptrImageDeviceB, w, h);
+    heatEcrasement<<<dg,db>>>(ptrImageDeviceB,prtImageHeats ,ptrImageDeviceB, w, h);
     Device::synchronize();
-    heatTransfert<<<dg,db>>>(ptrImageDeviceA,ptrImageDeviceB, w, h,k);
+    heatTransfert<<<dg,db>>>(ptrImageDeviceB,ptrImageDeviceA, w, h,k);
     Device::synchronize();
-    heatEcrasement<<<dg,db>>>(ptrImageDeviceB,prtImageHeats ,ptrImageDeviceA, w, h);
-    Device::synchronize();*/
+    heatEcrasement<<<dg,db>>>(ptrImageDeviceA,prtImageHeats ,ptrImageDeviceA, w, h);
+    Device::synchronize();
 
     }
 
