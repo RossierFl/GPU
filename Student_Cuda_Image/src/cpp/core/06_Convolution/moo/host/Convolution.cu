@@ -65,12 +65,14 @@ Convolution::Convolution(int w, int h,float dt)
 
     const int N = k*k;
 
+    printf("N: %d, k: %d, half of k: %d, ss: %d\n",N,k,k/2,(int)(k*((float)k/2.0f)));
+
     HANDLE_ERROR( cudaHostAlloc ((void**) &(this->ptrHostNoyau), N*sizeof(float),cudaHostAllocDefault ) );
 
     fillDetourage(ptrHostNoyau);
 
-    cudaMalloc((void **)ptrDeviceNoyau,N*sizeof(float));
-    cudaMemcpy(ptrDeviceNoyau,ptrHostNoyau,N*sizeof(float),cudaMemcpyHostToDevice);
+    HANDLE_ERROR(cudaMalloc((void **)&ptrDeviceNoyau,N*sizeof(float)));
+    HANDLE_ERROR(cudaMemcpy(ptrDeviceNoyau,ptrHostNoyau,N*sizeof(float),cudaMemcpyHostToDevice));
 
     //cout << endl<<"[CBI] Convolution dt =" << dt << endl;
     }
@@ -118,10 +120,11 @@ void Convolution::runGPU(uchar4* ptrDevPixels)
     {
     Mat matImage = captureur->capturer();
     uchar4* image = CaptureVideo::castToUChar4(&matImage);
-    cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(ptrDevPixels[0]),cudaMemcpyHostToDevice);
+    HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(ptrDevPixels[0]),cudaMemcpyHostToDevice));
     colorToGrey<<<dg,db>>>(ptrDevPixels,w,h);
-    cudaDeviceSynchronize();
+    HANDLE_ERROR(cudaDeviceSynchronize());
     convolutionKernel<<<dg,db>>>(ptrDevPixels,ptrDeviceNoyau,k,w,h,t);
+    HANDLE_ERROR(cudaDeviceSynchronize());
     }
 
 /*--------------*\

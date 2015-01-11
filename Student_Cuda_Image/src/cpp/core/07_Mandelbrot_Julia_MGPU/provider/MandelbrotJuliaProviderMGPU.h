@@ -12,7 +12,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class MandelbrotJuliaProvider
+class MandelbrotJuliaProviderMGPU
     {
     public:
 

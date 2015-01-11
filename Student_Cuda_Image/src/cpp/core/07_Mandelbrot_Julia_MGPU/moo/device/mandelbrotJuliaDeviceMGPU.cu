@@ -21,8 +21,8 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void fractale(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
-	int isJulia, double c1, double c2);
+__global__ void fractaleMGPU(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
+	int isJulia, double c1, double c2, int offset);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -42,8 +42,8 @@ __global__ void fractale(uchar4* ptrDevPixels, int w, int h, DomaineMath domaine
  |*		Private			*|
  \*-------------------------------------*/
 
-__global__ void fractale(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
-	int isJulia, double c1, double c2)
+__global__ void fractaleMGPU(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t,
+	int isJulia, double c1, double c2, int offset)
     {
     Fractale* fractaleMath = 0;
     if(isJulia)
@@ -67,7 +67,7 @@ __global__ void fractale(uchar4* ptrDevPixels, int w, int h, DomaineMath domaine
     int s = TID;
     while (s < WH)
 	{
-	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
+	IndiceTools::toIJ(s+offset, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 
 	// (i,j) domaine ecran
 	// (x,y) domaine math

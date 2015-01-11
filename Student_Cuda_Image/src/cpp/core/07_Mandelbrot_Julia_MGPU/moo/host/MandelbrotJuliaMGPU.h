@@ -79,11 +79,13 @@ class MandelbrotJuliaMGPU: public AnimableFonctionel_I
 	VariateurF variateurAnimation; // varier t
 	DomaineMath* ptrDomaineMathInit;
 
-	const static int nbGPUs;
+	int nbGPUs;
 	int splittedH;
 	size_t tailleSplitted;
 
-	uchar4 ptrDevZoneMemGPU[nbGPUs-1];
+	uchar4** ptrDevZoneMemGPU;
+	uchar4* ptrDevGpu1;
+	uchar4* ptrDevGpu2;
 
 	//Outputs
 	string title;

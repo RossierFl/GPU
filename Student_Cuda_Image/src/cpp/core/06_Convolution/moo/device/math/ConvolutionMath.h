@@ -59,42 +59,43 @@ class ConvolutionMath
     private:
 
 	__device__
-	void firstLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, unsigned char& levelGris, int i, int h, int s)
+	void firstLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, unsigned char& levelGris, int i, int h, int s)
 	    {
-	if(i==0)
-	    {
-	    levelGris = 0;
-	    }
-	else if(i>0 && i<h)
+	int k2 = k/2;
+	if(i<k2)
 	    {
 	    levelGris = 0;
 	    }
-	else if(i == h)
+	else if(i>=k2 && i<h-k2)
+	    {
+	    levelGris = 0;
+	    }
+	else if(i >= h-k2)
 	    {
 	    levelGris = 0;
 	    }
 	    }
 
 	/*
-	 * s1 s2 s3
-	 * s4 s5 s6
-	 * s7 s8 s9
+	 *
+	 *
+	 *
 	 */
 	__device__
 	void middleLines(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, unsigned char& levelGris, int i, int j, int h, int s)
 	    {
-	    int ss = (k*k)/2;
-	    if(i==0)
+	    int ss = (int)(k*((float)k/2.0f));
+	    int k2 = k/2;
+	    if(i<k2)
 		{
 		levelGris = 0;
 		}
-	    else if(i>0 && i<h)
+	    else if(i>=k2 && i<h-k2)
 		{
 		float sum = 0.0f;
-		int k2 = k/2;
-		for(int v = 1;v<k2;v++)
+		for(int v = 1;v<=k2;v++)
 		    {
-		    for(int u = 1;u<k2;u++)
+		    for(int u = 1;u<=k2;u++)
 			{
 			// bas droite
 			sum+=ptrDeviceNoyau[(ss+v*k)+u]*ptrDevPixels[(s+v*w)+u].x;
@@ -120,24 +121,25 @@ class ConvolutionMath
 		ptrColor->y = sum;
 		ptrColor->z = sum;
 		}
-	    else if(i == h)
+	    else if(i >= h-k2)
 		{
 		levelGris = 0;
 		}
 	    }
 
 	__device__
-	void lastLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, unsigned char& levelGris, int i, int h, int s)
+	void lastLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, unsigned char& levelGris, int i, int h, int s)
 	    {
-	    if(i==0)
+	    int k2 = k/2;
+	    if(i<k2)
 		{
 		levelGris = 0;
 		}
-	    else if(i>0 && i<h)
+	    else if(i>=k2 && i<h-k2)
 		{
 		levelGris = 0;
 		}
-	    else if(i == h)
+	    else if(i >= h-k2)
 		{
 		levelGris = 0;
 		}
@@ -146,17 +148,18 @@ class ConvolutionMath
 	__device__
 	void f(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, unsigned char& levelGris, int i, int j, int s, float t)
 	    {
-	    if(j==0)
+	    int k2 = k/2;
+	    if(j<k2)
 		{
-		firstLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,levelGris,i,h,s);
+		firstLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,levelGris,i,h,s);
 		}
-	    else if(j>0 && j<w)
+	    else if(j>=k/2 && j<w-k2)
 		{
 		middleLines(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,levelGris,i,j,h,s);
 		}
-	    else if(j == w)
+	    else if(j >= w-k2)
 		{
-		lastLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,levelGris,i,h,s);
+		lastLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,levelGris,i,h,s);
 		}
 	    }
 

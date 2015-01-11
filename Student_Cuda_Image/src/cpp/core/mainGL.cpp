@@ -10,6 +10,7 @@
 #include "Rippling0Provider.h"
 #include "RipplingProvider.h"
 #include "MandelbrotJuliaProvider.h"
+#include "MandelbrotJuliaProviderMGPU.h"
 #include "NewtonProvider.h"
 #include "ConvolutionProvider.h"
 
@@ -49,6 +50,7 @@ int mainGL(void)
     Image* ptrRippling = RipplingProvider::createGL();
     Image* ptrConvolution = ConvolutionProvider::createGL();
     ImageFonctionel* ptrMandelbrot = MandelbrotJuliaProvider::createGL();
+    ImageFonctionel* ptrMandelbrotMGPU = MandelbrotJuliaProviderMGPU::createGL();
     ImageFonctionel* ptrNewton = NewtonProvider::createGL();
 
     bool isAnimation = true;
@@ -57,6 +59,7 @@ int mainGL(void)
     //GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
     //GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
     //GLUTImageViewers mandelBrotViewer(ptrMandelbrot,isAnimation,isSelection,10,10);
+    //GLUTImageViewers mandelBrotMGPUViewer(ptrMandelbrotMGPU,isAnimation,isSelection,10,10);
     //GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,10,10);
     GLUTImageViewers newtonViewer(ptrConvolution,isAnimation,isSelection,10,10);
     // TODO : Insert here autres ImageViewers ...
@@ -68,12 +71,14 @@ int mainGL(void)
 	//delete ptrRippling0;
 	delete ptrRippling;
 	delete ptrMandelbrot;
+	delete ptrMandelbrotMGPU;
 	delete ptrNewton;
 	delete ptrConvolution;
 
 	//ptrRippling0 = NULL;
 	ptrRippling = NULL;
 	ptrMandelbrot = NULL;
+	ptrMandelbrotMGPU = NULL;
 	ptrNewton = NULL;
 	ptrConvolution = NULL;
 	}
