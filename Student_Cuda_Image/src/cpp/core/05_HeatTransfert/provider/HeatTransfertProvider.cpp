@@ -1,6 +1,6 @@
 #include "HeatTransfertProvider.h"
 #include "MathTools.h"
-
+#include "HeatTransfert.h"
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
@@ -31,12 +31,13 @@
 
 HeatTransfert* HeatTransfertProvider::create()
     {
-    float dt = 2*PI/1000;
+    //float dt = 2*PI/1000;
+    float dt = 1;
+    int dw =800; // =32*30=960
+    int dh = 800; // =32*30=960
+    float k = 0.25;
 
-    int dw = 16 * 60; // =32*30=960
-    int dh = 16 * 60; // =32*30=960
-
-    return new HeatTransfert(dw, dh, dt);
+    return new HeatTransfert(dw, dh, dt,k);
     }
 
  Image* HeatTransfertProvider::createGL(void)

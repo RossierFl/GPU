@@ -21,7 +21,7 @@ class HeatTransfert: public Animable_I
 
     public:
 
-	HeatTransfert(int w, int h, float dt = 2 * PI / 1000);
+	HeatTransfert(int w, int h, float dt,float k);
 	virtual ~HeatTransfert(void);
 
 	/*--------------------------------------*\
@@ -54,6 +54,15 @@ class HeatTransfert: public Animable_I
 
     private:
 
+	void initGPUMemory(int h, int w);
+
+	void createDataForGPU(int h, int w);
+
+	void initGPUFirstStep(int h, int w, float k);
+
+	void freeGPUMemory();
+
+
 	// Inputs
 	int w;
 	int h;
@@ -66,7 +75,7 @@ class HeatTransfert: public Animable_I
 	dim3 dg;
 	dim3 db;
 	float t;
-
+	int iteration_aveugle_counter=0;
 	//Outputs
 	string title;
 
