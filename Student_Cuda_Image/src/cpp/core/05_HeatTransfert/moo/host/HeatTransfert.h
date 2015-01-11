@@ -73,6 +73,7 @@ class HeatTransfert: public Animable_I
 	//Images memory
 	uchar4* ptrImageDeviceA;
 	uchar4* ptrImageDeviceB;
+	uchar4* prtImageHeats;
 
     };
 

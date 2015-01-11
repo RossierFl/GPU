@@ -132,6 +132,34 @@ string HeatTransfert::getTitle(void)
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
+ 
+ //Init GPU Memory and copy data 
+ void initGPUMemory(){
+	 HANDLE_ERROR(cudaMalloc(&ptrImageDeviceA,SIZE_BAND));
+    HANDLE_ERROR(cudaMemset(ptrImageDeviceA,0,SIZE_BAND));
+	 HANDLE_ERROR(cudaMalloc(&ptrImageDeviceB,SIZE_BAND));
+    HANDLE_ERROR(cudaMemset(ptrImageDeviceB,0,SIZE_BAND));
+	 HANDLE_ERROR(cudaMalloc(&prtImageHeats,SIZE_BAND));
+    HANDLE_ERROR(cudaMemset(prtImageHeats,0,SIZE_BAND));
+ }
+ 
+ void createDataForGPU(){
+	uchar4* ptrImageDeviceA;
+	uchar4* ptrImageDeviceB;
+	uchar4* prtImageHeats;
+ }
+ 
+ void initGPUFirstStep(int h,int w,float k){
+	heatEcrasement<<<dg,db>>>(ptrImageDeviceA,ptrDevImageHeaters ,ptrImageDeviceB,int w,int h);
+	heatTransfert<<<dg,db>>>(ptrImageDeviceA,ptrImageDeviceB,int w, int h);
+  
+ }
+ 
+ void freeGPUMemory(){
+	HANDLE_ERROR(cudaFree(ptrImageDeviceA));
+	HANDLE_ERROR(cudaFree(ptrImageDeviceB));
+	HANDLE_ERROR(cudaFree(prtImageHeats));
+ }
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
