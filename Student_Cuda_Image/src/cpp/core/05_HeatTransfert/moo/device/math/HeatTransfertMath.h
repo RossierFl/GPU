@@ -45,7 +45,7 @@ class HeatTransfertMath
 
 	__device__
 	void calculeColorTransfert(float* centralColorOutput,float colorSud,float colorEst,float colorNord,float colorOuest,float k){
-	   *centralColorOutput = *centralColorOutput + k*(colorSud+colorEst+colorNord+colorOuest);
+	   *centralColorOutput = *centralColorOutput + k*(colorSud+colorEst+colorNord+colorOuest-4*(*centralColorOutput));
 
 	}
 	__device__

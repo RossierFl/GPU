@@ -59,7 +59,7 @@ __global__ void heatTransfert(float* ptrDevImageAInput, float* ptrDevImageBOutpu
     while (s < WH)
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
-	if(pixelI!=0 || pixelJ!=0 || pixelI<h-1 || pixelJ<w-1){
+	if(pixelI!=0 && pixelJ!=0 && pixelI<h-1 && pixelJ<w-1){
 	int sS = IndiceTools::toS(w,pixelI-1,pixelJ);
 	int sE = IndiceTools::toS(w,pixelI,pixelJ+1);
 	int sN = IndiceTools::toS(w,pixelI+1,pixelJ);
