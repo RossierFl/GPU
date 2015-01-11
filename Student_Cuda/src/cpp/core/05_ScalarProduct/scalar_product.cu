@@ -16,10 +16,10 @@ using std::endl;
 #define WI 0.7390851332151606722931092
 
 __host__ double theoricalResult(uint n);
-__global__ void scalarProduct(const uint N, float* ptrDevResultGM, const uint nTabSM);
-__device__ void reduceIntraThread(float* tabSM, uint n);
-__device__ float v(int i);
-__device__ float w(int i);
+__global__ void scalarProduct(const uint N, double* ptrDevResultGM, const uint nTabSM);
+__device__ void reduceIntraThread(double* tabSM, uint n);
+__device__ double v(int i);
+__device__ double w(int i);
 __host__ bool useScalarProduct();
 
 __host__ double theoricalResult(uint n) {
@@ -27,9 +27,9 @@ __host__ double theoricalResult(uint n) {
 	return (n / (double) 2) * (n + 1);
 }
 
-__global__ void scalarProduct(const uint N, float* ptrDevResultGM, const uint N_TAB_SM) {
+__global__ void scalarProduct(const uint N, double* ptrDevResultGM, const uint N_TAB_SM) {
 	/* Shared memory */
-	extern __shared__ float tabSM[];
+	extern __shared__ double tabSM[];
 
 	const uint TID_LOCAL = Indice1D::tidLocalBlock();
 	initTabSM(tabSM, N_TAB_SM, 0);
@@ -46,7 +46,7 @@ __global__ void scalarProduct(const uint N, float* ptrDevResultGM, const uint N_
 	reduceInterBlock(tabSM, ptrDevResultGM);
 }
 
-__device__ void reduceIntraThread(float* tabSM, uint n) {
+__device__ void reduceIntraThread(double* tabSM, uint n) {
 	const uint NB_THREAD = Indice1D::nbThread();
 	const uint TID = Indice1D::tid();
 	const uint TID_LOCAL = Indice1D::tidLocalBlock();
@@ -61,21 +61,21 @@ __device__ void reduceIntraThread(float* tabSM, uint n) {
 	tabSM[TID_LOCAL] = sum;
 }
 
-__device__ float v(int i) {
-	float x = 1.5 + abs(cos((float) i));
+__device__ double v(int i) {
+	double x = 1.5 + abs(cos((double) i));
 	for (int j = 1; j <= M_V; j++) {
-		float xCarre = x * x;
+		double xCarre = x * x;
 		x = x - (xCarre * x - 3) / (3 * xCarre);
 	}
-	return (x / VI) * sqrt((float) i);
+	return (x / VI) * sqrt((double) i);
 }
 
-__device__ float w(int i) {
-	float x = abs(cos((float) i));
+__device__ double w(int i) {
+	double x = abs(cos((double) i));
 	for (int j = 1; j <= M_W; j++) {
 		x = x - (cos(x) - x) / (-sin(x) - 1);
 	}
-	return (x / WI) * sqrt((float) i);
+	return (x / WI) * sqrt((double) i);
 }
 
 __host__ bool useScalarProduct() {
@@ -91,21 +91,21 @@ __host__ bool useScalarProduct() {
 	Device::checkDimOptimiser(dg, db);
 
 	/* Result on CPU */
-	float scalarProductResult = 0;
+	double scalarProductResult = 0;
 
 	/* Result on GPU */
-	float* ptrScalarProductResultDevGRAM;
-	HANDLE_ERROR(cudaMalloc(&ptrScalarProductResultDevGRAM, sizeof(float)));
-	HANDLE_ERROR(cudaMemset(ptrScalarProductResultDevGRAM, 0, sizeof(float)));
+	double* ptrScalarProductResultDevGRAM;
+	HANDLE_ERROR(cudaMalloc(&ptrScalarProductResultDevGRAM, sizeof(double)));
+	HANDLE_ERROR(cudaMemset(ptrScalarProductResultDevGRAM, 0, sizeof(double)));
 
 	/* Launch kernel */
-	size_t sizeTabSMByte = sizeof(float) * NB_THREAD;
+	size_t sizeTabSMByte = sizeof(double) * NB_THREAD;
 	scalarProduct<<<dg,db,sizeTabSMByte>>>(N, ptrScalarProductResultDevGRAM, NB_THREAD);
 	Device::checkKernelError("Kernel error: scalarProduct");
 	Device::synchronize(); // Display printf
 
 	/* Fetch result */
-	HANDLE_ERROR(cudaMemcpy(&scalarProductResult, ptrScalarProductResultDevGRAM, sizeof(float), cudaMemcpyDeviceToHost));
+	HANDLE_ERROR(cudaMemcpy(&scalarProductResult, ptrScalarProductResultDevGRAM, sizeof(double), cudaMemcpyDeviceToHost));
 	HANDLE_ERROR(cudaFree(ptrScalarProductResultDevGRAM));
 	printf("Result GPU = %f - CPU = %f\n", scalarProductResult, theoricalResult(N));
 
