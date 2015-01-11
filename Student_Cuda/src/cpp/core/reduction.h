@@ -3,14 +3,32 @@
 
 #include <stdio.h>
 
-static __device__ void initTabSM(float* tabSM, int n, int value);
-static __device__ void reduceIntraBlock(float* tabSM, const int nTabSM);
-static __device__ void ecrasement(float* tabSM, const int m);
-static __device__ void reduceInterBlock(float* tabSM, float* tabGM);
-static __device__ void debugTabSM(float* tabSM, int nTabSM, char* message);
-static __device__ void debugTabGM(float* tabGM, int nTabGM, char* message);
+/* ------------------------------------------------------------------- */
 
-__device__ void debugTabGM(float* tabGM, int nTabGM, char* message) {
+static __device__ double atomicAdd(double* address, double val);
+
+template<typename T>
+static __device__ void initTabSM(T* tabSM, int n, int value);
+
+template<typename T>
+static __device__ void reduceIntraBlock(T* tabSM, const int nTabSM);
+
+template<typename T>
+static __device__ void ecrasement(T* tabSM, const int m);
+
+static __device__ void reduceInterBlock(float* tabSM, float* tabGM);
+static __device__ void reduceInterBlock(double* tabSM, double* tabGM);
+
+template<typename T>
+static __device__ void debugTabSM(T* tabSM, int nTabSM, char* message);
+
+template<typename T>
+static __device__ void debugTabGM(T* tabGM, int nTabGM, char* message);
+
+/* ------------------------------------------------------------------- */
+
+template<typename T>
+__device__ void debugTabGM(T* tabGM, int nTabGM, char* message) {
 	const unsigned int TID = Indice1D::tid();
 	__syncthreads();
 	if (TID == 0) {
@@ -20,8 +38,8 @@ __device__ void debugTabGM(float* tabGM, int nTabGM, char* message) {
 		}
 	}
 }
-
-__device__ void debugTabSM(float* tabSM, int nTabSM, char* message) {
+template<typename T>
+__device__ void debugTabSM(T* tabSM, int nTabSM, char* message) {
 	const unsigned int TID_LOCAL = Indice1D::tidLocal();
 	__syncthreads();
 	if (TID_LOCAL == 0) {
@@ -32,7 +50,8 @@ __device__ void debugTabSM(float* tabSM, int nTabSM, char* message) {
 	}
 }
 
-__device__ void initTabSM(float* tabSM, int nTabSM, int value) {
+template<typename T>
+__device__ void initTabSM(T* tabSM, int nTabSM, int value) {
 	const int NB_THREAD_LOCAL = Indice1D::nbThreadBlock();
 	int s = Indice1D::tidLocal();
 	while (s < nTabSM) {
@@ -41,7 +60,8 @@ __device__ void initTabSM(float* tabSM, int nTabSM, int value) {
 	}
 }
 
-__device__ void reduceIntraBlock(float* tabSM, const int nTabSM) {
+template<typename T>
+__device__ void reduceIntraBlock(T* tabSM, const int nTabSM) {
 	int m = nTabSM / 2;
 	while (m > 0) {
 		ecrasement(tabSM, m);
@@ -50,7 +70,8 @@ __device__ void reduceIntraBlock(float* tabSM, const int nTabSM) {
 	}
 }
 
-__device__ void ecrasement(float* tabSM, const int m) {
+template<typename T>
+__device__ void ecrasement(T* tabSM, const int m) {
 	const int NB_THREAD_LOCAL = Indice1D::nbThreadBlock();
 	const int TID_LOCAL = Indice1D::tidLocal();
 	int s = TID_LOCAL;
@@ -60,7 +81,28 @@ __device__ void ecrasement(float* tabSM, const int m) {
 	}
 }
 
-__device__ void reduceInterBlock(float* tabSM, float* tabGM) {
+__device__
+double atomicAdd(double* address, double val) {
+	unsigned long long int* address_as_ull = (unsigned long long int*) address;
+	unsigned long long int old = *address_as_ull, assumed;
+	do {
+		assumed = old;
+		old = atomicCAS(address_as_ull, assumed, __double_as_longlong(val + __longlong_as_double(assumed)));
+		// Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
+	} while (assumed != old);
+	return __longlong_as_double(old);
+}
+
+__device__
+void reduceInterBlock(double* tabSM, double* tabGM) {
+	if (threadIdx.x == 0) {
+		// add the reduction of this block to the final result
+		atomicAdd(tabGM, tabSM[0]);
+	}
+}
+
+__device__
+void reduceInterBlock(float* tabSM, float* tabGM) {
 	if (threadIdx.x == 0) {
 		// add the reduction of this block to the final result
 		atomicAdd(tabGM, tabSM[0]);
