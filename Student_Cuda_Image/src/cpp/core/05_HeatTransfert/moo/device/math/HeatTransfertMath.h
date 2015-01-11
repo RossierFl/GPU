@@ -20,9 +20,9 @@ class HeatTransfertMath
 
     public:
 
-	__device__ HeatTransfertMath(int w, int h)
+	__device__ HeatTransfertMath()
 	    {
-	    this->factor = 4 * PI / (float) w;
+
 	    }
 
 	__device__ HeatTransfertMath(const HeatTransfertMath& source)
@@ -36,35 +36,18 @@ class HeatTransfertMath
 
     public:
 
-	/**
-	 * x=pixelI
-	 * y=pixelJ
-	 */
+
+
+
 	__device__
-	void colorIJ(uchar4* ptrColor, int i, int j, float t)
-	    {
-	    unsigned char levelGris;
+	void calculeColorTransfert(float* centralColorOutput,float colorSud,float colorEst,float colorNord,float colorOuest,float k){
+	   *centralColorOutput = *centralColorOutput + k*(colorSud+colorEst+colorNord+colorOuest);
 
-	    f(levelGris, i, j, t); // update levelGris
-
-	    ptrColor->x = levelGris;
-	    ptrColor->y = levelGris;
-	    ptrColor->z = levelGris;
-
-	    ptrColor->w = 255; // opaque
-	    }
+	}
 
     private:
 
-	__device__
-	void f(unsigned char& levelGris, int i, int j, float t)
-	    {
-	    // Example1
-	    //unsigned char levelGris= 255 * abs(sin(t)); // same color for all the image (Hello image)
 
-	    // Example2
-	    levelGris = 255 * fabs(sin(i * factor + t));
-	    }
 
 	/*--------------------------------------*\
 	|*		Attributs		*|
@@ -72,7 +55,7 @@ class HeatTransfertMath
 
     private:
 
-	double factor;
+
 
     };
 
