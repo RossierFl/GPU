@@ -7,8 +7,7 @@
 #include <math.h>
 #include "reduction.h"
 
-using std::cout;
-using std::endl;
+#define DEBUG 1
 
 #define M_W 100
 #define M_V 100
@@ -24,7 +23,7 @@ __host__ bool useScalarProduct();
 
 __host__ double theoricalResult(uint n) {
 	n--;
-	return (n / (double) 2) * (n + 1);
+	return (n / 2.0) * (n + 1);
 }
 
 __global__ void scalarProduct(const uint N, double* ptrDevResultGM, const uint N_TAB_SM) {
@@ -39,8 +38,15 @@ __global__ void scalarProduct(const uint N, double* ptrDevResultGM, const uint N
 
 	__syncthreads(); // TODO is really necessary ??
 
+#ifdef DEBUG
+	if(TID_LOCAL == 0)
+	debugTabSM(tabSM, N_TAB_SM, "after intra thread");
+#endif
+
 	// reduceIntraBlock
 	reduceIntraBlock(tabSM, N_TAB_SM);
+
+	__syncthreads(); // TODO is really necessary ??
 
 	// reduceIntraBlock
 	reduceInterBlock(tabSM, ptrDevResultGM);
@@ -52,7 +58,7 @@ __device__ void reduceIntraThread(double* tabSM, uint n) {
 	const uint TID_LOCAL = Indice1D::tidLocalBlock();
 
 	uint s = TID;
-	float sum = 0;
+	double sum = 0;
 	while (s < n) {
 		sum += v(s) * w(s);
 		s += NB_THREAD;
@@ -83,18 +89,20 @@ __host__ bool useScalarProduct() {
 	printf("[Scalar Product]\n");
 
 	// Paramètres du GPU
-	const uint NB_THREAD = 16;
+	const uint NB_THREAD = 32;
 	assert(NB_THREAD % 2 == 0);
-	dim3 dg = dim3(NB_THREAD, 1, 1);
-	dim3 db = dim3(32, 1, 1);
+	dim3 dg = dim3(16, 1, 1);
+	dim3 db = dim3(NB_THREAD, 1, 1);
+#ifdef DEBUG
 	Device::checkDimError(dg, db);
 	Device::checkDimOptimiser(dg, db);
+#endif
 
 	/* Result on CPU */
 	double scalarProductResult = 0;
 
 	/* Result on GPU */
-	double* ptrScalarProductResultDevGRAM;
+	double* ptrScalarProductResultDevGRAM = NULL;
 	HANDLE_ERROR(cudaMalloc(&ptrScalarProductResultDevGRAM, sizeof(double)));
 	HANDLE_ERROR(cudaMemset(ptrScalarProductResultDevGRAM, 0, sizeof(double)));
 
@@ -106,8 +114,10 @@ __host__ bool useScalarProduct() {
 
 	/* Fetch result */
 	HANDLE_ERROR(cudaMemcpy(&scalarProductResult, ptrScalarProductResultDevGRAM, sizeof(double), cudaMemcpyDeviceToHost));
-	HANDLE_ERROR(cudaFree(ptrScalarProductResultDevGRAM));
 	printf("Result GPU = %f - CPU = %f\n", scalarProductResult, theoricalResult(N));
+
+	/* Free memory */
+	HANDLE_ERROR(cudaFree(ptrScalarProductResultDevGRAM));
 
 	return true;
 }
