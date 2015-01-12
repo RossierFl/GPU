@@ -7,17 +7,17 @@
 #include <assert.h>
 #include <math.h>
 #include <limits.h>
+#include "Device.h"
 
 #include <curand_kernel.h>
+#include "montecarloDevice.h"
 
-#include <omp.h>
-
-__device__ float uniformMulti( float min, float max, curandState& localState);
-__device__ float fMulti(float x);
-__global__ void computeMontecarloGPUMulti(float* ptrDevGM, int nTabSM, float xMin, float xMax, int m, long n, curandState* ptrDevRandom);
-__device__ void reduce_intra_thread_montecarloMulti(float* tabSM, float xMin, float xMax, int m, long n, curandState* ptrDevRandom);
-__host__ bool isMontecarlo_OkMulti(long n, float xMin, float xMax, int m);
-__global__ void setup_kernel_rand_montecarloMulti(curandState* ptrDevTabGeneratorThread, int deviceId);
+__device__ float uniform( float min, float max, curandState& localState);
+__device__ float f(float x);
+__global__ void computeMontecarloGPU(float* ptrDevGM, int nTabSM, float xMin, float xMax, int m, long n, curandState* ptrDevRandom);
+__device__ void reduce_intra_thread_montecarlo(float* tabSM, float xMin, float xMax, int m, long n, curandState* ptrDevRandom);
+__host__ bool isMontecarlo_Ok(long n, float xMin, float xMax, int m);
+__global__ void setup_kernel_rand_montecarlo(curandState* ptrDevTabGeneratorThread, int deviceId);
 
 /*--------------------------------------------
  * Reductions
@@ -86,68 +86,48 @@ __global__ void setup_kernel_rand_montecarloMulti(curandState* ptrDevTabGenerato
  }
 
 
-
-
 /*---------------------------------------------------------------------------*
  * Lancement
  *---------------------------------------------------------------------------*/
 
-__host__ bool isMontecarloMulti_Ok(long n, float xMin, float xMax, int m) {
-	printf("MontecarloMulti[n=%d, min=%f, max=%f, m=%d]\n", n, xMin, xMax, m);
-	float* resultHost = new float[6];
-	assert(n%6==0);//could be more generic
-	int nbNPerGPU = n/6;
+/*__host__ bool isMontecarlo_Ok(long n, float xMin, float xMax, int m) {
+	printf("Montecarlo[n=%d, min=%f, max=%f, m=%d]\n", n, xMin, xMax, m);
+	float resultHost = 0;
+	float* ptrDevGM = NULL;
+	size_t size = sizeof(float);
 	int nThreadPerBlock = 4;
+	size_t sizeTabSM = sizeof(float) * nThreadPerBlock;
+	HANDLE_ERROR(cudaMalloc(&ptrDevGM, size));
+	HANDLE_ERROR(cudaMemset(ptrDevGM, 0, size));
+
 	dim3 dg(1, 1, 1); // TODO to optimize
 	dim3 db(nThreadPerBlock, 1, 1); // TODO to optimize
 	Device::checkDimError(dg, db);
 	Device::checkDimOptimiser(dg, db);
 
-	Device::checkKernelError("setup_kernel_rand_montecarloMulti");
-	int nbGPU = 6; //could be more generic
-	omp_set_num_threads(nbGPU);
-#pragma omp parralel for
-	for(int i=0;i<nbGPU;i++)
-	  {
-	    cudaSetDevice(i);
-	   // printf("i:%d\n",i);
+	//init random generator
+	curandState* ptrDevRandom;
+	size_t sizeRandom = sizeof(curandState) * nThreadPerBlock;
+	HANDLE_ERROR(cudaMalloc((void**) &ptrDevRandom, sizeRandom));
+	HANDLE_ERROR(cudaMemset(ptrDevRandom, 0, sizeRandom));
+	setup_kernel_rand_montecarlo<<<dg,db>>>(ptrDevRandom,Device::getDeviceId());
+	Device::checkKernelError("setup_kernel_rand");
 
-	    //init random generator
-	    curandState* ptrDevRandom;
-	    size_t sizeRandom = sizeof(curandState) * nThreadPerBlock;
-	    HANDLE_ERROR(cudaMalloc((void**) &ptrDevRandom, sizeRandom));
-	    HANDLE_ERROR(cudaMemset(ptrDevRandom, 0, sizeRandom));
-	    setup_kernel_rand_montecarloMulti<<<dg,db>>>(ptrDevRandom,Device::getDeviceId());
+	computeMontecarloGPU<<<dg,db,sizeTabSM>>>(ptrDevGM, sizeTabSM, xMin, xMax, m, n, ptrDevRandom);
+	Device::checkKernelError("computeMontecarloGPU");
 
-	    float* ptrDevGM = NULL;
-	    size_t size = sizeof(float);
-	    size_t sizeTabSM = sizeof(float) * nThreadPerBlock;
-	    HANDLE_ERROR(cudaMalloc(&ptrDevGM, size));
-	    HANDLE_ERROR(cudaMemset(ptrDevGM, 0, size));
-
-	    computeMontecarloGPUMulti<<<dg,db,sizeTabSM>>>(ptrDevGM, sizeTabSM, xMin, xMax, m, nbNPerGPU, ptrDevRandom);
-	    Device::checkKernelError("computeMontecarloGPUMulti");
-
-	    // Récupération du résultat
-	    HANDLE_ERROR(cudaMemcpy(&resultHost[i], ptrDevGM, size, cudaMemcpyDeviceToHost)); // barrière de synchronisation
-	  }
-	float result = 0.0;
-	for(int i=0;i<nbGPU;i++)//could be more generic
-	  {
-	      result += resultHost[i];
-	  }
-	result /= nbGPU;
-
+	// Récupération du résultat
+	HANDLE_ERROR(cudaMemcpy(&resultHost, ptrDevGM, size, cudaMemcpyDeviceToHost)); // barrière de synchronisation
 
 	// Affichage du résultat
-	printf("MontecarloMulti[n=%d, min=%f, max=%f, m=%d] = %f\n", n, xMin, xMax, m, result);
+	printf("Montecarlo[n=%d, min=%f, max=%f, m=%d] = %f\n", n, xMin, xMax, m, resultHost);
 
 	return true;
-}
+}*/
 
 
 
-__device__ float uniformMulti(const float MIN, const float MAX, curandState& localState) {
+__device__ float uniform(const float MIN, const float MAX, curandState& localState) {
 	float r = curand_uniform(&localState);
 	return MIN + r * (MAX - MIN);
 }
@@ -156,25 +136,25 @@ __device__ float uniformMulti(const float MIN, const float MAX, curandState& loc
  * Montecarlo
  *---------------------------------------------------------------------------*/
 
-__device__ float fMulti(float x) {
+__device__ float f(float x) {
 	return 0.3;
 }
 
-__global__ void computeMontecarloGPUMulti(float* ptrDevGM, int nTabSM, float xMin, float xMax, int m, long n, curandState* ptrDevRandom){
+__global__ void computeMontecarloGPU(float* ptrDevGM, int nTabSM, float xMin, float xMax, int m, long n, curandState* ptrDevRandom){
 	extern __shared__ float tabSM[];// 1 instance per block !
 	const int TID = Indice1D::tid();
 	init_tabSM(tabSM, nTabSM);
 
 	__syncthreads();
-	reduce_intra_thread_montecarloMulti(tabSM, xMin, xMax, m, n, ptrDevRandom);
+	reduce_intra_thread_montecarlo(tabSM, xMin, xMax, m, n, ptrDevRandom);
 	__syncthreads();
-	reduction_intra_block(tabSM,n);
+	reduction_intra_block(tabSM,nTabSM);
 	__syncthreads();
 	reduction_inter_block(tabSM, ptrDevGM,nTabSM);
 	if(TID == 0) *ptrDevGM = *ptrDevGM / n * (xMax - xMin) * m;
 }
 
-__device__ void reduce_intra_thread_montecarloMulti(float* tabSM, float xMin, float xMax, int m, long n,
+__device__ void reduce_intra_thread_montecarlo(float* tabSM, float xMin, float xMax, int m, long n,
         curandState* tabGeneratorThread) {
 	const int TID = Indice1D::tid();
 	const int TID_LOCAL = Indice1D::tidLocal();
@@ -184,9 +164,9 @@ __device__ void reduce_intra_thread_montecarloMulti(float* tabSM, float xMin, fl
 	float intraThreadSum = 0;
 	int s = TID;
 	while (s < n) {
-		float xAlea = uniformMulti(xMin, xMax, localState);
-		float yAlea = uniformMulti(0, m, localState);
-		if (yAlea < fMulti(xAlea)) intraThreadSum++;
+		float xAlea = uniform(xMin, xMax, localState);
+		float yAlea = uniform(0, m, localState);
+		if (yAlea < f(xAlea)) intraThreadSum++;
 		s += NB_THREAD;
 	}
 	tabSM[TID_LOCAL] = intraThreadSum;
@@ -195,7 +175,7 @@ __device__ void reduce_intra_thread_montecarloMulti(float* tabSM, float xMin, fl
 /*
  * I have to used this hack to avoid multiple definition
  */
-__global__ void setup_kernel_rand_montecarloMulti(curandState* ptrDevTabGeneratorThread, int deviceId)
+__global__ void setup_kernel_rand_montecarlo(curandState* ptrDevTabGeneratorThread, int deviceId)
     {
     int tid = Indice1D::tid();
 
@@ -212,4 +192,12 @@ __global__ void setup_kernel_rand_montecarloMulti(curandState* ptrDevTabGenerato
     //Each thread gets same seed , a different sequence number , no offset
     curand_init(seed, sequenceNumber, offset, &ptrDevTabGeneratorThread[tid]);
     }
+
+void MontecarloDevice::runMontecarlo(curandState* ptrDevRandom,float* ptrDevGM,float  xMin,float xMax,int m,long n,size_t sizeTabSM,dim3 dg,dim3 db){
+    setup_kernel_rand_montecarlo<<<dg,db>>>(ptrDevRandom,Device::getDeviceId());
+    Device::checkKernelError("setup_kernel_rand");
+
+    computeMontecarloGPU<<<dg,db,sizeTabSM>>>(ptrDevGM, sizeTabSM, xMin, xMax, m, n, ptrDevRandom);
+    Device::checkKernelError("computeMontecarloGPU");
+}
 
