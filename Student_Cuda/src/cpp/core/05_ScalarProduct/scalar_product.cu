@@ -3,62 +3,56 @@
 #include "cudaTools.h"
 #include "Device.h"
 #include "Indice1D.h"
+#include "reduction.h"
 #include <assert.h>
 #include <math.h>
-#include "reduction.h"
+#include "MathTools.h"
 
-#define DEBUG 1
+// #define DEBUG 1
 
-#define M_W 50
-#define M_V 50
+#define M_W 100
+#define M_V 100
 #define VI 1.4422495703074083017725115
 #define WI 0.7390851332151606722931092
 
-__host__ double checkScalarProduct(uint n);
-__global__ void scalarProduct(const uint N, double* ptrDevResultGM, const uint nTabSM);
-__device__ void reduceIntraThread(double* tabSM, uint n);
-__device__ double v(int i);
-__device__ double w(int i);
 __host__ bool useScalarProduct();
+static __host__ double theoricalResult(int n);
+static __global__ void scalarProduct(const uint N, double* ptrDevResult, const uint NB_THREAD);
+static __device__ void reduceIntraThread(double* tabSM, int n);
+static __device__ double v(int i);
+static __device__ double w(int i);
 
-__host__ double checkScalarProduct(uint n) {
+static __host__ double theoricalResult(int n) {
 	n--;
-	return (n / 2.0) * (n + 1);
+	return (n / (double) 2) * (n + 1);
 }
 
-__global__ void scalarProduct(const uint N, double* ptrDevResultGM, const uint N_TAB_SM) {
+static __global__ void scalarProduct(const uint N, double* ptrDevRes, const uint NB_THREAD) {
 	/* Shared memory */
 	extern __shared__ double tabSM[];
+	initTabSM(tabSM, NB_THREAD, 0);
 
-	const uint TID_LOCAL = Indice1D::tidLocalBlock();
-	initTabSM(tabSM, N_TAB_SM, 0);
-
-	// reduceIntraThread
-	reduceIntraThread(tabSM, N_TAB_SM);
+	// Reduce intra thread
+	reduceIntraThread(tabSM, N);
 
 	__syncthreads(); // TODO is really necessary ??
 
-#ifdef DEBUG
-	if(TID_LOCAL == 0)
-	debugTabSM(tabSM, N_TAB_SM, "after intra thread");
-#endif
-
-	// reduceIntraBlock
-	reduceIntraBlock(tabSM, N_TAB_SM);
+	// Reduce intra block
+	reduceIntraBlock(tabSM, NB_THREAD);
 
 	__syncthreads(); // TODO is really necessary ??
 
-	// reduceIntraBlock
-	reduceInterBlock(tabSM, ptrDevResultGM);
+	// Reduce inter block
+	reduceInterBlock(tabSM, ptrDevRes);
 }
 
-__device__ void reduceIntraThread(double* tabSM, uint n) {
-	const int NB_THREAD = Indice1D::nbThread();
-	const int TID = Indice1D::tid();
-	const int TID_LOCAL = Indice1D::tidLocalBlock();
+static __device__ void reduceIntraThread(double* tabSM, int n) {
+	const uint TID = Indice1D::tid();
+	const uint TID_LOCAL = Indice1D::tidLocalBlock();
+	const uint NB_THREAD = Indice1D::nbThread();
 
 	int s = TID;
-	double sum = 0;
+	double sum = 0.0;
 	while (s < n) {
 		sum += v(s) * w(s);
 		s += NB_THREAD;
@@ -67,31 +61,48 @@ __device__ void reduceIntraThread(double* tabSM, uint n) {
 	tabSM[TID_LOCAL] = sum;
 }
 
-__device__ double v(int i) {
+static __device__ double v(int i) {
+	const uint TID = Indice1D::tid();
 	double x = 1.5 + abs(cos((double) i));
+
 	for (int j = 1; j <= M_V; j++) {
 		double xCarre = x * x;
 		x = x - (xCarre * x - 3) / (3 * xCarre);
 	}
+
 	return (x / VI) * sqrt((double) i);
 }
 
-__device__ double w(int i) {
+static __device__ double w(int i) {
+	const uint TID = Indice1D::tid();
 	double x = abs(cos((double) i));
+
 	for (int j = 1; j <= M_W; j++) {
 		x = x - (cos(x) - x) / (-sin(x) - 1);
 	}
+
 	return (x / WI) * sqrt((double) i);
 }
 
 __host__ bool useScalarProduct() {
+
 	printf("\n[Scalar Product]\n");
 
-	const uint N = 100000;
+	const uint N = 50000;
 
-	// Paramètres du GPU
+	/* Scalar product in RAM */
+	double scalarProductRAM = 0.0;
+	double* ptrScalarProductRAM = &scalarProductRAM;
+
+	/* Scalar product in GRAM */
+	double* ptrDevScalarProductGRAM = NULL;
+	size_t size = sizeof(double);
+	HANDLE_ERROR(cudaMalloc(&ptrDevScalarProductGRAM, size));
+	HANDLE_ERROR(cudaMemset(ptrDevScalarProductGRAM, 0, size));
+
+	/* Parameters */
 	const uint NB_THREAD = 32;
-	assert(NB_THREAD % 2 == 0);
+	assert((NB_THREAD & (NB_THREAD - 1)) == 0); // should be 2^xy
 	dim3 dg = dim3(16, 1, 1);
 	dim3 db = dim3(NB_THREAD, 1, 1);
 #ifdef DEBUG
@@ -99,28 +110,22 @@ __host__ bool useScalarProduct() {
 	Device::checkDimOptimiser(dg, db);
 #endif
 
-	/* Result on CPU */
-	double scalarProductResult = 0;
-
-	/* Result on GPU */
-	double* ptrScalarProductResultDevGRAM = NULL;
-	HANDLE_ERROR(cudaMalloc(&ptrScalarProductResultDevGRAM, sizeof(double)));
-	HANDLE_ERROR(cudaMemset(ptrScalarProductResultDevGRAM, 0, sizeof(double)));
-
-	/* Launch kernel */
-	size_t sizeTabSMByte = sizeof(double) * NB_THREAD;
-	scalarProduct<<<dg,db,sizeTabSMByte>>>(N, ptrScalarProductResultDevGRAM, NB_THREAD);
-	Device::checkKernelError("Kernel error: scalarProduct");
-	Device::synchronize(); // Display printf
+	/* Processing */
+	size_t sizeTabSM = sizeof(double) * NB_THREAD;
+	scalarProduct<<<dg,db,sizeTabSM>>>(N, ptrDevScalarProductGRAM, NB_THREAD); // asynchrone
+	Device::checkKernelError("kernel error: scalarProduct");
+	Device::synchronize(); // printf
 
 	/* Fetch result */
-	HANDLE_ERROR(cudaMemcpy(&scalarProductResult, ptrScalarProductResultDevGRAM, sizeof(double), cudaMemcpyDeviceToHost));
-	printf("GPU = %f\n", scalarProductResult);
-	printf("CPU = %f\n", checkScalarProduct(N));
+	HANDLE_ERROR(cudaMemcpy(ptrScalarProductRAM, ptrDevScalarProductGRAM, size, cudaMemcpyDeviceToHost));
+	HANDLE_ERROR(cudaFree(ptrDevScalarProductGRAM));
 
-	/* Free memory */
-	HANDLE_ERROR(cudaFree(ptrScalarProductResultDevGRAM));
+	/* Control result */
+	double referenceValue = theoricalResult(N);
+	printf("Result GPU = %f\n", scalarProductRAM);
+	printf("Result CPU = %f\n", referenceValue);
+	bool isOk = MathTools::isEquals(scalarProductRAM, referenceValue, 1);
+	printf("isOk = %d\n", isOk);
 
-	return true;
+	return isOk;
 }
-
