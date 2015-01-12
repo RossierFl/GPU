@@ -14,6 +14,7 @@
 #include "HeatTransfertProvider.h"
 #include "RayTracingProvider.h"
 #include "NewtonProvider.h"
+#include "ConvolutionProvider.h"
 
 using std::cout;
 using std::endl;
@@ -50,6 +51,7 @@ int mainGL(void)
     Rippling0Image* ptrRippling0 = Rippling0Provider::createGL();
     Image* ptrRippling = RipplingProvider::createGL();
     Image* ptrRayTracing = RayTracingProvider::createGL();
+    Image* ptrConvolution = ConvolutionProvider::createGL();
     // TODO : Insert  autres Images ...
     //ImageFonctionel* ptrMandelbrotJulia = MandelbrotJuliaProvider::createGL();
 
@@ -60,7 +62,7 @@ int mainGL(void)
 
 
     bool isAnimation = true;
-    bool isSelection = true;
+    bool isSelection = false;
 
    // GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
   //  GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
@@ -71,7 +73,8 @@ int mainGL(void)
    // GLUTImageViewers mandelbrotJuliaViewerMultiGPU(ptrMandelbrotJuliaMultiGPU, isAnimation, isSelection, 0, 0);
   //  GLUTImageViewers heatTransfertViewer(ptrHeatTransfert, isAnimation, isSelection, 0, 0);
   //  GLUTImageViewers  rayTracingViewer(ptrRayTracing, isAnimation, isSelection, 0, 0);
-    GLUTImageViewers  newtonViewer(ptrNewton, isAnimation, isSelection, 0, 0);
+   // GLUTImageViewers  newtonViewer(ptrNewton, isAnimation, isSelection, 0, 0);
+    GLUTImageViewers  newtonViewer(ptrConvolution, isAnimation, isSelection, 0, 0);
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
     // destruction
@@ -83,12 +86,14 @@ int mainGL(void)
 	//delete ptrMandelbrotJulia;
 	delete ptrHeatTransfert;
 	delete ptrNewton;
+	delete ptrConvolution;
 
 	ptrRippling0 = NULL;
 	ptrRayTracing=NULL;
 	ptrRippling = NULL;
 	ptrHeatTransfert=NULL;
 	ptrNewton=NULL;
+	ptrConvolution=NULL;
 	//ptrMandelbrotJuliaMultiGPU=NULL;
 	//ptrMandelbrotJulia = NULL;
 	}
