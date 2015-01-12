@@ -16,7 +16,7 @@ using std::endl;
 /*--------------------------------------*\
  |*		Imported	 	*|
  \*-------------------------------------*/
-
+extern texture<float,2> textureRef;
 extern __global__ void convolutionKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
 extern __global__ void colorToGrey(uchar4* ptrDevPixels, int w, int h);
 extern __global__ void findMinMax(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h);
@@ -129,6 +129,12 @@ void Convolution::animationStep()
  */
 void Convolution::runGPU(uchar4* ptrDevPixels)
     {
+	size_t pitch = w * sizeof(float);
+     //taille en octets d'une ligne
+     cudaChannelFormatDesc channelDesc = cudaCreateChannelDesc<float>();
+     cudaBindTexture2D(NULL, textureRef,ptrDevPixels,channelDesc,w,h,pitch);
+
+
     Mat matImage = captureur->capturer();
     uchar4* image = CaptureVideo::castToUChar4(&matImage);
     HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(ptrDevPixels[0]),cudaMemcpyHostToDevice));
@@ -155,6 +161,7 @@ void Convolution::runGPU(uchar4* ptrDevPixels)
     if(min != 0)
 	b = 255.0f/((-max/(float)min)+1.0f);
     affineTransform<<<dg,db>>>(ptrDevPixels, a, b, w, h,0);
+    cudaUnbindTexture(textureRef);
     //printf("min: %d, max: %d\n",min,max);
     }
 

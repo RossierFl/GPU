@@ -17,6 +17,9 @@
 
 __device__ int mutex = 0;
 
+texture<float,2> textureRef;
+
+
 __global__ void convolutionKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h,float t);
 
 __global__ void colorToGrey(uchar4* ptrDevPixels, int w, int h);
