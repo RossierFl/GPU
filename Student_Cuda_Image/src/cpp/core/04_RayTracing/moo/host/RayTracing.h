@@ -23,7 +23,7 @@ class RayTracing: public Animable_I
 
     public:
 
-	RayTracing(int w, int h, float dt, double x1, double y1, double x2, double y2, Sphere* spheres, int n);
+	RayTracing(int w, int h, float dt, double x1, double y1, double x2, double y2,double z1,double z2, double rayonMax,int nbrBalls);
 	virtual ~RayTracing(void);
 
 	/*--------------------------------------*\
@@ -54,6 +54,9 @@ class RayTracing: public Animable_I
 	string getTitle(void); // Override
 
 
+	void InitSphereMemory();
+
+
 
 	/*--------------------------------------*\
 	 |*		Attributs		*|
@@ -66,7 +69,8 @@ class RayTracing: public Animable_I
 	int h;
 	
 	Sphere* spheres;
-	int n;
+	  Sphere* ptrSpheresDev;
+	int nbrBalls;
 
 	// Tools
 	dim3 dg;

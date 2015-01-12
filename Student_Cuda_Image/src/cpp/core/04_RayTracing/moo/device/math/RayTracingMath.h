@@ -43,9 +43,7 @@ class RayTracingMath
 
     public:
 
-	__device__ float lerp(float v0, float v1, float t) {
-		  return (1-t)*v0 + t*v1;
-		}
+
 
 
 
@@ -77,13 +75,7 @@ class RayTracingMath
 		    }
 	    }
 
-	__device__ float3 float3Lerp(float3 c0, float3 c1, float f) {
-	  float3 res;
-	    res.x = lerp(c0.x,c1.x,f);
-	    res.y = lerp(c0.y,c1.y,f);
-	    res.z = lerp(c0.z,c1.z,f);
-	    return res;
-	}
+
 
 	/*--------------------------------------*\
 	|*		Attributs		*|

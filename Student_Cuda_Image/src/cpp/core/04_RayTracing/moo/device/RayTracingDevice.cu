@@ -40,7 +40,7 @@ __global__ void rayTracingGPU(uchar4* ptrDevPixels, int w, int h, DomaineMath do
 
 __global__ void rayTracingGPU(uchar4* ptrDevPixels, int w, int h, float t, Sphere* spheres, int n)
     {
-    RayTracingMath* rayTracingMath = new RayTracingMath();
+    RayTracingMath rayTracingMath =  RayTracingMath();
 
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
@@ -56,11 +56,11 @@ __global__ void rayTracingGPU(uchar4* ptrDevPixels, int w, int h, float t, Spher
     while (s < WH)
 	{
 	IndiceTools::toIJ(s, w, &x, &y );
-	rayTracingMath->colorXY(&color,x, y,t,spheres, n);
+	rayTracingMath.colorXY(&color,x, y,t,spheres, n);
 	ptrDevPixels[s] = color;
 	s += NB_THREAD;
 	}
-    delete rayTracingMath;
+
     }
 
 /*----------------------------------------------------------------------*\
