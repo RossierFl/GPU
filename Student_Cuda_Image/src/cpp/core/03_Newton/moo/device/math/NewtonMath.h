@@ -3,8 +3,6 @@
 
 #include <math.h>
 
-
-
 /*----------------------------------------------------------------------*\
 |*			Declaration 												*|
  \*----------------------------------------------------------------------*/
@@ -16,8 +14,6 @@
 /*--------------------------------------*\
 |*		Private							*|
  \*--------------------------------------*/
-
-
 
 class NewtonMath
     {
@@ -39,7 +35,7 @@ class NewtonMath
 	    xc[1] = -sqrt(3.0) / 2;
 	    }
 
-	__device__      virtual ~NewtonMath()
+	__device__       virtual ~NewtonMath()
 	    {
 	    }
 
@@ -49,24 +45,9 @@ class NewtonMath
 
     private:
 
-	__device__
-	 float normSquare(float x1, float x2)
-	    {
-	    return x1 * x1 + x2 * x2;
-	    }
-
-	__device__
-		 float f(float x1, float x2,float* result)
-		    {
-			result[0]=(x1 * x1 * x1) - (3 * x1 * (x2 * x2)) - 1;
-			result[1]=(x2 * x2 * x2) - (3 * x2 * (x1 * x1));
-		    }
-
-
-
 	// Jacobienne
 	__device__
-	 void fJacobienne(float x1, float x2, float* matrix)
+	void fJacobienne(float x1, float x2, float* matrix)
 	    {
 	    matrix[0] = 3 * x1 * x1 - 3 * x2 * x2;
 	    matrix[1] = -6 * x1 * x2;
@@ -74,35 +55,57 @@ class NewtonMath
 	    matrix[3] = 3 * x2 * x2 - 3 * x1 * x1;
 	    }
 
-
 	//Determinant
 	__device__
-	 float det(float* matrix)
+	float det(float* matrix)
 	    {
 	    return (matrix[0] * matrix[3]) - (matrix[1] * matrix[2]);
 	    }
 
+	__device__
+	float f(float x1, float x2, float* result)
+	    {
+	    result[0] = (x1 * x1 * x1) - (3 * x1 * (x2 * x2)) - 1;
+	    result[1] = (x2 * x2 * x2) - (3 * x2 * (x1 * x1));
+	    }
+
 	//Inversion de matrice
 	__device__
-	 void inverseMatix(float* matrix)
+	void inverseMatix(float* matrix)
 	    {
 	    float determinant = det(matrix);
-	    float aCopy = matrix[0];
-	    float bCopy = matrix[1];
-	    float cCopy = matrix[2];
-	    float dCopy = matrix[3];
-	    matrix[0] = dCopy / determinant;
-	    matrix[1] = -bCopy / determinant;
-	    matrix[2] = -cCopy / determinant;
-	    matrix[3] = aCopy / determinant;
+	    float a = matrix[0];
+	    float b = matrix[1];
+	    float c = matrix[2];
+	    float d = matrix[3];
+	    matrix[0] = d / determinant;
+	    matrix[1] = -b / determinant;
+	    matrix[2] = -c / determinant;
+	    matrix[3] = a / determinant;
 	    }
 
 	__device__
-	 void matrixVectorMult(float* matrix, float x1, float x2, float* solX1, float* solX2)
+	float normSquare(float x1, float x2)
+	    {
+	    return x1 * x1 + x2 * x2;
+	    }
+
+	__device__
+	void jacobInverse(float x1,float x2 , float* matrix){
+
+	    		fJacobienne(x1, x2, matrix);
+	    		inverseMatix(matrix);
+
+	}
+
+	__device__
+	void matrixVectorMult(float* matrix, float x1, float x2, float* solX1, float* solX2)
 	    {
 	    *solX1 = matrix[0] * x1 + matrix[1] * x2;
 	    *solX2 = matrix[2] * x1 + matrix[3] * x2;
 	    }
+
+
 
 	__device__
 	int indiceArret(float x1, float x2, float epsilonx, float epsilonf, float epsilonxstar)
@@ -114,17 +117,13 @@ class NewtonMath
 	    float nextX2;
 	    float solX1;
 	    float solX2;
-	    float jacob[4];
+	    float jacobMatrix[4];
 
 	    for (int i = 0; i < n; i++)
 		{
-		// Compute the jacobienne
-		fJacobienne(crtX1, crtX2, jacob);
+		jacobInverse(crtX1,crtX2,jacobMatrix);
 
-		// Inverse the jacobienne
-		inverseMatix(jacob);
-
-		// Current X is near solution a, b or c
+		//La solution la plus proche de XA, XB ou XC
 		if (normSquare(crtX1 - xa[0], crtX2 - xa[1]) / normSquare(xa[0], xa[1]) < epsilonxstar)
 		    {
 		    return XA;
@@ -138,12 +137,10 @@ class NewtonMath
 		    return XC;
 		    }
 
-		// Compute x(i+1)
+		//Calcule une itération
 		float resultF[2];
-		f(crtX1,crtX2,resultF);
-		//float resF1 = f1(crtX1, crtX2);
-		//float resF2 = f2(crtX1, crtX2);
-		matrixVectorMult(jacob, resultF[0], resultF[1], &solX1, &solX2);
+		f(crtX1, crtX2, resultF);
+		matrixVectorMult(jacobMatrix, resultF[0], resultF[1], &solX1, &solX2);
 		nextX1 = crtX1 - solX1;
 		nextX2 = crtX2 - solX2;
 		crtX1 = nextX1;
@@ -158,7 +155,7 @@ class NewtonMath
 	void colorIJ(uchar4* ptrColor, float x, float y, float epsilonx, float epsilonf, float epsilonxstar)
 	    {
 	    int indice = indiceArret(x, y, epsilonx, epsilonf, epsilonxstar);
-	    ptrColor->w = 255; // opaque
+	    ptrColor->w = 255;
 	    switch (indice)
 		{
 		case XA:
@@ -194,7 +191,6 @@ class NewtonMath
     private:
 	// Input
 	int n;
-
 
 	float xa[2];
 	float xb[2];
