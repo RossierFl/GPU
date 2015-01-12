@@ -7,21 +7,21 @@
 #include <math.h>
 #include "reduction.h"
 
-// #define DEBUG 1
+#define DEBUG 1
 
-#define M_W 100
-#define M_V 100
+#define M_W 50
+#define M_V 50
 #define VI 1.4422495703074083017725115
 #define WI 0.7390851332151606722931092
 
-__host__ double theoricalResult(uint n);
+__host__ double checkScalarProduct(uint n);
 __global__ void scalarProduct(const uint N, double* ptrDevResultGM, const uint nTabSM);
 __device__ void reduceIntraThread(double* tabSM, uint n);
 __device__ double v(int i);
 __device__ double w(int i);
 __host__ bool useScalarProduct();
 
-__host__ double theoricalResult(uint n) {
+__host__ double checkScalarProduct(uint n) {
 	n--;
 	return (n / 2.0) * (n + 1);
 }
@@ -53,11 +53,11 @@ __global__ void scalarProduct(const uint N, double* ptrDevResultGM, const uint N
 }
 
 __device__ void reduceIntraThread(double* tabSM, uint n) {
-	const uint NB_THREAD = Indice1D::nbThread();
-	const uint TID = Indice1D::tid();
-	const uint TID_LOCAL = Indice1D::tidLocalBlock();
+	const int NB_THREAD = Indice1D::nbThread();
+	const int TID = Indice1D::tid();
+	const int TID_LOCAL = Indice1D::tidLocalBlock();
 
-	uint s = TID;
+	int s = TID;
 	double sum = 0;
 	while (s < n) {
 		sum += v(s) * w(s);
@@ -116,7 +116,7 @@ __host__ bool useScalarProduct() {
 	/* Fetch result */
 	HANDLE_ERROR(cudaMemcpy(&scalarProductResult, ptrScalarProductResultDevGRAM, sizeof(double), cudaMemcpyDeviceToHost));
 	printf("GPU = %f\n", scalarProductResult);
-	printf("CPU = %f\n", theoricalResult(N));
+	printf("CPU = %f\n", checkScalarProduct(N));
 
 	/* Free memory */
 	HANDLE_ERROR(cudaFree(ptrScalarProductResultDevGRAM));
