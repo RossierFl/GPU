@@ -6,12 +6,12 @@
 #include "Device.h"
 #include "reduction.h"
 
-// #define DEBUG 1
+//#define DEBUG 1
 
 static __device__ float uniform(const float MIN, const float MAX, curandState& localState);
 static __global__ void setup_kernel_rand(curandState* tabGeneratorThread, const int DEVICE_ID);
 static __device__ float f(float x);
-static __global__ void kernel(float* ptrDevGM, const int nTabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long N,
+static __global__ void kernel(float* ptrDevGM, const int N_THREAD_PER_BLOCK, const float X_MIN, const float X_MAX, const int M, const unsigned long N,
         curandState* tabGeneratorThread);
 static __device__ void reduceIntraThread(float* tabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long N, curandState* tabGeneratorThread);
 __host__ bool useMontecarloMultiGPU();
@@ -46,7 +46,7 @@ static __device__ float f(float x) {
 	return 0.3;
 }
 
-static __global__ void kernel(float* ptrDevGM, const int nTabSM, const float X_MIN, const float X_MAX, const int M, const unsigned long N,
+static __global__ void kernel(float* ptrDevGM, const int N_THREAD_PER_BLOCK, const float X_MIN, const float X_MAX, const int M, const unsigned long N,
         curandState* tabGeneratorThread) {
 	// @formatter:off
 	extern __shared__ float tabSM[];// 1 instance per block !
@@ -56,9 +56,9 @@ static __global__ void kernel(float* ptrDevGM, const int nTabSM, const float X_M
 	const int TID = Indice1D::tid();
 
 	// Init
-	initTabSM(tabSM, nTabSM, 0);
+	initTabSM(tabSM, N_THREAD_PER_BLOCK, 0);
 #ifdef DEBUG
-	debugTabSM(tabSM, nTabSM, "After init");
+	debugTabSM(tabSM, N_THREAD_PER_BLOCK, "After init");
 #endif
 
 	__syncthreads(); // TODO useless?
@@ -66,15 +66,15 @@ static __global__ void kernel(float* ptrDevGM, const int nTabSM, const float X_M
 	// reduceIntraThread
 	reduceIntraThread(tabSM, X_MIN, X_MAX, M, N, tabGeneratorThread);
 #ifdef DEBUG
-	debugTabSM(tabSM, nTabSM, "After reduceIntraThread");
+	debugTabSM(tabSM, N_THREAD_PER_BLOCK, "After reduceIntraThread");
 #endif
 
 	__syncthreads(); // TODO is really necessary ??
 
 	// reduceIntraBlock
-	reduceIntraBlock(tabSM, nTabSM);
+	reduceIntraBlock(tabSM, N_THREAD_PER_BLOCK);
 #ifdef DEBUG
-	debugTabSM(tabSM, nTabSM, "After reduceIntraBlock");
+	debugTabSM(tabSM, N_THREAD_PER_BLOCK, "After reduceIntraBlock");
 #endif
 
 	__syncthreads(); // TODO is really necessary ??
@@ -145,7 +145,7 @@ static __host__ float runOnDevice(const uint DEVICE, const unsigned long N, cons
 	Device::synchronize();
 
 	// Lancement du kernel 2: calcul de montecarlo
-	kernel<<<dg,db,sizeTabSM>>>(ptrDevGM, sizeTabSM, X_MIN, X_MAX, M, N, ptrDevTabGeneratorThread);
+	kernel<<<dg,db,sizeTabSM>>>(ptrDevGM, N_THREAD_PER_BLOCK, X_MIN, X_MAX, M, N, ptrDevTabGeneratorThread);
 	Device::checkKernelError("Kernel error: montecarlo");
 	Device::synchronize();
 
@@ -169,7 +169,7 @@ __host__ bool useMontecarloMultiGPU() {
 	const float X_MIN = 0;
 	const float X_MAX = 2;
 	const int M = 1;
-	const uint N_THREAD_PER_BLOCK = 1;
+	const uint N_THREAD_PER_BLOCK = 16;
 
 	double sum = 0;
 
