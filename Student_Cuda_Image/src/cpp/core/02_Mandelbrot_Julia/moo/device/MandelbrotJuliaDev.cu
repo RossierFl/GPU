@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "IndiceTools.h"
 #include "Indice2D.h"
 #include "cudaTools.h"
