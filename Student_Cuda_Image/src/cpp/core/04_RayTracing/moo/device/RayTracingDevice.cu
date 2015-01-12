@@ -6,62 +6,24 @@
 #include "RayTracingMath.h"
 #include "Sphere.h"
 
-/*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
-
-/*--------------------------------------*\
- |*		Imported	 	*|
- \*-------------------------------------*/
-
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
-
-__global__ void rayTracing(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, float t, Sphere* ptrSpheresDevGM, int n);
-
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-
-
-/*----------------------------------------------------------------------*\
- |*			Implementation 					*|
- \*---------------------------------------------------------------------*/
-
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
-
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-__global__ void rayTracing(uchar4* ptrDevPixels, int w, int h, float t, Sphere* ptrSpheresDevGM, int n)
-{
-	RayTracingMath* math = new RayTracingMath();
-
+__global__ void rayTracingGPU(uchar4* ptrDevPixels, int w, int h, float t, Sphere* spheres, int n) {
 	const int TID = Indice2D::tid();
 	const int NB_THREAD = Indice2D::nbThread();
 	const int WH = w * h;
 
-	uchar4 color;
-	int x;
-	int y;
+	RayTracingMath* rayTracingMath = new RayTracingMath();
 
 	int s = TID;
-	while (s < WH)
-	{
+	while (s < WH) {
+		uchar4 color;
+		int x;
+		int y;
 		IndiceTools::toIJ(s, w, &x, &y);
-		math->colorXY(&color, x, y, t, ptrSpheresDevGM, n);
+		rayTracingMath->colorXY(&color, x, y, t, spheres, n);
 		ptrDevPixels[s] = color;
 		s += NB_THREAD;
 	}
 
-	delete math;
+	delete rayTracingMath;
 }
 
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/

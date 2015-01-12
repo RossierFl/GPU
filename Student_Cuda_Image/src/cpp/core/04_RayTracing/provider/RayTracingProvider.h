@@ -4,25 +4,11 @@
 #include "RayTracing.h"
 #include "Image.h"
 
-/*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
+class RayTracingProvider {
 
-class RayTracingProvider
-{
- /*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
-public:
-
-	static RayTracing* create();
-
-	static Image* createGL();
-
+	public:
+		static RayTracing* create(void);
+		static Image* createGL(void);
 };
 
 #endif
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/

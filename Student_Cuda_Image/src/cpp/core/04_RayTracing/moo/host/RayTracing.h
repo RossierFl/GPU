@@ -7,74 +7,41 @@
 #include "VariateurF.h"
 #include "Sphere.h"
 
-/*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
+class RayTracing: public Animable_I {
 
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+	public:
+		RayTracing(int w, int h, float dt, double x1, double y1, double x2, double y2, Sphere* spheres, int n);
+		virtual ~RayTracing(void);
 
-class RayTracing : public Animable_I
-{
-	/*--------------------------------------*\
-	|*		Constructor		*|
-	 \*-------------------------------------*/
+		/**
+		 * Override
+		 * Call periodicly by the API
+		 */
+		virtual void animationStep(void);
 
-public:
+		void runGPU(uchar4* ptrDevPixels); // Override
 
-	RayTracing(int w, int h, float dt, double x1, double y1, double x2, double y2, Sphere* spheres, int n);
+		/**
+		 * Para animation
+		 */
+		float getT(); // Override
+		int getW(); // Override
+		int getH(); // Override
+		string getTitle(); // Override
 
-	virtual ~RayTracing();
+	private:
+		// Inputs
+		int w;
+		int h;
+		Sphere* spheres;
+		int n;
 
-	/*--------------------------------------*\
-	 |*		Methodes		*|
-	 \*-------------------------------------*/
-
-public:
-
-	/*----------------*\
-	|*  Override	  *|
-	\*---------------*/
-
-
-	/**
-	 * Override
-	 * Call periodically by the API
-	 */
-	virtual void animationStep();
-
-	void runGPU(uchar4* ptrDevPixels); // Override
-
-	/**
-	 * Para animation
-	 */
-	float getT(); // Override
-	int getW(); // Override
-	int getH(); // Override
-	string getTitle(); // Override
-
-	/*--------------------------------------*\
-	 |*		Attributs		*|
-	 \*-------------------------------------*/
-
-private:
-
-	// Inputs
-	int w;
-	int h;
-	Sphere* spheres;
-	int n;
-
-	// Tools
-	dim3 dg;
-	dim3 db;
-	float t;
-	VariateurF variateurAnimation;
+		// Tools
+		dim3 dg;
+		dim3 db;
+		float t;
+		VariateurF variateurAnimation;
+		string title;
 };
 
 #endif
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/

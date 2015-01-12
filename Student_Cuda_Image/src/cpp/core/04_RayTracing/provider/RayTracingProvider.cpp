@@ -5,80 +5,44 @@
 #include <time.h>
 #include "Sphere.h"
 
-/*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
-
-/*--------------------------------------*\
- |*		Imported	 	*|
- \*-------------------------------------*/
-
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
-
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-/*----------------------------------------------------------------------*\
- |*			Implementation 					*|
- \*---------------------------------------------------------------------*/
-
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
-
-/*-----------------*\
- |*	static	   *|
- \*----------------*/
-
-RayTracing* RayTracingProvider::create()
-{
+RayTracing* RayTracingProvider::create() {
 	int dw = 16 * 60;
 	int dh = 16 * 60;
-	float dt = 0.001f;
 
-	int nbBalls = 50;
+	int nBall = 50;
 
 	double x1 = 0;
-	double x2 = x1 + dw;
+	double x2 = dw;
 	double y1 = 0;
-	double y2 = y1 + dh;
+	double y2 = dh;
 	double z1 = 10;
 	double z2 = x2 * 2;
 
-	srand48(time(NULL));
+	float maxRBall = x2 / 10.0;
 
-	Sphere* spheres = (Sphere*) malloc(sizeof(Sphere) * nbBalls);
-	for (int i = 0; i < nbBalls; i++)
-	{
-		float x = x1 + drand48() * (x2 - x1);
-		float y = y1 + drand48() * (y2 - y1);
-		float z = z1 + drand48() * (z2 - z1);
-		float r = 20 + drand48() * (x2 / 10);
+	srand48 (time(NULL));
+
+	Sphere* spheres = NULL;
+	spheres = (Sphere*) malloc(sizeof(Sphere) * nBall);
+	for (int i = 0; i < nBall; i++) {
+		float x = drand48();
+		float y = drand48();
+		float z = drand48();
+		float r = drand48();
 		float hue = drand48();
 
 		float3 centre;
-		centre.x = x;
-		centre.y = y;
-		centre.z = z;
+		centre.x = x1 + x * (x2 - x1);
+		centre.y = y1 + y * (y2 - y1);
+		centre.z = z1 + z * (z2 - z1);
 
-		spheres[i] = Sphere(centre, r, hue);
+		spheres[i] = Sphere(centre, 20 + r * maxRBall, hue);
 	}
-
-	return new RayTracing(dw, dh, dt, x1, y1, x2, y2, spheres, nbBalls);
+	float dt = 0.001f;
+	return new RayTracing(dw, dh, dt, x1, y1, x2, y2, spheres, nBall);
 }
 
-Image* RayTracingProvider::createGL()
-{
-	return new Image(create());
+Image* RayTracingProvider::createGL(void) {
+	ColorRGB_01* ptrColorTitre = new ColorRGB_01(1, 1, 1);
+	return new Image(create(), ptrColorTitre);
 }
-
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
