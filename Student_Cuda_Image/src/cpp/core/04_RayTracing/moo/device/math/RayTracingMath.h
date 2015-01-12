@@ -61,7 +61,7 @@ class RayTracingMath
 		while(i<n)
 		    {
 			float h2 = spheres[i].hCarre(solXY);
-			bool isUnder = spheres[i].isEnDessous(h2);
+			bool isUnder = spheres[i].isUnder(h2);
 			if(isUnder){
 			float dz = spheres[i].dz(h2);
 			float dist = spheres[i].distance(dz);

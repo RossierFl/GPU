@@ -32,7 +32,7 @@ float b = (centre.y - xySol.y);
 return a * a + b * b;
 }
 
-__device__ bool isEnDessous(float hCarre)
+__device__ bool isUnder(float hCarre)
 {
 return hCarre < rCarre;
 }
