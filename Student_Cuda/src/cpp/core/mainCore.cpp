@@ -15,14 +15,15 @@ extern bool useScalarProduct();
 int mainCore() {
 	bool isOk = true;
 
-	//isOk &= useScalarProduct();
-	isOk &= useHistogramme();
+	isOk &= useScalarProduct();
+	//isOk &= useHistogramme();
 	//isOk &= usePI();
 	//isOk &= useMontecarlo();
 	//isOk &= useMontecarloMultiGPU();
 
-	cout << "\nisOK = " << isOk << endl;
-	cout << "\nEnd : mainCore" << endl;
+	cout << endl << "[SUMMARY]" << endl;
+	cout << "isOK = " << isOk << endl;
+	cout << "End : mainCore" << endl;
 	return isOk ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
