@@ -1,0 +1,3 @@
+Warning !
+
+freeglut_std.h was edited by myself !
