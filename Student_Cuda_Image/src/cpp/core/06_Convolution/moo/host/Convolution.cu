@@ -19,6 +19,8 @@ using std::endl;
 
 extern __global__ void convolutionKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
 extern __global__ void colorToGrey(uchar4* ptrDevPixels, int w, int h);
+extern __global__ void findMinMax(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h);
+extern __global__ void affineTransform(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -40,23 +42,25 @@ extern __global__ void colorToGrey(uchar4* ptrDevPixels, int w, int h);
  |*	Constructeur	    *|
  \*-------------------------*/
 
-Convolution::Convolution(int w, int h,float dt)
+Convolution::Convolution()
     {
     // Inputs
-    this->w = w;
-    this->h = h;
-    this->dt=dt;
+    this->w = 640;
+    this->h = 360;
     this->k = 9;
 
     // Tools
-    this->dg = dim3(8, 8, 1); // disons a optimiser
-    this->db = dim3(16, 16, 1); // disons a optimiser
+    this->dg = dim3(16, 1, 1); // disons a optimiser
+    this->db = dim3(32, 1, 1); // disons a optimiser
     this->t=0;
 
     //Outputs
     this->title="[API Image Cuda] : Convolution CUDA";
     this->videoPath="/media/Data/Video/nasaFHD_short.avi";
     this->videoTitle="NASA FHD SHORT";
+
+    this->videoPath="/media/Data/Video/neilPryde.avi";
+    this->videoTitle="neilPryde";
 
     size_t sizeOctets=w*h*sizeof(uchar4);
     HANDLE_ERROR( cudaHostAlloc ((void**) &(this->ptrHostMemory), sizeOctets,cudaHostAllocDefault ) );
@@ -65,8 +69,6 @@ Convolution::Convolution(int w, int h,float dt)
 
     const int N = k*k;
 
-    printf("N: %d, k: %d, half of k: %d, ss: %d\n",N,k,k/2,(int)(k*((float)k/2.0f)));
-
     HANDLE_ERROR( cudaHostAlloc ((void**) &(this->ptrHostNoyau), N*sizeof(float),cudaHostAllocDefault ) );
 
     fillDetourage(ptrHostNoyau);
@@ -74,12 +76,21 @@ Convolution::Convolution(int w, int h,float dt)
     HANDLE_ERROR(cudaMalloc((void **)&ptrDeviceNoyau,N*sizeof(float)));
     HANDLE_ERROR(cudaMemcpy(ptrDeviceNoyau,ptrHostNoyau,N*sizeof(float),cudaMemcpyHostToDevice));
 
+
+    sizeSM = 2*db.x*sizeof(uchar);
+    sizeResult=2*dg.x*sizeof(uchar);
+    ptrHostResult = (uchar*) malloc(sizeResult);
+
+    // first contains min of each block, then max of each block
+    HANDLE_ERROR(cudaMalloc((void**) &ptrDevResult, sizeResult));
+
     //cout << endl<<"[CBI] Convolution dt =" << dt << endl;
     }
 
 Convolution::~Convolution()
     {
-    // rien
+    free(ptrHostResult);
+    cudaFree(ptrDevResult);
     }
 
 /*-------------------------*\
@@ -100,7 +111,7 @@ void Convolution::fillDetourage(float* ptrNoyau)
 
     for (int i = 1; i <= N; i++)
 	{
-	ptrNoyau[i - 1] = tab[i - 1] / 100;
+	ptrNoyau[i - 1] = tab[i - 1] / 100.0f;
 	}
     }
 
@@ -110,7 +121,7 @@ void Convolution::fillDetourage(float* ptrNoyau)
  */
 void Convolution::animationStep()
     {
-    t+=dt;
+    //t+=dt;
     }
 
 /**
@@ -125,6 +136,26 @@ void Convolution::runGPU(uchar4* ptrDevPixels)
     HANDLE_ERROR(cudaDeviceSynchronize());
     convolutionKernel<<<dg,db>>>(ptrDevPixels,ptrDeviceNoyau,k,w,h,t);
     HANDLE_ERROR(cudaDeviceSynchronize());
+    findMinMax<<<dg,db,sizeSM>>>(ptrDevPixels,ptrDevResult,w,h);
+    HANDLE_ERROR(cudaMemcpy(ptrHostResult, ptrDevResult, sizeResult, cudaMemcpyDeviceToHost));
+    uchar max = 0;
+    uchar min = 255;
+    for(int i = 0;i<dg.x;i++)
+	{
+	uchar crt = ptrHostResult[i];
+	if(crt < min)
+	    min = crt;
+	crt = ptrHostResult[i+dg.x];
+	if(crt > max)
+	    max = crt;
+	}
+    // affine transformation
+    float a = 255.0f/(float)(max-min);
+    float b = 0;
+    if(min != 0)
+	b = 255.0f/((-max/(float)min)+1.0f);
+    affineTransform<<<dg,db>>>(ptrDevPixels, a, b, w, h,0);
+    //printf("min: %d, max: %d\n",min,max);
     }
 
 /*--------------*\

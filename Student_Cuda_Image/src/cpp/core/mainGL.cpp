@@ -61,7 +61,7 @@ int mainGL(void)
     //GLUTImageViewers mandelBrotViewer(ptrMandelbrot,isAnimation,isSelection,10,10);
     //GLUTImageViewers mandelBrotMGPUViewer(ptrMandelbrotMGPU,isAnimation,isSelection,10,10);
     //GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,10,10);
-    GLUTImageViewers newtonViewer(ptrConvolution,isAnimation,isSelection,10,10);
+    GLUTImageViewers convolViewer(ptrConvolution,isAnimation,isSelection,10,10);
     // TODO : Insert here autres ImageViewers ...
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte

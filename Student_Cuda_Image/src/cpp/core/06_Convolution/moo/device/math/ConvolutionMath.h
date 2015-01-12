@@ -2,6 +2,7 @@
 #define CONVOLUTIONMATH_H_
 
 #include "MathTools.h"
+#include <cstdio>
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -42,11 +43,10 @@ class ConvolutionMath
 	 * y=pixelJ
 	 */
 	__device__
-	void colorIJ(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s, float t)
+	void colorIJ(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
-	unsigned char levelGris;
 
-	f(ptrColor, ptrDevPixels, ptrDeviceNoyau,k,levelGris, i, j, s, t); // update levelGris
+	f(ptrColor, ptrDevPixels, ptrDeviceNoyau,k,i, j, s); // update levelGris
 
 	//	ptrOutputColor->x = levelGris;
 	//	ptrOutputColor->y = levelGris;
@@ -59,20 +59,26 @@ class ConvolutionMath
     private:
 
 	__device__
-	void firstLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, unsigned char& levelGris, int i, int h, int s)
+	void firstLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
 	int k2 = k/2;
-	if(i<k2)
+	if(j<k2)
 	    {
-	    levelGris = 0;
+	    ptrColor->x = 0;
+	    ptrColor->y = 0;
+	    ptrColor->z = 0;
 	    }
-	else if(i>=k2 && i<h-k2)
+	else if(j>=k2 && j<w-k2)
 	    {
-	    levelGris = 0;
+	    ptrColor->x = 0;
+	    ptrColor->y = 0;
+	    ptrColor->z = 0;
 	    }
-	else if(i >= h-k2)
+	else if(j >= w-k2)
 	    {
-	    levelGris = 0;
+	    ptrColor->x = 0;
+	    ptrColor->y = 0;
+	    ptrColor->z = 0;
 	    }
 	    }
 
@@ -82,17 +88,24 @@ class ConvolutionMath
 	 *
 	 */
 	__device__
-	void middleLines(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, unsigned char& levelGris, int i, int j, int h, int s)
+	void middleLines(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
 	    int ss = (int)(k*((float)k/2.0f));
 	    int k2 = k/2;
-	    if(i<k2)
+	    if(j<k2)
 		{
-		levelGris = 0;
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
 		}
-	    else if(i>=k2 && i<h-k2)
+	    else if(j>=k2 && j<w-k2)
 		{
+		//		ptrColor->x = 0;
+		//		ptrColor->y = 0;
+		//		ptrColor->z = 0;
+		//		return;
 		float sum = 0.0f;
+
 		for(int v = 1;v<=k2;v++)
 		    {
 		    for(int u = 1;u<=k2;u++)
@@ -121,45 +134,53 @@ class ConvolutionMath
 		ptrColor->y = sum;
 		ptrColor->z = sum;
 		}
-	    else if(i >= h-k2)
+	    else if(j >= w-k2)
 		{
-		levelGris = 0;
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
 		}
 	    }
 
 	__device__
-	void lastLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, unsigned char& levelGris, int i, int h, int s)
-	    {
-	    int k2 = k/2;
-	    if(i<k2)
-		{
-		levelGris = 0;
-		}
-	    else if(i>=k2 && i<h-k2)
-		{
-		levelGris = 0;
-		}
-	    else if(i >= h-k2)
-		{
-		levelGris = 0;
-		}
-	    }
-
-	__device__
-	void f(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, unsigned char& levelGris, int i, int j, int s, float t)
+	void lastLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
 	    int k2 = k/2;
 	    if(j<k2)
 		{
-		firstLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,levelGris,i,h,s);
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
 		}
-	    else if(j>=k/2 && j<w-k2)
+	    else if(j>=k2 && j<w-k2)
 		{
-		middleLines(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,levelGris,i,j,h,s);
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
 		}
 	    else if(j >= w-k2)
 		{
-		lastLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,levelGris,i,h,s);
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
+		}
+	    }
+
+	__device__
+	void f(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
+	    {
+	    int k2 = k/2;
+	    if(i<k2)
+		{
+		firstLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,i,j,s);
+		}
+	    else if(i>=k2 && i<h-k2)
+		{
+		middleLines(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,i,j,s);
+		}
+	    else if(i>=h-k2)
+		{
+		lastLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,i,j,s);
 		}
 	    }
 

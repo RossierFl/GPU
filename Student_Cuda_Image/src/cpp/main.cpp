@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 
 	// Server Cuda1: in [0,5]
 	// Server Cuda2: in [0,2]
-	int deviceId = 0;
+	int deviceId = 2;
 
 	int isOk = start();
 
@@ -84,7 +84,7 @@ void initCuda(int deviceId)
     // Choose current device  (state of host-thread)
     HANDLE_ERROR(cudaSetDevice(deviceId));
 
-    // Enable Interoperabilité OpenGL:
+    // Enable Interoperabilitï¿½ OpenGL:
     //		- Create a cuda specifique contexte, shared between Cuda and GL
     //		- To be called before first call to kernel
     //		- cudaSetDevice ou cudaGLSetGLDevice are mutualy exclusive

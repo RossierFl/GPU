@@ -31,12 +31,8 @@
 
 Convolution* ConvolutionProvider::create()
     {
-    float dt = 2*PI/1000;
 
-    int dw = 1920;
-    int dh = 1080;
-
-    return new Convolution(dw, dh, dt);
+    return new Convolution();
     }
 
  Image* ConvolutionProvider::createGL(void)

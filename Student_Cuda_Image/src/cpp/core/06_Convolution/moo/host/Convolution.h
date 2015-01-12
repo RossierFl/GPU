@@ -31,7 +31,7 @@ class Convolution: public Animable_I
 
     public:
 
-	Convolution(int w, int h, float dt = 2 * PI / 1000);
+	Convolution();
 	virtual ~Convolution(void);
 
 	/*--------------------------------------*\
@@ -89,6 +89,12 @@ class Convolution: public Animable_I
 	string videoTitle;
 	CaptureVideo* captureur;
 	uchar4* ptrHostMemory;
+
+
+	size_t sizeSM;
+	uchar* ptrDevResult;
+	uchar* ptrHostResult;
+	size_t sizeResult;
     };
 
 #endif 
