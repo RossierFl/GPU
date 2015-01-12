@@ -63,20 +63,10 @@ class NewtonMath
 		    }
 
 
-	__device__
-	 float f1(float x1, float x2)
-	    {
-	    return (x1 * x1 * x1) - (3 * x1 * (x2 * x2)) - 1;
-	    }
 
+	// Jacobienne
 	__device__
-	 float f2(float x1, float x2)
-	    {
-	    return (x2 * x2 * x2) - (3 * x2 * (x1 * x1));
-	    }
-
-	__device__
-	 void jacobienne(float x1, float x2, float* matrix)
+	 void fJacobienne(float x1, float x2, float* matrix)
 	    {
 	    matrix[0] = 3 * x1 * x1 - 3 * x2 * x2;
 	    matrix[1] = -6 * x1 * x2;
@@ -84,14 +74,17 @@ class NewtonMath
 	    matrix[3] = 3 * x2 * x2 - 3 * x1 * x1;
 	    }
 
+
+	//Determinant
 	__device__
 	 float det(float* matrix)
 	    {
 	    return (matrix[0] * matrix[3]) - (matrix[1] * matrix[2]);
 	    }
 
+	//Inversion de matrice
 	__device__
-	 void inverse(float* matrix)
+	 void inverseMatix(float* matrix)
 	    {
 	    float determinant = det(matrix);
 	    float aCopy = matrix[0];
@@ -126,10 +119,10 @@ class NewtonMath
 	    for (int i = 0; i < n; i++)
 		{
 		// Compute the jacobienne
-		jacobienne(crtX1, crtX2, jacob);
+		fJacobienne(crtX1, crtX2, jacob);
 
 		// Inverse the jacobienne
-		inverse(jacob);
+		inverseMatix(jacob);
 
 		// Current X is near solution a, b or c
 		if (normSquare(crtX1 - xa[0], crtX2 - xa[1]) / normSquare(xa[0], xa[1]) < epsilonxstar)
