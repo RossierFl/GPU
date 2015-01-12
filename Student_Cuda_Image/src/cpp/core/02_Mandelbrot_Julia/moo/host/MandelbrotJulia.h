@@ -10,7 +10,7 @@ class MandelbrotJulia: public AnimableFonctionel_I {
 
 	public:
 
-		MandelbrotJulia(bool isJulia, int w, int h, float dt, int n, float c1, float c2, float x1, float x2, float y1, float y2);
+		MandelbrotJulia(bool isJulia, bool isMultiGPU, int w, int h, float dt, int n, float c1, float c2, float x1, float x2, float y1, float y2);
 		virtual ~MandelbrotJulia();
 
 		/**
@@ -34,6 +34,7 @@ class MandelbrotJulia: public AnimableFonctionel_I {
 
 		// Inputs
 		bool isJulia;
+		bool isMultiGPU;
 		int w;
 		int h;
 		int n;

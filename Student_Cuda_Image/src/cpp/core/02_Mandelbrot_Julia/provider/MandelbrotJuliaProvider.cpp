@@ -1,7 +1,8 @@
 #include "MandelbrotJuliaProvider.h"
 #include "MathTools.h"
 
-#define JULIA 1 /* 0 or 1 */
+#define JULIA true /* true|false */
+#define MULTI_GPU true /* true|false */
 
 MandelbrotJulia* MandelbrotJuliaProvider::create() {
 	int dw = 16 * 60; // =32*30=960
@@ -26,7 +27,7 @@ MandelbrotJulia* MandelbrotJuliaProvider::create() {
 		int n = 102;
 #endif
 
-	return new MandelbrotJulia(JULIA, dw, dh, dt, n, c1, c2, x1, x2, y1, y2);
+	return new MandelbrotJulia(JULIA, MULTI_GPU, dw, dh, dt, n, c1, c2, x1, x2, y1, y2);
 }
 
 ImageFonctionel* MandelbrotJuliaProvider::createGL() {
