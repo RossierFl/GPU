@@ -33,11 +33,11 @@ Newton* NewtonProvider::createMOO()
 	double x2 = 2.0;
 	double y2 = 2.0;
 
-	float epsilonx = 0.004;
-	float epsilonxstar = 0.006;
-	float epsilonf = 0.007;
+	float epsilonX= 0.004;
+	float epsilonxStart = 0.006;
+	float epsilonF = 0.007;
 
-	return new Newton(dw, dh, dt, epsilonx, epsilonf, epsilonxstar, x1, y1, x2, y2);
+	return new Newton(dw, dh, dt, epsilonX, epsilonF, epsilonxStart, x1, y1, x2, y2);
 }
 
 ImageFonctionel* NewtonProvider::createGL()

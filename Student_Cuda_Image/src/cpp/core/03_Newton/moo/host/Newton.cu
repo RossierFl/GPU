@@ -16,7 +16,7 @@
 |*		Imported					 	*|
 \*--------------------------------------*/
 
-__global__ void fractalNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float epsilonx, float epsilonf, float epsilonxstar);
+__global__ void fractalNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float epsilonX, float epsilonF, float epsilonxStart);
 
 /*--------------------------------------*\
 |*		Public							*|
@@ -34,7 +34,7 @@ __global__ void fractalNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath do
 |*	Constructor		       *|
 \*-------------------------*/
 
-Newton::Newton(int w, int h, float dt, float epsilonx, float epsilonf, float epsilonxstar, double x1, double y1, double x2, double y2)
+Newton::Newton(int w, int h, float dt, float epsilonX, float epsilonF, float epsilonxStart, double x1, double y1, double x2, double y2)
 		:
 		animationVariator(IntervalF(30, 100), dt)
 {
@@ -43,9 +43,9 @@ Newton::Newton(int w, int h, float dt, float epsilonx, float epsilonf, float eps
 	this->h = h;
 	this->n = n;
 
-	this->epsilonx = epsilonx;
-	this->epsilonf = epsilonf;
-	this->epsilonxstar = epsilonxstar;
+	this->epsilonX = epsilonX;
+	this->epsilonF = epsilonF;
+	this->epsilonxStart = epsilonxStart;
 
 	// Tools
 	this->dg = dim3(8, 8, 1); // TODO à optimiser
@@ -90,7 +90,7 @@ void Newton::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
 {
 	// Run the computation on the GPU
 	// @formatter:off
-	fractalNewton<<<dg,db>>>(ptrDevPixels, w, h, domaineMath, n, epsilonx, epsilonf, epsilonxstar);
+	fractalNewton<<<dg,db>>>(ptrDevPixels, w, h, domaineMath, n, epsilonX, epsilonF, epsilonxStart);
 	// @formatter:on
 }
 

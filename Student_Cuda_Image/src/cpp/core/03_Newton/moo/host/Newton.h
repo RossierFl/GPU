@@ -23,7 +23,7 @@ class Newton : public AnimableFonctionel_I
 
 public:
 
-	Newton(int w, int h, float dt, float epsilonx, float epsilonf, float epsilonxstar, double x1, double y1, double x2, double y2);
+	Newton(int w, int h, float dt, float epsilonX, float epsilonF, float epsilonxStart, double x1, double y1, double x2, double y2);
 
 	virtual ~Newton();
 
@@ -80,9 +80,9 @@ private:
 	int w; // width
 	int h; // height
 	int n; // todo
-	float epsilonx; // todo
-	float epsilonf; // todo
-	float epsilonxstar; // todo
+	float epsilonX; // todo
+	float epsilonF; // todo
+	float epsilonxStart; // todo
 
 	// Tools
 	dim3 dg; // configuration of the grid
