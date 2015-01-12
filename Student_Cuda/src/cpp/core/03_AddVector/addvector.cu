@@ -5,30 +5,13 @@
 #include "cudaTools.h"
 #include "Device.h"
 
-/*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
-
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+// #define DEBUG 1
 
 __host__ void useAdd();
-
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
 static __global__ void add(float* ptrDevV1, float* ptrDevV2, int n, float* ptrDevResult);
 static __device__ float work(float v1, float v2);
 static __host__ void fillArray(float* ptrArray, int n, int start, int pas);
 
-/*----------------------------------------------------------------------*\
- |*			Implementation 					*|
- \*---------------------------------------------------------------------*/
-
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
 __host__ void useAdd() {
 	int n = 10;
 
@@ -55,8 +38,10 @@ __host__ void useAdd() {
 
 	dim3 dg(4, 4, 1);
 	dim3 db(4, 8, 1);
+#ifdef DEBUG
 	Device::checkDimError(dg, db);
 	Device::checkDimOptimiser(dg, db);
+#endif
 
 	add<<<dg,db>>>(ptrDevV1, ptrDevV2, n, ptrDevResult); // asynchronous
 	Device::checkKernelError("erreur kernel");
@@ -67,10 +52,6 @@ __host__ void useAdd() {
 	}
 	std::cout << std::endl;
 }
-
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
 
 __host__ void fillArray(float* ptrArray, int n, int start, int pas) {
 	for(int i = 0; i < n; i++) {
@@ -93,8 +74,3 @@ __global__ void add(float* ptrDevV1, float* ptrDevV2, int n, float* ptrDevResult
 __device__ float work(float v1, float v2) {
 	return v1 + v2;
 }
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
-

@@ -7,7 +7,7 @@
 #include <math.h>
 #include "reduction.h"
 
-#define DEBUG 1
+// #define DEBUG 1
 
 #define M_W 100
 #define M_V 100
@@ -85,8 +85,9 @@ __device__ double w(int i) {
 }
 
 __host__ bool useScalarProduct() {
+	printf("\n[Scalar Product]\n");
+
 	const uint N = 100000;
-	printf("[Scalar Product]\n");
 
 	// Paramètres du GPU
 	const uint NB_THREAD = 32;
@@ -114,7 +115,8 @@ __host__ bool useScalarProduct() {
 
 	/* Fetch result */
 	HANDLE_ERROR(cudaMemcpy(&scalarProductResult, ptrScalarProductResultDevGRAM, sizeof(double), cudaMemcpyDeviceToHost));
-	printf("Result GPU = %f - CPU = %f\n", scalarProductResult, theoricalResult(N));
+	printf("GPU = %f\n", scalarProductResult);
+	printf("CPU = %f\n", theoricalResult(N));
 
 	/* Free memory */
 	HANDLE_ERROR(cudaFree(ptrScalarProductResultDevGRAM));

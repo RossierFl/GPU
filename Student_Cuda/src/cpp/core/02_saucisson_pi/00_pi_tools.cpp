@@ -6,46 +6,27 @@
 using std::cout;
 using std::endl;
 
-/*----------------------------------------------------------------------*\
- |*			Implementation 					*|
- \*---------------------------------------------------------------------*/
+double fpi(double x) {
+	return 4 / (1 + x * x);
+}
 
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+bool isAlgoPI_OK(AlgoPI algoPI, int n, string title) {
+	cout << "n=" << n << endl;
 
-double fpi(double x)
-    {
-    return 4 / (1 + x * x);
-    }
+	Chronos chrono;
+	double piHat = algoPI(n);
+	chrono.stop();
 
-bool isAlgoPI_OK(AlgoPI algoPI, int n, string title)
-    {
-    cout << endl << "[" << title << " running ...]" << endl;
-    cout << "n=" << n << endl;
+	cout.precision(8);
+	cout << "Pi hat  = " << piHat << endl;
+	cout << "Pi true = " << PI << endl;
 
-    Chronos chrono;
-    double piHat = algoPI(n);
-    chrono.stop();
+	bool isOk = MathTools::isEquals(piHat, PI, 1e-4);
+	cout << "isOk = " << isOk << endl;
 
-    cout.precision(8);
-    cout << "Pi hat  = " << piHat << endl;
-    cout << "Pi true = " << PI << endl;
+	cout.precision(3);
+	chrono.print("time : ");
 
-    bool isOk = MathTools::isEquals(piHat, PI, 1e-6);
-    cout << "isOk = " << isOk << endl;
-
-    cout.precision(3);
-    chrono.print("time : ");
-
-    return isOk;
-    }
-
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
+	return isOk;
+}
 

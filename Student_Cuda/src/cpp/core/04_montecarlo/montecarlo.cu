@@ -116,6 +116,8 @@ static __device__ void reduceIntraThread(float* tabSM, const float X_MIN, const 
 
 __host__ bool useMontecarlo() {
 
+	printf("\n[Montecarlo single CPU]\n");
+
 	// Paramètres de l'algorithme
 	const unsigned long long N = 5000000;
 	const float X_MIN = 0;
@@ -136,8 +138,10 @@ __host__ bool useMontecarlo() {
 	// Paramètres du GPU
 	dim3 dg(1, 1, 1); // TODO to optimize
 	dim3 db(nThreadPerBlock, 1, 1); // TODO to optimize
+#ifdef DEBUG
 	Device::checkDimError(dg, db);
 	Device::checkDimOptimiser(dg, db);
+#endif
 	const int DEVICE_ID = 1;
 
 	// générateurs de nombres aléatoires sur le GPU

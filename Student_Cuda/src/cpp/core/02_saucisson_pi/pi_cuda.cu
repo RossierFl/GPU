@@ -8,6 +8,8 @@
 #include "00_pi_tools.h"
 #include "reduction.h"
 
+// #define DEBUG 1
+
 static __global__ void kernel(float* ptrDevPiGM, const int n, const int nTabSM);
 static __device__ void reduceIntraThread(float* tabSM, int const n);
 static __device__ float fpi(float x);
@@ -93,8 +95,10 @@ double piCuda(const int n) {
 	// Lancement du kernel
 	dim3 dg(1, 1, 1); // TODO to optimize
 	dim3 db(nThreadPerBlock, 1, 1); // TODO to optimize
+#ifdef DEBUG
 	Device::checkDimError(dg, db);
 	Device::checkDimOptimiser(dg, db);
+#endif
 	kernel<<<dg,db,sizeTabSM>>>(ptrDevPiGM, n, nThreadPerBlock); // asynchronous
 	Device::checkKernelError("Kernel error");
 
@@ -105,6 +109,9 @@ double piCuda(const int n) {
 }
 
 bool usePI() {
-	const int N = 200000;
+
+	printf("\n[PI]\n");
+
+	const int N = 2000000;
 	return isAlgoPI_OK(piCuda, N, "Pi cuda");
 }

@@ -159,6 +159,9 @@ static __host__ float runOnDevice(const uint DEVICE, const unsigned long N, cons
 }
 
 __host__ bool useMontecarloMultiGPU() {
+
+	printf("\n[Montecarlo multi GPU]\n");
+
 	// Parametres de l'algorithme
 	const uint NB_GPU = Device::getDeviceCount();
 	unsigned long N = 5000000;

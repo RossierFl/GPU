@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//src/cpp/core/02_saucisson_pi/pi_cuda.cu=UTF-8
+encoding//src/cpp/core/03_AddVector/addvector.cu=UTF-8
 encoding//src/cpp/core/04_montecarlo/montecarlo-multigpc.cu=UTF-8
 encoding//src/cpp/core/04_montecarlo/montecarlo.cu=UTF-8
 encoding//src/cpp/core/05_ScalarProduct/scalar_product.cu=UTF-8
