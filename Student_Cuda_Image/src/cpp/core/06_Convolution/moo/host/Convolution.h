@@ -1,9 +1,19 @@
 #ifndef CONVOLUTION_H_
 #define CONVOLUTION_H_
 
+
+/*----------------------------------------------------------------------*\
+ |*			Declaration 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+
 #include "cudaTools.h"
 #include "Animable_I.h"
 #include "MathTools.h"
+#include "CaptureVideo.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -21,7 +31,7 @@ class Convolution: public Animable_I
 
     public:
 
-	Convolution(int w, int h, float dt = 2 * PI / 1000);
+	Convolution();
 	virtual ~Convolution(void);
 
 	/*--------------------------------------*\
@@ -48,6 +58,8 @@ class Convolution: public Animable_I
 
 	virtual string getTitle(void); // Override
 
+	void fillDetourage(float* ptrNoyau);
+
 	/*--------------------------------------*\
 	 |*		Attributs		*|
 	 \*-------------------------------------*/
@@ -58,6 +70,7 @@ class Convolution: public Animable_I
 	int w;
 	int h;
 	float dt;
+	int k;
 
 	// Tools
 	dim3 dg;
@@ -66,9 +79,25 @@ class Convolution: public Animable_I
 
 	//Outputs
 	string title;
+
+	// noyau convolution
+	float* ptrHostNoyau;
+	float* ptrDeviceNoyau;
+
+	// capture video
+	string videoPath;
+	string videoTitle;
+	CaptureVideo* captureur;
+	uchar4* ptrHostMemory;
+
+
+	size_t sizeSM;
+	uchar* ptrDevResult;
+	uchar* ptrHostResult;
+	size_t sizeResult;
     };
 
-#endif
+#endif 
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|

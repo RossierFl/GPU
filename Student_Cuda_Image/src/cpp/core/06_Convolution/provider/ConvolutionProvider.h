@@ -1,5 +1,5 @@
-#ifndef CONVOLUTION_PROVIDER_H_
-#define CONVOLUTION_PROVIDER_H_
+#ifndef CONVOLUTIONPROVIDER_H_
+#define CONVOLUTIONPROVIDER_H_
 
 #include "Convolution.h"
 #include "Image.h"
@@ -22,9 +22,8 @@ class ConvolutionProvider
 
     };
 
-#endif
+#endif 
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-
