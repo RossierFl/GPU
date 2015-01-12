@@ -5,7 +5,7 @@
 #include "MathTools.h"
 #include <stdio.h>
 
-__global__ void fractale(bool isJulia, uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t, float c1, float c2);
+__global__ void fractale(bool isJulia, uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t, float c1, float c2, uint offset = 0);
 
 MandelbrotJulia::MandelbrotJulia(bool isJulia, bool isMultiGPU, int w, int h, float dt, int n, float c1, float c2, float x1, float x2, float y1, float y2) :
 		variateurAnimation(IntervalF(30, 100), dt) {
@@ -19,6 +19,11 @@ MandelbrotJulia::MandelbrotJulia(bool isJulia, bool isMultiGPU, int w, int h, fl
 
 	this->isJulia = isJulia;
 	this->isMultiGPU = isMultiGPU;
+	if (isMultiGPU) {
+		/* Enable P2P */
+		Device::p2pEnableALL();
+		printf("\n");
+	}
 
 	// Tools
 	this->dg = dim3(8, 8, 1); // disons a optimiser
@@ -28,7 +33,7 @@ MandelbrotJulia::MandelbrotJulia(bool isJulia, bool isMultiGPU, int w, int h, fl
 
 	//Outputs
 	this->title = "[API Image Fonctionelle] : Mandelbrot or Julia zoomable";
-	if(isMultiGPU) {
+	if (isMultiGPU) {
 		this->title += " [Multi GPU]";
 	}
 
@@ -59,25 +64,26 @@ void MandelbrotJulia::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMat
 	} else {
 		const uint NB_GPU = Device::getDeviceCount();
 
-		/* Enable P2P */
-		Device::p2pEnableALL();
-
 		/* Compute steps for each GPU */
 		uint remainingH = h;
 		const uint stepH = h / NB_GPU;
 		uint steps[NB_GPU];
+		printf("initial h = %d\n", h);
 		for (int device = 0; device < NB_GPU; device++) {
 			if (device == NB_GPU - 1) {
 				steps[device] = remainingH;
 			} else {
 				steps[device] = stepH;
 			}
+			printf("steps[%d] = %d\n", device, steps[device]);
 			remainingH -= steps[device];
 		}
+		printf("remaining = %d\n", remainingH);
 
 		/* Processing */
-#pragma omp parallel for
+//#pragma omp parallel for
 		for (int device = 0; device < NB_GPU; device++) {
+			printf("processing devide %d\n", device);
 			bool isFirst = device == 0;
 
 			// set current device
@@ -88,24 +94,31 @@ void MandelbrotJulia::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMat
 			uchar4* start = ptrDevPixels + offset;
 			uchar4* targetCurrentDevResult = ptrDevPixels;
 
-			if(!isFirst) {
+			if (!isFirst) {
 				targetCurrentDevResult = NULL;
 				HANDLE_ERROR(cudaMalloc(&targetCurrentDevResult, sizeof(uchar4) * steps[device]));
 			}
 
 			// call kernel to compute a step
-			fractale<<<dg,db>>>(isJulia, targetCurrentDevResult, w, steps[device], domaineMath, getT(), t, c1, c2);
+			printf("targetCurrentDevResult = %d\n", (void*)targetCurrentDevResult);
+			printf("w = %d\n", w);
+			printf("steps[device] = %d\n", steps[device]);
+			printf("offset = %d\n", offset);
+			fractale<<<dg,db>>>(isJulia, targetCurrentDevResult, w, steps[device], domaineMath, getT(), t, c1, c2, offset);
 			Device::checkKernelError("kernel error: fractale");
 			Device::synchronize();
 
 			// Le premier GPU contient toute l'image, mais traite que les premières lignes
 			// Les autres sont traitées par les autres GPUs, il faut donc copier leur résultat sur le
 			// première GPU afin qu'OpenGL puisse tout afficher
-			if(!isFirst) {
+			if (!isFirst) {
 				HANDLE_ERROR(cudaMemcpy(start, targetCurrentDevResult, sizeof(uchar4) * steps[device], cudaMemcpyDeviceToDevice));
 				HANDLE_ERROR(cudaFree(targetCurrentDevResult));
 			}
 		}
+
+		// reset current device
+		cudaSetDevice(0);
 	}
 }
 

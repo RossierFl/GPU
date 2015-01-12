@@ -7,7 +7,7 @@
 #include "MandelbrotMath.h"
 #include "JuliaMath.h"
 
-__global__ void fractale(bool isJulia, uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t, float c1, float c2) {
+__global__ void fractale(bool isJulia, uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t, float c1, float c2, uint offset = 0) {
 	const int TID = Indice2D::tid();
 	const int NB_THREAD = Indice2D::nbThread();
 	const int WH = w * h;
@@ -23,7 +23,7 @@ __global__ void fractale(bool isJulia, uchar4* ptrDevPixels, int w, int h, Domai
 	while (s < WH) {
 		int pixelI;
 		int pixelJ;
-		IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
+		IndiceTools::toIJ(s + offset, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 
 		// (i,j) domaine ecran
 		// (x,y) domaine math
