@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//src/cpp/core/04_montecarlo/montecarlo-multigpc.cu=UTF-8
+encoding//src/cpp/core/04_montecarlo/montecarlo.cu=UTF-8
+encoding//src/cpp/core/05_ScalarProduct/scalar_product.cu=UTF-8
+encoding//src/cpp/core/11_histogramme/histogramme.cu=UTF-8
