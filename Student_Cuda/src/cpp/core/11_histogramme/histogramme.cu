@@ -5,7 +5,6 @@
 #include "cudaTools.h"
 #include "Indice1D.h"
 #include "reduction.h"
-#include <assert.h>
 
 #define WIDTH 2000
 #define HEIGHT 2000
