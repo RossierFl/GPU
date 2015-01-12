@@ -51,14 +51,13 @@ int mainGL()
 	ImageFonctionel* ptrNewton = NewtonProvider::createGL();
 	Image* ptrRayTracing = RayTracingProvider::createGL();
 
-
 	bool isAnimation = true;
 	bool isSelection = true;
 
-	// GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
-	// GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 0, 100);
-	// GLUTImageViewers fractalViewer(ptrFractal, isAnimation, isSelection, 10, 10);
-	// GLUTImageViewers newtonViewer(ptrNewton, isAnimation, isSelection, 100, 0);
+	GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
+	GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 0, 100);
+	GLUTImageViewers fractalViewer(ptrFractal, isAnimation, isSelection, 10, 10);
+	GLUTImageViewers newtonViewer(ptrNewton, isAnimation, isSelection, 100, 0);
 	GLUTImageViewers rayTracingViewer(ptrRayTracing, isAnimation, isSelection, 100, 0);
 
 	GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
