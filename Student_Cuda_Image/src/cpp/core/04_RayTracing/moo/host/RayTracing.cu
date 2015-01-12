@@ -1,12 +1,9 @@
-#include <iostream>
 #include <assert.h>
 
 #include "RayTracing.h"
 #include "Device.h"
 #include "MathTools.h"
-
-using std::cout;
-using std::endl;
+#include <stdio.h>
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -16,7 +13,7 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void rayTracing(uchar4* ptrDevPixels,int w, int h,float t);
+__global__ void rayTracingGPU(uchar4* ptrDevPixels, int w, int h, float t, Sphere* spheres, int n);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -38,32 +35,32 @@ extern __global__ void rayTracing(uchar4* ptrDevPixels,int w, int h,float t);
  |*	Constructeur	    *|
  \*-------------------------*/
 
-RayTracing::RayTracing(int w, int h,float dt)
+RayTracing::RayTracing(int w, int h, float dt, double x1, double y1, double x2, double y2, Sphere* spheres, int n) :
+		variateurAnimation(IntervalF(0,10), dt)
     {
     // Inputs
     this->w = w;
     this->h = h;
-    this->dt=dt;
-
+	
+    this->spheres = spheres;
+    this->n = n;
+	
     // Tools
     this->dg = dim3(8, 8, 1); // disons a optimiser
     this->db = dim3(16, 16, 1); // disons a optimiser
-    this->t=0;
+    this->t = variateurAnimation.varierAndGet();
 
     //Outputs
-    this->title="[API Image Cuda] : RayTracing CUDA";
+    this->title = "[API Image Normale] : RayTracing non-zoomable CUDA";
 
     // Check:
     //print(dg, db);
     Device::assertDim(dg, db);
-    assert(w== h);
-
-    cout << endl<<"[CBI] RayTracing dt =" << dt;
+    assert(w == h);
     }
 
 RayTracing::~RayTracing()
     {
-    // rien
     }
 
 /*-------------------------*\
@@ -72,11 +69,10 @@ RayTracing::~RayTracing()
 
 /**
  * Override
- * Call periodicly by the API
  */
 void RayTracing::animationStep()
     {
-    t+=dt;
+    this->t = variateurAnimation.varierAndGet();
     }
 
 /**
@@ -84,7 +80,15 @@ void RayTracing::animationStep()
  */
 void RayTracing::runGPU(uchar4* ptrDevPixels)
     {
-    rayTracing<<<dg,db>>>(ptrDevPixels,w,h,t);
+    Sphere* spheresToDev = NULL; //create pointer
+    HANDLE_ERROR(cudaMalloc(&spheresToDev,n*sizeof(Sphere)));//malloc all spheres
+    HANDLE_ERROR(cudaMemcpy(spheresToDev,spheres,n*sizeof(Sphere),cudaMemcpyHostToDevice));//fill with spheres
+    rayTracingGPU<<<dg,db>>>(ptrDevPixels,w,h,t,spheresToDev,n);//call
+    cudaFree(spheresToDev);//free mat
+    cudaDeviceSynchronize(); // in case of issues
+    //printf("\n");
+    //exit(0);
+    //get fps to do smooth animation ??
     }
 
 /*--------------*\
@@ -112,7 +116,7 @@ int RayTracing::getW(void)
  */
 int RayTracing::getH(void)
     {
-    return  h;
+    return h;
     }
 
 /**
@@ -130,4 +134,3 @@ string RayTracing::getTitle(void)
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-

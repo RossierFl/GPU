@@ -1,16 +1,9 @@
-#ifndef RAYTRACING_PROVIDER_H_
-#define RAYTRACING_PROVIDER_H_
+#ifndef RAYTRACINGPROVIDER_H_
+#define RAYTRACINGPROVIDER_H_
 
 #include "RayTracing.h"
 #include "Image.h"
 
-/*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
-
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
 
 class RayTracingProvider
     {
@@ -19,7 +12,6 @@ class RayTracingProvider
 	static RayTracing* create(void);
 	static Image* createGL(void);
 
-
     };
 
 #endif
@@ -27,4 +19,3 @@ class RayTracingProvider
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-

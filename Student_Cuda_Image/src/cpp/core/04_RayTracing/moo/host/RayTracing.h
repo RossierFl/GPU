@@ -4,6 +4,8 @@
 #include "cudaTools.h"
 #include "Animable_I.h"
 #include "MathTools.h"
+#include "VariateurF.h"
+#include "Sphere.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -21,7 +23,7 @@ class RayTracing: public Animable_I
 
     public:
 
-	RayTracing(int w, int h, float dt = 2 * PI / 1000);
+	RayTracing(int w, int h, float dt, double x1, double y1, double x2, double y2, Sphere* spheres, int n);
 	virtual ~RayTracing(void);
 
 	/*--------------------------------------*\
@@ -34,19 +36,24 @@ class RayTracing: public Animable_I
 	|*  Override	  *|
 	\*---------------*/
 
+
 	/**
 	 * Override
 	 * Call periodicly by the API
 	 */
 	virtual void animationStep(void);
 
-	virtual void runGPU(uchar4* ptrDevPixels); // Override
+	void runGPU(uchar4* ptrDevPixels); // Override
 
-	virtual float getT(void); // Override
-	virtual int getW(void); // Override
-	virtual int getH(void); // Override
+	/**
+	 * Para animation
+	 */
+	float getT(void); // Override
+	int getW(void); // Override
+	int getH(void); // Override
+	string getTitle(void); // Override
 
-	virtual string getTitle(void); // Override
+
 
 	/*--------------------------------------*\
 	 |*		Attributs		*|
@@ -57,12 +64,15 @@ class RayTracing: public Animable_I
 	// Inputs
 	int w;
 	int h;
-	float dt;
+	
+	Sphere* spheres;
+	int n;
 
 	// Tools
 	dim3 dg;
 	dim3 db;
 	float t;
+	VariateurF variateurAnimation;
 
 	//Outputs
 	string title;
