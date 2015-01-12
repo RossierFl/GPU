@@ -3,134 +3,120 @@
 #include "Newton.h"
 #include "Device.h"
 #include "MathTools.h"
+#include <stdio.h>
+
+#define MAX_T 40
+#define MAX_N 25
 
 /*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
+|*			Declaration 												*|
+\*----------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Imported	 	*|
- \*-------------------------------------*/
+|*		Imported					 	*|
+\*--------------------------------------*/
 
-__global__ void newton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t);
-
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+__global__ void fractalNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float epsilonx, float epsilonf, float epsilonxstar);
 
 /*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
+|*		Public							*|
+\*--------------------------------------*/
+
+/*--------------------------------------*\
+|*		Private							*|
+\*--------------------------------------*/
 
 /*----------------------------------------------------------------------*\
- |*			Implementation 					*|
- \*---------------------------------------------------------------------*/
-
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+|*			Implementation 												*|
+\*----------------------------------------------------------------------*/
 
 /*-------------------------*\
- |*	Constructeur	    *|
- \*-------------------------*/
+|*	Constructor		       *|
+\*-------------------------*/
 
-Newton::Newton(int w, int h, float dt, int n) :
-	variateurAnimation(IntervalF(0, 2 * PI), dt)
-    {
-    // Inputs
-    this->w = w;
-    this->h = h;
-    this->n = n;
+Newton::Newton(int w, int h, float dt, float epsilonx, float epsilonf, float epsilonxstar, double x1, double y1, double x2, double y2)
+		:
+		animationVariator(IntervalF(30, 100), dt)
+{
+	// Inputs
+	this->w = w;
+	this->h = h;
+	this->n = n;
 
-    // Tools
-    this->dg = dim3(8, 8, 1); // disons a optimiser
-    this->db = dim3(16, 16, 1); // disons a optimiser
-    this->t = 0;
-    ptrDomaineMathInit=new DomaineMath(0,0,2*PI,2*PI);
+	this->epsilonx = epsilonx;
+	this->epsilonf = epsilonf;
+	this->epsilonxstar = epsilonxstar;
 
-    //Outputs
-    this->title = "[API Image Fonctionelle] : Newton zoomable CUDA";
+	// Tools
+	this->dg = dim3(8, 8, 1); // TODO à optimiser
+	this->db = dim3(16, 16, 1); // TODO à optimiser
+	this->t = 0;
+	this->tAdd = true;
+	ptrDomaineMathInit = new DomaineMath(x1, y1, x2, y2);
 
-    // Check:
-    //print(dg, db);
-    Device::assertDim(dg, db);
-    assert(w == h);
-    }
+	Device::assertDim(dg, db);
+	assert(w == h);
+}
 
 Newton::~Newton()
-    {
-   delete ptrDomaineMathInit;
-    }
+{
+	delete ptrDomaineMathInit;
+}
 
-/*-------------------------*\
- |*	Methode		    *|
- \*-------------------------*/
+/*------------------------*\
+|*	Methods	  			  *|
+\*------------------------*/
 
-/**
- * Override
- */
 void Newton::animationStep()
-    {
-    this->t = variateurAnimation.varierAndGet(); // in [0,2pi]
-    }
+{
+	t++;
+	if(t > MAX_T) {
+		t = 0;
+		if(tAdd) {
+			this->n++;
+			if(this->n >= MAX_N) {
+				this->tAdd = !this->tAdd;
+			}
+		} else {
+			this->n--;
+			if(this->n <= 0) {
+				this->tAdd = !this->tAdd;
+			}
+		}
+	}
+}
 
-/**
- * Override
- */
 void Newton::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
-    {
-    newton<<<dg,db>>>(ptrDevPixels,w,h,domaineMath,n,t);
-    }
+{
+	// Run the computation on the GPU
+	// @formatter:off
+	fractalNewton<<<dg,db>>>(ptrDevPixels, w, h, domaineMath, n, epsilonx, epsilonf, epsilonxstar);
+	// @formatter:on
+}
 
-/*--------------*\
- |*	get	 *|
- \*--------------*/
+DomaineMath* Newton::getDomaineMathInit()
+{
+	return ptrDomaineMathInit;
+}
 
-/**
- * Override
- */
-DomaineMath* Newton::getDomaineMathInit(void)
-    {
-    return ptrDomaineMathInit;
-    }
+float Newton::getT()
+{
+	return n;
+}
 
-/**
- * Override
- */
-float Newton::getT(void)
-    {
-    return t;
-    }
+int Newton::getW()
+{
+	return w;
+}
 
-/**
- * Override
- */
-int Newton::getW(void)
-    {
-    return w;
-    }
+int Newton::getH()
+{
+	return h;
+}
 
-/**
- * Override
- */
-int Newton::getH(void)
-    {
-    return h;
-    }
+std::string Newton::getTitle()
+{
+	return "Newton";
+}
 
-/**
- * Override
- */
-string Newton::getTitle(void)
-    {
-    return title;
-    }
-
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
 

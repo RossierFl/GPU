@@ -8,73 +8,60 @@
 
 
 /*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
+|*			Declaration 		                            			*|
+\*---------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Imported	 	*|
- \*-------------------------------------*/
+|*		Imported	                	*|
+\*--------------------------------------*/
 
 /*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+|*		Public			                *|
+\*--------------------------------------*/
 
-__global__ void newton(uchar4* ptrDevPixels,int w, int h,DomaineMath domaineMath, int n,float t);
+__global__ void fractalNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float epsilonx, float epsilonf, float epsilonxstar);
 
 /*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-
+|*		Private		                 	*|
+\*--------------------------------------*/
 
 /*----------------------------------------------------------------------*\
- |*			Implementation 					*|
- \*---------------------------------------------------------------------*/
+|*			Implementation 				                            	*|
+\*----------------------------------------------------------------------*/
 
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+__global__ void fractalNewton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float epsilonx, float epsilonf, float epsilonxstar)
+{
+	const int TID = Indice2D::tid();
+	const int NB_THREAD = Indice2D::nbThread();
+	const int WH = w * h;
 
-/*--------------------------------------*\
- |*		Private			*|
- \*-------------------------------------*/
-
-__global__ void newton(uchar4* ptrDevPixels, int w, int h, DomaineMath domaineMath, int n, float t)
-    {
-    NewtonMath newtonMath = NewtonMath(n);
-
-    const int TID = Indice2D::tid();
-    const int NB_THREAD = Indice2D::nbThread();
-
-    const int WH=w*h;
-
-    uchar4 color;
-
-    double x;
-    double y;
-
-    int pixelI;
-    int pixelJ;
-
-    int s = TID;
-    while (s < WH)
+	uchar4 color;
+	double x;
+	double y;
+	int i;
+	int j;
+	NewtonMath newtonMath(n);
+	int s = TID;
+	while (s < WH)
 	{
-	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
+		// Compute (i,j)
+		// (i,j) screen domain
+		// (x,y) math domain
+		IndiceTools::toIJ(s, w, &i, &j);
 
-	// (i,j) domaine ecran
-	// (x,y) domaine math
-	domaineMath.toXY(pixelI, pixelJ, &x, &y); //  (i,j) -> (x,y)
+		// Compute (x,y)
+		//  (i,j) -> (x,y)
+		domaineMath.toXY(i, j, &x, &y);
 
-	newtonMath.colorXY(&color,x, y,t); // update color
+		// Compute the color
+		newtonMath.colorXY(&color, x, y, epsilonx, epsilonf, epsilonxstar);
 
-	ptrDevPixels[s] = color;
+		// Apply the color
+		ptrDevPixels[s] = color;
 
-	s += NB_THREAD;
+		//
+		s += NB_THREAD;
 	}
+}
 
-    }
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
 

@@ -1,5 +1,5 @@
 #ifndef NEWTON_H_
-#define HELLO_FONCTIONEL_H_
+#define NEWTON_H_
 
 #include "cudaTools.h"
 #include "AnimableFonctionel_I.h"
@@ -7,78 +7,90 @@
 #include "VariateurF.h"
 
 /*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
+|*			Declaration 			                            		*|
+\*-------------------------------------------------------------- -------*/
 
-/*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+/*-------------------------------------*\
+|*		Public			               *|
+\*-------------------------------------*/
 
-class Newton: public AnimableFonctionel_I
-    {
-	/*--------------------------------------*\
-	|*		Constructor		*|
-	 \*-------------------------------------*/
+class Newton : public AnimableFonctionel_I
+{
 
-    public:
+/*-------------------------------------*\
+|*		Constructor		               *|
+\*-------------------------------------*/
 
-	Newton(int w, int h, float dt, int n);
-	virtual ~Newton(void);
+public:
 
-	/*--------------------------------------*\
-	 |*		Methodes		*|
-	 \*-------------------------------------*/
+	Newton(int w, int h, float dt, float epsilonx, float epsilonf, float epsilonxstar, double x1, double y1, double x2, double y2);
 
-    public:
+	virtual ~Newton();
 
-	/*----------------*\
-	|*  Override	  *|
-	\*---------------*/
+/*-------------------------------------*\
+|*		Methods		                   *|
+\*-------------------------------------*/
 
+public:
 
 	/**
-	 * Override
-	 * Call periodicly by the API
-	 */
-	virtual void animationStep(void);
-
-	void runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath); // Override
+	* Update t
+	* Call periodically by the API
+	*/
+	virtual void animationStep();
 
 	/**
-	 * Para animation
-	 */
-	float getT(void); // Override
-	int getW(void); // Override
-	int getH(void); // Override
-	DomaineMath* getDomaineMathInit(void); // Override
-	string getTitle(void); // Override
+	* Run the computation on the GPU
+	*/
+	void runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath);
+
+	/**
+	* Get the current animation parameter
+	*/
+	float getT();
+
+	/**
+	* Get the width of the fractal
+	*/
+	int getW();
+
+	/**
+	* Get the height of the fractal
+	*/
+	int getH();
+
+	/**
+	* Get the mathematical domain.
+	*/
+	DomaineMath* getDomaineMathInit();
+
+	/**
+	* Get the title of the fractal
+	*/
+	std::string getTitle();
 
 
+/*-------------------------------------*\
+|*		Attributs		               *|
+\*-------------------------------------*/
 
-	/*--------------------------------------*\
-	 |*		Attributs		*|
-	 \*-------------------------------------*/
-
-    private:
+private:
 
 	// Inputs
-	int w;
-	int h;
-	int n;
+	int w; // width
+	int h; // height
+	int n; // todo
+	float epsilonx; // todo
+	float epsilonf; // todo
+	float epsilonxstar; // todo
 
 	// Tools
-	dim3 dg;
-	dim3 db;
-	float t; // para animation
-	VariateurF variateurAnimation; // varier t
+	dim3 dg; // configuration of the grid
+	dim3 db; // configuration of the blocks
+	float t; // animation parameter
+	bool tAdd;
+	VariateurF animationVariator; // used to variate t
 	DomaineMath* ptrDomaineMathInit;
-
-	//Outputs
-	string title;
-    };
+};
 
 #endif
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/

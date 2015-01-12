@@ -1,30 +1,26 @@
-#ifndef NEWTON_PROVIDER_H_
-#define NEWTON_PROVIDER_H_
+#ifndef NEWTONPROVIDER_H_
+#define NEWTONPROVIDER_H_
 
 #include "Newton.h"
 #include "ImageFonctionel.h"
 
 /*----------------------------------------------------------------------*\
- |*			Declaration 					*|
- \*---------------------------------------------------------------------*/
+|*			Declaration 												*|
+\*----------------------------------------------------------------------*/
 
 /*--------------------------------------*\
- |*		Public			*|
- \*-------------------------------------*/
+|*		Public							*|
+\*--------------------------------------*/
 
 class NewtonProvider
-    {
-    public:
+{
+public:
 
-	static Newton* create(void);
-	static ImageFonctionel* createGL(void);
+	static Newton* createMOO();
 
+	static ImageFonctionel* createGL();
 
-    };
+};
 
 #endif
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
 
