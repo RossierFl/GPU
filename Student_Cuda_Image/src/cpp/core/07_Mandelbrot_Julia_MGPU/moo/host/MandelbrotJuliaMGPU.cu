@@ -38,7 +38,7 @@ __global__ void fractaleMGPU(uchar4* ptrDevPixels, int w, int h, DomaineMath dom
 
 MandelbrotJuliaMGPU::MandelbrotJuliaMGPU(int w, int h, float dt, int n, int isJulia,
 	double c1, double c2, double x1, double y1, double x2, double y2) :
-													variateurAnimation(IntervalF(30, 100), dt)
+														variateurAnimation(IntervalF(30, 100), dt)
     {
     // Inputs
     this->w = w;
@@ -57,7 +57,7 @@ MandelbrotJuliaMGPU::MandelbrotJuliaMGPU(int w, int h, float dt, int n, int isJu
     ptrDomaineMathInit=new DomaineMath(x1,y1,x2,y2);
 
     //Outputs
-    this->title = "[API Image Fonctionelle] : Mandelbrot Julia zoomable CUDA";
+    this->title = "[API Image Fonctionelle] : Mandelbrot Julia multi-gpu zoomable CUDA";
 
     // Check:
     //print(dg, db);

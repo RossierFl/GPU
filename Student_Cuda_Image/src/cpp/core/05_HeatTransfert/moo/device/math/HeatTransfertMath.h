@@ -41,8 +41,9 @@ class HeatTransfertMath
 	 \*-------------------------------------*/
 
     public:
-	__device__ void setNewValue(float* updatedValue,float* ptrDevImageA,float k,int s,int w){
+	__device__ void updateHeat(float* updatedValue,float* ptrDevImageA,float k,int s,int w){
 	float crtValue = ptrDevImageA[s];
+	// cf. pdf page 2
 	float north = ptrDevImageA[s-w];
 	float south = ptrDevImageA[s+w];
 	float west = ptrDevImageA[s-1];

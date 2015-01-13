@@ -60,11 +60,12 @@ __global__ void diffusion(float* ptrDevImageA,float* ptrDevImageB, int w, int h,
       while (s < WH)
   	{
 	  IndiceTools::toIJ(s, w, &pixelI, &pixelJ);
+	  // 1 pixel band around image not calc to avoid 9 branch
 	  if(pixelI !=0 && pixelI != h && pixelJ != 0 && pixelJ != w){
 		  if(!imgAIsInput)
-		      math->setNewValue(&ptrDevImageB[s],ptrDevImageA,k,s,w); // update color
+		      math->updateHeat(&ptrDevImageB[s],ptrDevImageA,k,s,w); // update color
 		  else
-		      math->setNewValue(&ptrDevImageA[s],ptrDevImageB,k,s,w); // update color
+		      math->updateHeat(&ptrDevImageA[s],ptrDevImageB,k,s,w); // update color
 	  }
 	  s += NB_THREAD;
   	}

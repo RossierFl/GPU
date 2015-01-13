@@ -73,54 +73,62 @@ HeatTransfert::HeatTransfert(int w, int h, float k):calibreurCuda(0.0,1.0,0.7,0.
     HANDLE_ERROR(cudaMemset(ptrDevImageHeater,0,sizeImages)) ;
 
     float* ptrHostImageHeater = new float[w*h];
-    memset(ptrHostImageHeater,0,sizeImages);
+    //memset(ptrHostImageHeater,0,sizeImages);
 
-    // init
-//    for(int i=0;i<=h;i++)
-//	{
-//	for(int j=0;j<=w;j++)
-//	    {
-//	    ptrHostImageHeater[i*h+j]=0.0;
-//	    }
-//	}
+    // init, in case memset doesn't work for float
+    for(int i=0;i<h;i++)
+	{
+	for(int j=0;j<w;j++)
+	    {
+	    ptrHostImageHeater[i*w+j]=0.0f;
+	    }
+	}
     //single cooler point
-    ptrHostImageHeater[295*h+400] = 0.2;
-    ptrHostImageHeater[400*h+295] = 0.2;
-    ptrHostImageHeater[505*h+400] = 0.2;
-    ptrHostImageHeater[400*h+505] = 0.2;
+    ptrHostImageHeater[295*w+400] = 0.2;
+    ptrHostImageHeater[400*w+295] = 0.2;
+    ptrHostImageHeater[505*w+400] = 0.2;
+    ptrHostImageHeater[400*w+505] = 0.2;
+
+    /*
+     * cf. PDF for std case values
+     */
 
     //main heater
     for(int i=300;i<=500;i++)
 	{
 	for(int j=300;j<=500;j++)
 	    {
-	    ptrHostImageHeater[i*h+j] = 1.0;
+	    ptrHostImageHeater[i*w+j] = 1.0;
 	    }
 	}
 
     //north cooler
     for(int i=179;i<=195;i++)
 	{
+	// west
 	for(int j=179;j<=195;j++)
 	    {
-	    ptrHostImageHeater[i*h+j] = 0.2;
+	    ptrHostImageHeater[i*w+j] = 0.2;
 	    }
+	// east
 	for(int j=605;j<=621;j++)
 	    {
-	    ptrHostImageHeater[i*h+j] = 0.2;
+	    ptrHostImageHeater[i*w+j] = 0.2;
 	    }
 	}
 
     //south cooler
     for(int i=605;i<=621;i++)
 	{
+	// west
 	for(int j=179;j<=195;j++)
 	    {
-	    ptrHostImageHeater[i*h+j] = 0.2;
+	    ptrHostImageHeater[i*w+j] = 0.2;
 	    }
+	// east
 	for(int j=605;j<=621;j++)
 	    {
-	    ptrHostImageHeater[i*h+j] = 0.2;
+	    ptrHostImageHeater[i*w+j] = 0.2;
 	    }
 	}
 

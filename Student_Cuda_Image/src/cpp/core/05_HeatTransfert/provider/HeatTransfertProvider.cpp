@@ -32,11 +32,18 @@
 HeatTransfert* HeatTransfertProvider::create()
     {
     // cf. PDF
-    int dw = 800;
-    int dh = 800;
+    int dw = 820;
+    int dh = 820;
+    // 1/4, 4 neighbours
     float k = 0.25;
+    HeatTransfert* heatTransfert;
+    if(dw < 650 || dh < 650)
+	{
+	printf("Error, size too small !!!\n");
+	heatTransfert = new HeatTransfert(810, 810,k);
+	}
 
-    HeatTransfert* heatTransfert = new HeatTransfert(dw, dh,k);
+    heatTransfert = new HeatTransfert(dw, dh,k);
     return heatTransfert;
     }
 
