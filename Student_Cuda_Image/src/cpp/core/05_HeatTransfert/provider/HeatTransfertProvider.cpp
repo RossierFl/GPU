@@ -1,9 +1,5 @@
-#include <iostream>
-#include <stdlib.h>
-
-
-using std::cout;
-using std::endl;
+#include "HeatTransfertProvider.h"
+#include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -13,24 +9,13 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern bool useHello(void);
-extern bool useProduitScalaire(void);
-extern bool useHistogramme(void);
-extern bool useSaucisson(void);
-extern bool useMonteCarlo(void);
-extern bool useMonteCarloMGPU(void);
-
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainCore();
-
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
-
-
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -40,29 +25,30 @@ int mainCore();
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainCore()
+/*-----------------*\
+ |*	static	   *|
+ \*----------------*/
+
+HeatTransfert* HeatTransfertProvider::create()
     {
-    bool isOk = true;
-    //isOk &= useHello();
-    //isOk &= useProduitScalaire();
-    isOk &= useHistogramme();
-    //isOk &= useSaucisson();
-    //isOk &= useMonteCarlo();
-    //isOk &= useMonteCarloMGPU();
+    // cf. PDF
+    int dw = 800;
+    int dh = 800;
+    float k = 0.25;
 
-    cout << "\nisOK = " << isOk << endl;
-    cout << "\nEnd : mainCore" << endl;
+    HeatTransfert* heatTransfert = new HeatTransfert(dw, dh,k);
+    return heatTransfert;
+    }
 
-    return isOk ? EXIT_SUCCESS : EXIT_FAILURE;
+Image* HeatTransfertProvider::createGL(void)
+    {
+    return new Image(create());;
     }
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
 
-
-
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-

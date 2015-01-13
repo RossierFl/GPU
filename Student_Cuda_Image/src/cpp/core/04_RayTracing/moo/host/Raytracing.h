@@ -1,10 +1,14 @@
 #ifndef RAYTRACING_H_
 #define RAYTRACING_H_
 
+#include <assert.h>
+
 #include "cudaTools.h"
 #include "Animable_I.h"
 #include "MathTools.h"
 #include "VariateurF.h"
+#include "Device.h"
+#include "Sphere.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -19,7 +23,7 @@ class Raytracing: public Animable_I
 
     public:
 
-	Raytracing(int w, int h);
+	Raytracing(int w, int h, Sphere* spheres, int n);
 	virtual ~Raytracing(void);
 
     public:
@@ -46,6 +50,9 @@ class Raytracing: public Animable_I
 
 	//Outputs
 	string title;
+
+	Sphere* spheres;
+	int n;
     };
 
 #endif 

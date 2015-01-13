@@ -106,6 +106,9 @@ void MandelbrotJuliaMGPU::animationStep()
  */
 void MandelbrotJuliaMGPU::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMath)
     {
+    /*
+     * TODO implement OMP, but if no OMP, ok runs fine and quick without it
+     */
     //    for(int i = 0;i<nbGPUs;i++)
     //	{
     cudaSetDevice(0);

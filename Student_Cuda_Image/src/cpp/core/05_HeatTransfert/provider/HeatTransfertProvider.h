@@ -1,6 +1,8 @@
-#ifndef RAYTRACINGPROVIDER_H_
-#define RAYTRACINGPROVIDER_H_
+#ifndef HEATTRANSFERTPROVIDER_H_
+#define HEATTRANSFERTPROVIDER_H_
 
+#include "HeatTransfert.h"
+#include "Image.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -10,18 +12,19 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-#include "Raytracing.h"
-#include "Image.h"
-
-
-class RaytracingProvider {
+class HeatTransfertProvider
+    {
     public:
-	static Raytracing* create(void);
-	static Image* createGL(void);
-};
 
-#endif 
+	static HeatTransfert* create(void);
+	static Image* createGL(void);
+
+
+    };
+
+#endif
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
+
