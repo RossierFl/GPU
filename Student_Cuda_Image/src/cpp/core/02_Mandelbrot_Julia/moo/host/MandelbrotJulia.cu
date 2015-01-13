@@ -75,17 +75,14 @@ void MandelbrotJulia::runGPU(uchar4* ptrDevPixels, const DomaineMath& domaineMat
 		uint remainingH = h;
 		const uint stepH = h / NB_GPU;
 		uint steps[NB_GPU];
-		printf("initial h = %d\n", h);
 		for (int device = 0; device < NB_GPU; device++) {
 			if (device == NB_GPU - 1) {
 				steps[device] = remainingH;
 			} else {
 				steps[device] = stepH;
 			}
-			printf("steps[%d] = %d\n", device, steps[device]);
 			remainingH -= steps[device];
 		}
-		printf("remaining = %d\n", remainingH);
 
 		/* Processing */
 #pragma omp parallel for

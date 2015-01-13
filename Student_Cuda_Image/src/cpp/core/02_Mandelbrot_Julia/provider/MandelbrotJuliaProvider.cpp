@@ -2,7 +2,7 @@
 #include "MathTools.h"
 
 #define JULIA true /* true|false */
-#define MULTI_GPU true /* true|false */
+#define MULTI_GPU false /* true|false */
 
 MandelbrotJulia* MandelbrotJuliaProvider::create() {
 	int dw = 16 * 60; // =32*30=960
