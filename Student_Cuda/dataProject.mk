@@ -42,6 +42,7 @@ TARGET_MODE:=EXE
 #	Mimimum : empty
 
 SRC_AUX+= ../BilatTools_CPP/src/core
+SRC_AUX+= ../BilatTools_OMP/src/core
 SRC_AUX+= ../BilatTools_Cuda/src/core
 
 #################
