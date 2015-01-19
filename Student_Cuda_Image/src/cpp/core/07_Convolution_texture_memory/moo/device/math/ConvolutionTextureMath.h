@@ -42,7 +42,7 @@ class ConvolutionTextureMath
 	 * x=pixelI
 	 * y=pixelJ
 	 */
-	__device__
+	/*__device__
 	void colorIJ(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
 
@@ -54,7 +54,21 @@ class ConvolutionTextureMath
 	// trololololo
 
 	ptrColor->w = 255; // opaque
-	    }
+	    }*/
+
+	__device__
+	void colorIJ(uchar4* ptrColor, uchar4* ptrVideoImage, float* ptrDeviceNoyau, size_t sizetKernel){
+	    size_t size = sizetKernel* sizetKernel;
+	    int sum = 0;
+		for(int s=0;s<size;s++){
+		    sum += ptrVideoImage[s].x * ptrDeviceNoyau[s];
+		}
+		ptrColor->x=sum;
+		ptrColor->y=sum;
+		ptrColor->z=sum;
+
+
+	}
 
     private:
 

@@ -19,8 +19,8 @@ __device__ int mutex = 0;
 
 texture<float,2> textureRef;
 
-
-__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h,float t);
+__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,uchar4* ptrDeviceVideoImage, int k, int w, int h, float t);
+//__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h,float t);
 
 __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
 
@@ -148,7 +148,7 @@ __global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, i
 	}
     }
 
-__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t)
+__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,uchar4* ptrDeviceVideoImage, int k, int w, int h, float t)
     {
     ConvolutionTextureMath convMath = ConvolutionTextureMath(w, h);
 
@@ -166,8 +166,24 @@ __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceN
     while (s < WH)
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
-	color = ptrDevPixels[s];
-	convMath.colorIJ(&color,ptrDevPixels,ptrDeviceNoyau,k,pixelI, pixelJ, s); 	// update color
+	//color = ptrDevPixels[s];
+	const int KERN_SIZE =9;
+	const int KERN_OFFSET=-4;
+	uchar4 colorsVideo[9*9];
+	//uchar4* ptrOnePixel = tex2D(textureRef,pixelJ,pixelI);
+	int sk=0;
+	for(int i=0;i<KERN_SIZE;i++){
+	    int iTex = KERN_OFFSET+i;
+	    for (int j=0;j<KERN_SIZE;j++){
+	    int jTex=KERN_OFFSET+j;
+	    colorsVideo[sk].x=tex2D(textureRef,jTex,iTex);
+	    colorsVideo[sk].y=tex2D(textureRef,jTex,iTex);
+	    colorsVideo[sk].z=tex2D(textureRef,jTex,iTex);
+	    sk++;
+	    }
+	}
+//	convMath.colorIJ(&color,ptrDevPixels,ptrDeviceNoyau,k,pixelI, pixelJ, s); // update color
+	convMath.colorIJ(&color,colorsVideo,ptrDeviceNoyau,KERN_SIZE); // update color
 	ptrDevPixels[s] = color;
 	s += NB_THREAD;
 	}
