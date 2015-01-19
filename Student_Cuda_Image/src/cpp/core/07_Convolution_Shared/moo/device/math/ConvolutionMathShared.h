@@ -1,5 +1,5 @@
-#ifndef CONVOLUTIONMATH_H_
-#define CONVOLUTIONMATH_H_
+#ifndef CONVOLUTIONMATHSHARED_H_
+#define CONVOLUTIONMATHSHARED_H_
 
 #include "MathTools.h"
 #include <cstdio>
@@ -12,7 +12,7 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class ConvolutionMath
+class ConvolutionMathShared
     {
 
 	/*--------------------------------------*\
@@ -21,13 +21,13 @@ class ConvolutionMath
 
     public:
 
-	__device__ ConvolutionMath(int w, int h)
+	__device__ ConvolutionMathShared(int w, int h)
 	    {
 	this->w = w;
 	this->h = h;
 	    }
 
-	__device__ ConvolutionMath(const ConvolutionMath& source)
+	__device__ ConvolutionMathShared(const ConvolutionMathShared& source)
 	    {
 	    // rien
 	    }

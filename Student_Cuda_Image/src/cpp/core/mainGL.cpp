@@ -14,6 +14,7 @@
 #include "NewtonProvider.h"
 #include "RaytracingProvider.h"
 #include "ConvolutionProvider.h"
+#include "ConvolutionProviderShared.h"
 #include "HeatTransfertProvider.h"
 
 using std::cout;
@@ -53,6 +54,7 @@ int mainGL(void)
     Image* ptrRay = RaytracingProvider::createGL();
     Image* ptrHeatTransfert = HeatTransfertProvider::createGL();
     Image* ptrConvolution = ConvolutionProvider::createGL();
+    Image* ptrConvolutionShared = ConvolutionProviderShared::createGL();
     ImageFonctionel* ptrMandelbrot = MandelbrotJuliaProvider::createGL();
     ImageFonctionel* ptrMandelbrotMGPU = MandelbrotJuliaProviderMGPU::createGL();
     ImageFonctionel* ptrNewton = NewtonProvider::createGL();
@@ -61,13 +63,14 @@ int mainGL(void)
     bool isSelection = true;
 
     //GLUTImageViewers rippling0Viewer(ptrRippling0, isAnimation, isSelection, 0, 0);
-    GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
-    GLUTImageViewers mandelBrotViewer(ptrMandelbrot,isAnimation,isSelection,10,10);
-    GLUTImageViewers mandelBrotMGPUViewer(ptrMandelbrotMGPU,isAnimation,isSelection,10,10);
-    GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,10,10);
-    GLUTImageViewers rayViewer(ptrRay,isAnimation,isSelection,10,10);
-    GLUTImageViewers heatViewer(ptrHeatTransfert,isAnimation,isSelection,10,10);
-    GLUTImageViewers convolViewer(ptrConvolution,isAnimation,isSelection,10,10);
+    //GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelection, 10, 10);
+    //GLUTImageViewers mandelBrotViewer(ptrMandelbrot,isAnimation,isSelection,10,10);
+    //GLUTImageViewers mandelBrotMGPUViewer(ptrMandelbrotMGPU,isAnimation,isSelection,10,10);
+    //GLUTImageViewers newtonViewer(ptrNewton,isAnimation,isSelection,10,10);
+    //GLUTImageViewers rayViewer(ptrRay,isAnimation,isSelection,10,10);
+    //GLUTImageViewers heatViewer(ptrHeatTransfert,isAnimation,isSelection,10,10);
+    //GLUTImageViewers convolViewer(ptrConvolution,isAnimation,isSelection,10,10);
+    GLUTImageViewers convolViewerShared(ptrConvolutionShared,isAnimation,isSelection,10,10);
     // TODO : Insert here autres ImageViewers ...
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
@@ -82,6 +85,7 @@ int mainGL(void)
 	delete ptrRay;
 	delete ptrHeatTransfert;
 	delete ptrConvolution;
+	delete ptrConvolutionShared;
 
 	//ptrRippling0 = NULL;
 	ptrRippling = NULL;
@@ -91,6 +95,7 @@ int mainGL(void)
 	ptrRay = NULL;
 	ptrHeatTransfert = NULL;
 	ptrConvolution = NULL;
+	ptrConvolutionShared = NULL;
 	}
 
     return EXIT_SUCCESS;

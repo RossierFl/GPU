@@ -5,7 +5,7 @@
 #include "Device.h"
 #include "Lock.h"
 
-#include "ConvolutionMath.h"
+#include "ConvolutionMathShared.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -17,11 +17,11 @@
 
 __device__ int mutex = 0;
 
-__global__ void convolutionKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h,float t);
+__global__ void convolutionKernelShared(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h,float t);
 
-__global__ void colorToGrey(uchar4* ptrDevPixels, int w, int h);
+__global__ void colorToGreyShared(uchar4* ptrDevPixels, int w, int h);
 
-__global__ void affineTransform(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
+__global__ void affineTransformShared(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -36,7 +36,7 @@ __global__ void affineTransform(uchar4* ptrDevPixels, float a, float b, int w, i
  |*		Public			*|
  \*-------------------------------------*/
 
-__device__ void ecrasement(uchar* tabSM, int halfThread)
+__device__ void ecrasementShared(uchar* tabSM, int halfThread)
     {
     const int TID_LOCAL = Indice1D::tidLocalBlock();
     const int NB_THREAD_BLOCK = Indice1D::nbThreadBlock();
@@ -51,20 +51,20 @@ __device__ void ecrasement(uchar* tabSM, int halfThread)
 	}
     }
 
-__device__ void reductionIntraB(uchar* tabSM)
+__device__ void reductionIntraBShared(uchar* tabSM)
     {
     const int NB_THREAD = Indice1D::nbThread();
     const int NB_THREAD_BLOCK=Indice1D::nbThreadBlock();
     int halfThread = NB_THREAD_BLOCK/2;
     while(halfThread>=1)
 	{
-	ecrasement(tabSM,halfThread);
+	ecrasementShared(tabSM,halfThread);
 	__syncthreads();
 	halfThread/=2;
 	}
     }
 
-__device__ void reductionInterB(uchar* tabSM, uchar* ptrDevResult)
+__device__ void reductionInterBShared(uchar* tabSM, uchar* ptrDevResult)
     {
     const int TID_LOCAL = Indice1D::tidLocalBlock();
     const int NB_THREADS = Indice1D::nbThreadBlock();
@@ -79,7 +79,7 @@ __device__ void reductionInterB(uchar* tabSM, uchar* ptrDevResult)
 
     }
 
-__device__ void reductionIntraT(uchar* tabSM, uchar4* ptrDevPixels,int n)
+__device__ void reductionIntraTShared(uchar* tabSM, uchar4* ptrDevPixels,int n)
     {
     const int NB_THREAD = Indice1D::nbThread();
     const int TID = Indice1D::tid();
@@ -103,7 +103,7 @@ __device__ void reductionIntraT(uchar* tabSM, uchar4* ptrDevPixels,int n)
     tabSM[Indice1D::nbThreadBlock()+TID_LOCAL] = maxCrtThread; // tabSM is 2*n size
     }
 
-__global__ void colorToGrey(uchar4* ptrDevPixels, int w, int h)
+__global__ void colorToGreyShared(uchar4* ptrDevPixels, int w, int h)
     {
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
@@ -125,7 +125,7 @@ __global__ void colorToGrey(uchar4* ptrDevPixels, int w, int h)
 	}
     }
 
-__global__ void affineTransform(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset)
+__global__ void affineTransformShared(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset)
     {
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
@@ -146,11 +146,15 @@ __global__ void affineTransform(uchar4* ptrDevPixels, float a, float b, int w, i
 	}
     }
 
-__global__ void convolutionKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t)
+__global__ void convolutionKernelShared(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t)
     {
-    ConvolutionMath convMath = ConvolutionMath(w, h);
+
+    extern __shared__ float convSM[];// 1 instance per block !
+
+    ConvolutionMathShared convMath = ConvolutionMathShared(w, h);
 
     const int TID = Indice2D::tid();
+    const int TID_LOCAL = Indice2D::tidLocal();
     const int NB_THREAD = Indice2D::nbThread();
 
     const int WH=w*h;
@@ -160,12 +164,17 @@ __global__ void convolutionKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, i
     int pixelI;
     int pixelJ;
 
-    int s = TID;
+    int s = TID_LOCAL;
+    if(s < (k*k))
+	convSM[s] = ptrDeviceNoyau[s];
+    __syncthreads();
+
+    s = TID;
     while (s < WH)
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 	color = ptrDevPixels[s];
-	convMath.colorIJ(&color,ptrDevPixels,ptrDeviceNoyau,k,pixelI, pixelJ, s); 	// update color
+	convMath.colorIJ(&color,ptrDevPixels,convSM,k,pixelI, pixelJ, s); 	// update color
 	ptrDevPixels[s] = color;
 	s += NB_THREAD;
 	}
@@ -174,16 +183,16 @@ __global__ void convolutionKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, i
 /*
  * ptrDevResult should contain min in [0] and max in [1]
  */
-__global__ void findMinMax(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h)
+__global__ void findMinMaxShared(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h)
     {
     // one shared memory per block
     extern __shared__ uchar tabSM[];
     //const int TID_LOCAL = Indice1D::tidLocalBlock();
 
     int sizePtrDevPixels = w*h;
-    reductionIntraT(tabSM, ptrDevPixels,sizePtrDevPixels);
-    reductionIntraB(tabSM);
-    reductionInterB(tabSM, ptrDevResult);
+    reductionIntraTShared(tabSM, ptrDevPixels,sizePtrDevPixels);
+    reductionIntraBShared(tabSM);
+    reductionInterBShared(tabSM, ptrDevResult);
     }
 
 /*--------------------------------------*\
