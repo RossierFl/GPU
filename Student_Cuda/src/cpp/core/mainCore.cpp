@@ -10,20 +10,11 @@ extern bool useMontecarlo();
 extern bool useMontecarloMultiGPU();
 extern bool useHistogramme();
 extern bool useScalarProduct();
+extern void histogramme_extended();
 
 
 int mainCore() {
-	bool isOk = true;
-
-	//isOk &= useScalarProduct();
-	//isOk &= useHistogramme();
-	//isOk &= usePI();
-	//isOk &= useMontecarlo();
-	isOk &= useMontecarloMultiGPU();
-
-	cout << endl << "[SUMMARY]" << endl;
-	cout << "isOK = " << isOk << endl;
-	cout << "End : mainCore" << endl;
-	return isOk ? EXIT_SUCCESS : EXIT_FAILURE;
+	histogramme_extended();
+	return EXIT_SUCCESS;
 }
 

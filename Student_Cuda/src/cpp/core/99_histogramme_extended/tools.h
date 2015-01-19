@@ -2,10 +2,15 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
-static __host__ void swap(int* image, const uint DATA_SIZE);
-static __host__ void generateData(int* data, const uint DATA_SIZE);
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+#include "AleaTools.h"
 
-static __host__ void swap(int* data, const uint DATA_SIZE)
+static void swap(int* image, const uint DATA_SIZE);
+static void generateData(int* data, const uint DATA_SIZE);
+
+static void swap(int* data, const uint DATA_SIZE)
 {
 	AleaTools r;
 	for(int i = 0; i < DATA_SIZE * 10; i++)
@@ -21,9 +26,9 @@ static __host__ void swap(int* data, const uint DATA_SIZE)
 	}
 }
 
-static __host__ void generateData(int* data, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE)
+static void generateData(int* data, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE)
 {
-	assert(MIN_VALUE > MAX_VALUE);
+	assert(MIN_VALUE < MAX_VALUE);
 
 	int* itr = data;
 	for(int i = 0; i < DATA_SIZE; i++)

@@ -24,15 +24,13 @@ static __global__ void kernel(uint* ptrImageDevGM, size_t sizeImage, uint* ptrHi
 
 __host__ void hist_cuda_gm(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE)
 {
-	printf("\n[Histogramme cuda GM]\n");
-
 	// Image
 	const size_t DATA_SIZE_BYTE = sizeof(int) * DATA_SIZE;
 	const uint NB_POSSIBLE_VALUE = MAX_VALUE - MIN_VALUE + 1;
 	const size_t HIST_SIZE_BYTE = sizeof(int) * NB_POSSIBLE_VALUE;
 
 	// Parameters
-	uint nThreadPerBlock = 16; // TODO to optimize
+	uint nThreadPerBlock = 32; // TODO to optimize
 	uint nBlockPerMP = 32; // TODO to optimize
 	dim3 dg(nBlockPerMP, 1, 1);
 	dim3 db(nThreadPerBlock, 1, 1);
