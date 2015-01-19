@@ -1,6 +1,7 @@
-
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include "OmpTools.h"
 
 void hist_omp_entrelacer_atomic_withtab(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE)
 {
@@ -26,20 +27,18 @@ void hist_omp_entrelacer_atomic_withtab(int* data, int* hist, const uint DATA_SI
 		int s = TID;
 		while (s < DATA_SIZE)
 		{
-			int val = data[i];
+			int val = data[s];
 			uint index = val - MIN_VALUE;
 			promotionHist[index]++;
 
-			s += NBTHREADS;
+			s += NB_THREADS;
 		}
 
 		// Reduction
 		for (int i = 0; i < NB_VALUES; i++)
 		{
 #pragma omp atomic
-			{
 				hist[i] += promotionHist[i];
-			}
 		}
 
 		delete[] promotionHist;

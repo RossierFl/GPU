@@ -1,5 +1,7 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include "OmpTools.h"
 
 void hist_omp_entrelacer_critical_withtab(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE)
 {
@@ -25,11 +27,11 @@ void hist_omp_entrelacer_critical_withtab(int* data, int* hist, const uint DATA_
 		int s = TID;
 		while (s < DATA_SIZE)
 		{
-			int val = data[i];
+			int val = data[s];
 			uint index = val - MIN_VALUE;
 			promotionHist[index]++;
 
-			s += NBTHREADS;
+			s += NB_THREADS;
 		}
 
 		// Reduction

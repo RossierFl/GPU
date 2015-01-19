@@ -1,17 +1,17 @@
-#include "AleaTools.h"
-#include "Device.h"
+#include <stdlib.h>
 #include <stdio.h>
-#include "cudaTools.h"
+#include "Device.h"
 #include "Indice1D.h"
 #include "reduction.h"
+#include "cudaTools.h"
 
-static __global__ void kernel(uint* ptrImageDevGM, size_t sizeImageByte, uint* ptrHistogrammeDevGM, size_t sizeHistogrammeByte)
+static __global__ void kernel(uint* ptrImageDevGM, size_t sizeImage, uint* ptrHistogrammeDevGM, size_t sizeHistogramme)
 {
 	// @formatter:off
 	extern __shared__ uint tabSM[];// 1 instance per block !
 	// @formatter:on
 
-	initTabSM(tabSM, NB_POSSIBLE_VALUE, 0);
+	initTabSM(tabSM, sizeHistogramme, 0);
 
 	const uint TID = Indice1D::tid();
 	const uint TID_LOCAL = Indice1D::tidLocal();
@@ -19,7 +19,7 @@ static __global__ void kernel(uint* ptrImageDevGM, size_t sizeImageByte, uint* p
 	const uint NB_THREAD_LOCAL = Indice1D::nbThreadBlock();
 
 	uint s = TID;
-	while(s < SIZE)
+	while(s < sizeImage)
 	{
 		// work >>>>
 		uint value = ptrImageDevGM[s];
@@ -34,7 +34,7 @@ static __global__ void kernel(uint* ptrImageDevGM, size_t sizeImageByte, uint* p
 
 	// merge local hist with global hist
 	s = TID_LOCAL;
-	while(s < NB_POSSIBLE_VALUE)
+	while(s < sizeHistogramme)
 	{
 		// work >>>>
 		atomicAdd(&ptrHistogrammeDevGM[s], tabSM[s]);

@@ -1,17 +1,17 @@
-#include "AleaTools.h"
-#include "Device.h"
+#include <stdlib.h>
 #include <stdio.h>
-#include "cudaTools.h"
+#include "Device.h"
 #include "Indice1D.h"
 #include "reduction.h"
+#include "cudaTools.h"
 
-static __global__ void kernel(uint* ptrImageDevGM, size_t sizeImageByte, uint* ptrHistogrammeDevGM, size_t sizeHistogrammeByte)
+static __global__ void kernel(uint* ptrImageDevGM, size_t sizeImage, uint* ptrHistogrammeDevGM, size_t sizeHistogramme)
 {
 	const uint TID = Indice1D::tid();
 	const uint NB_THREAD = Indice1D::nbThread();
 
 	uint s = TID;
-	while (s < SIZE)
+	while (s < sizeImage)
 	{
 		// work >>>>
 		uint value = ptrImageDevGM[s];

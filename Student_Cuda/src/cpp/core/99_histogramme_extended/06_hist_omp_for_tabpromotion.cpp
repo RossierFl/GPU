@@ -1,5 +1,7 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include "OmpTools.h"
 
 void hist_omp_for_tabpromotion(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE)
 {
@@ -15,7 +17,7 @@ void hist_omp_for_tabpromotion(int* data, int* hist, const uint DATA_SIZE, const
 	int* promotionHist = new int[promotionHistSize];
 	for (int i = 0; i < promotionHistSize; i++)
 	{
-		promotionHistSize[i] = 0;
+		promotionHist[i] = 0;
 	}
 
 	// Compute histogramme
@@ -27,7 +29,7 @@ void hist_omp_for_tabpromotion(int* data, int* hist, const uint DATA_SIZE, const
 
 		int val = data[i];
 		uint index = val - MIN_VALUE;
-		promotion[OFFSET + index]++;
+		promotionHist[OFFSET + index]++;
 
 	}
 

@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 
@@ -16,7 +17,7 @@ void hist_omp_for_critical_withouttab(int* data, int* hist, const uint DATA_SIZE
 
 #pragma omp critical(section)
 		{
-			promotionHist[index]++;
+			hist[index]++;
 		}
 	}
 }
