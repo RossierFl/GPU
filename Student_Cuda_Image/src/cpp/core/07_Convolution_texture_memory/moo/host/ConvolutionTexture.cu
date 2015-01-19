@@ -6,6 +6,7 @@
 #include "Device.h"
 #include "MathTools.h"
 
+
 using std::cout;
 using std::endl;
 
@@ -16,8 +17,8 @@ using std::endl;
 /*--------------------------------------*\
  |*		Imported	 	*|
  \*-------------------------------------*/
-extern texture<float,2> textureRef;
-extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,uchar4* ptrDeviceVideoImage, int k, int w, int h, float t);
+extern texture<uchar4,2> textureRef;
+extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t);
 //extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
 extern __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
 extern __global__ void findMinMaxTexture(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h);
@@ -139,19 +140,21 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
 
 
 
+
     Mat matImage = captureur->capturer();
     //Copie de l'image dans le GPU et binder avec le mode texture
     uchar4* image = CaptureVideo::castToUChar4(&matImage);
     HANDLE_ERROR(cudaMemcpy(ptrImageVideoDevice,image,(w*h)*sizeof(uchar4),cudaMemcpyHostToDevice));
 
+
      //taille en octets d'une ligne
      cudaChannelFormatDesc channelDesc = cudaCreateChannelDesc<uchar4>();
-     cudaBindTexture2D(NULL, textureRef,ptrImageVideoDevice,channelDesc,w,h,pitch);
+     HANDLE_ERROR(cudaBindTexture2D(NULL, textureRef,ptrImageVideoDevice,channelDesc,w,h,pitch));
 
-
-    colorToGreyTexture<<<dg,db>>>(ptrDevPixels,w,h);
+    colorToGreyTexture<<<dg,db>>>(ptrImageVideoDevice,w,h);
     HANDLE_ERROR(cudaDeviceSynchronize());
-    convolutionTextureKernel<<<dg,db>>>(ptrDevPixels, ptrDeviceNoyau, ptrImageVideoDevice,  k,  w,  h,  t);
+    convolutionTextureKernel<<<dg,db>>>(ptrDevPixels, ptrDeviceNoyau,  k,  w,  h,  t);
+    HANDLE_ERROR(cudaPeekAtLastError());
    // convolutionTextureKernel<<<dg,db>>>(ptrImageVideoDevice,ptrDeviceNoyau,k,w,h,t);
     HANDLE_ERROR(cudaDeviceSynchronize());
     findMinMaxTexture<<<dg,db,sizeSM>>>(ptrDevPixels,ptrDevResult,w,h);
@@ -174,6 +177,7 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
 	b = 255.0f/((-max/(float)min)+1.0f);
     affineTransformTexture<<<dg,db>>>(ptrDevPixels, a, b, w, h,0);
    // HANDLE_ERROR(cudaMemcpy(ptrDevPixels,ptrDevPixels,(w*h)*sizeof(uchar4),cudaMemcpyDeviceToDevice));
+   // HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(uchar4),cudaMemcpyHostToDevice));
     cudaUnbindTexture(textureRef);
     //printf("min: %d, max: %d\n",min,max);
     }

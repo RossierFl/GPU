@@ -63,9 +63,16 @@ class ConvolutionTextureMath
 		for(int s=0;s<size;s++){
 		    sum += ptrVideoImage[s].x * ptrDeviceNoyau[s];
 		}
+
 		ptrColor->x=sum;
 		ptrColor->y=sum;
 		ptrColor->z=sum;
+		ptrColor->w=255;
+		/*ptrColor->x=255;
+		ptrColor->y=255;
+		ptrColor->z=255;*/
+
+
 
 
 	}

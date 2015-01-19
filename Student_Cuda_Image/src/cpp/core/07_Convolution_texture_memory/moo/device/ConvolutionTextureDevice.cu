@@ -17,9 +17,9 @@
 
 __device__ int mutex = 0;
 
-texture<float,2> textureRef;
+texture<uchar4,2> textureRef;
 
-__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,uchar4* ptrDeviceVideoImage, int k, int w, int h, float t);
+__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
 //__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h,float t);
 
 __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
@@ -115,6 +115,7 @@ __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h)
     int s = TID;
     while(s<WH)
 	{
+
 	float x = ptrDevPixels[s].x;
 	float y = ptrDevPixels[s].y;
 	float z = ptrDevPixels[s].z;
@@ -148,7 +149,7 @@ __global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, i
 	}
     }
 
-__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,uchar4* ptrDeviceVideoImage, int k, int w, int h, float t)
+__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t)
     {
     ConvolutionTextureMath convMath = ConvolutionTextureMath(w, h);
 
@@ -157,7 +158,9 @@ __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceN
 
     const int WH=w*h;
 
+
     uchar4 color;
+
 
     int pixelI;
     int pixelJ;
@@ -176,15 +179,19 @@ __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceN
 	    int iTex = KERN_OFFSET+i;
 	    for (int j=0;j<KERN_SIZE;j++){
 	    int jTex=KERN_OFFSET+j;
-	    colorsVideo[sk].x=tex2D(textureRef,jTex,iTex);
-	    colorsVideo[sk].y=tex2D(textureRef,jTex,iTex);
-	    colorsVideo[sk].z=tex2D(textureRef,jTex,iTex);
+	    colorsVideo[sk]=tex2D(textureRef,jTex,iTex);
+	    printf("Value of : %i + %i + %i \n",colorsVideo[sk].x,colorsVideo[sk].y,colorsVideo[sk].z);
+
+
+
 	    sk++;
 	    }
 	}
 //	convMath.colorIJ(&color,ptrDevPixels,ptrDeviceNoyau,k,pixelI, pixelJ, s); // update color
 	convMath.colorIJ(&color,colorsVideo,ptrDeviceNoyau,KERN_SIZE); // update color
 	ptrDevPixels[s] = color;
+	//ptrDevPixels[s] = tex2D(textureRef,pixelI,pixelJ);
+	//ptrDevPixels[s].w=255;
 	s += NB_THREAD;
 	}
     }
