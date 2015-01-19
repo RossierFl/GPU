@@ -45,7 +45,7 @@ MandelbrotJulia* MandelbrotJuliaProvider::create()
     float cY=0;*/
 
     //MandleBrot Exemple 2
-   bool isJulia = false;
+  /* bool isJulia = false;
     int n = 600;
      float xMin =-1.3968;
       float xMax=-1.3578;
@@ -53,11 +53,11 @@ MandelbrotJulia* MandelbrotJuliaProvider::create()
       float yMin=-0.03362;
       float yMax=0.0013973;
       float cX=0;
-    float cY=0;
+    float cY=0;*/
 
 
     // Julia Exemple 1
-    /*  bool isJulia = true;
+      bool isJulia = true;
        int n = 52;
        float xMin = -1.3;
        float xMax=1.3;
@@ -66,7 +66,7 @@ MandelbrotJulia* MandelbrotJuliaProvider::create()
        float yMax=1.4;
 
        float cX=-0.12;
-       float cY=0.85;*/
+       float cY=0.85;
 
        // Julia Exemple 2
           /* bool isJulia = true;

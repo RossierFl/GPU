@@ -78,17 +78,17 @@
   //  int nEntrees,int  nTabSM,float * ptrDevResult,float * tabEntrees,dim3 dg,dim3 db
     HistogrammeDevice::runHistogramme(NBR_ENTREES,nTabSM,ptrDevResult,ptrDevEntrees,dg,db);//asynchronous
     HANDLE_ERROR(cudaMemcpy(hostResult,ptrDevResult,SIZE_RESULT,cudaMemcpyDeviceToHost));//barriere implicite de sync
-    std::cout<<"Histogramme Results " << hostResult <<std::endl;
+    //std::cout<<"Histogramme Results " << hostResult <<std::endl;
 
-   /* for(int i=0;i<NBR_SORTIES;i++){
+    for(int i=0;i<NBR_SORTIES;i++){
 
 
     if(hostResult[i]!=0)
     std::cout<< i << " = "<< hostResult[i]<< std::endl;
 
-    }*/
+    }
 
-    std::cout << "Is histogramm ok : " << isGoodHistogramme(hostResult,SIZE_RESULT)<< std::endl;
+    std::cout << "Is histogramm ok : " << isGoodHistogramme(hostResult,NBR_SORTIES)<< std::endl;
 
     HANDLE_ERROR(cudaFree(ptrDevEntrees));
     HANDLE_ERROR(cudaFree(ptrDevResult));
@@ -97,11 +97,12 @@
 
 }
 
- bool HistogrammeHost::isGoodHistogramme(int histogramme[],int sizeTableValues){
+ bool HistogrammeHost::isGoodHistogramme(int* histogramme,int sizeTableValues){
      int firstValue = histogramme[0];
      for(int i=0;i<sizeTableValues;i++){
-	 if(histogramme[i]!=firstValue)
+	 if(histogramme[i]!=firstValue){
 	     return false;
+	 }
 
      }
      return true;

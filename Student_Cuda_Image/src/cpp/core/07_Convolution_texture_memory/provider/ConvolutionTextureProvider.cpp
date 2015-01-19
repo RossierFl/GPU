@@ -1,14 +1,5 @@
-#include <iostream>
-#include <stdlib.h>
-#include "PiHost.h"
-#include "ProduitScalaireHost.h"
-#include "HistogrammeHost.h"
-
-#include "montecarloHostMulti.h"
-
-
-using std::cout;
-using std::endl;
+#include "ConvolutionTextureProvider.h"
+#include "MathTools.h"
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -18,20 +9,13 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern bool useHello(void);
-extern void useAdd();
-
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainCore();
-
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
-
-
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -41,30 +25,25 @@ int mainCore();
  |*		Public			*|
  \*-------------------------------------*/
 
-int mainCore()
+/*-----------------*\
+ |*	static	   *|
+ \*----------------*/
+
+ConvolutionTexture* ConvolutionTextureProvider::create()
     {
-    bool isOk = true;
-    //isOk &= useHello();
-    //useAdd();
-   // PiHost::MyCalculatePI();
-    ProduitScalaireHost::MyCalculateProduitScalaire();
-   // HistogrammeHost::MyCalculateHistogramme();
 
- //   MontecarloHost::myCalculateMontecarlo();
-   // MontecarloHostMulti::myCalculateMontecarloMulti();
-   // cout << "\nisOK = " << isOk << endl;
-  //  cout << "\nEnd : mainCore" << endl;
-
-    return isOk ? EXIT_SUCCESS : EXIT_FAILURE;
+    return new ConvolutionTexture();
     }
+
+ Image* ConvolutionTextureProvider::createGL(void)
+     {
+     return new Image(create());
+     }
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
 
-
-
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
-

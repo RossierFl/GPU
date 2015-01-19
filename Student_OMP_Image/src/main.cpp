@@ -51,25 +51,25 @@ int run(void)
     bool isAnimation = true;
     bool isSelectionEnable = false;
 
-  //  RipplingImage* ptrRippling = RipplingProvider::create();
+   RipplingImage* ptrRippling = RipplingProvider::create();
 
-   // GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelectionEnable, 20, 20);
+   GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelectionEnable, 20, 20);
     // Insert here other viewers ...
 
-    MandelbrotJuliaImage* prtMandelbrotJulia = MandelbrotJuliaProvider::create();
+  //  MandelbrotJuliaImage* prtMandelbrotJulia = MandelbrotJuliaProvider::create();
     isAnimation = true ;
-    isSelectionEnable=true;
-    GLUTImageViewers mandelbrotJuliaViewer(prtMandelbrotJulia,isAnimation,isSelectionEnable,20,20);
+    isSelectionEnable=false;
+   // GLUTImageViewers mandelbrotJuliaViewer(prtMandelbrotJulia,isAnimation,isSelectionEnable,20,20);
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
     // destruction
 	{
-	//delete ptrRippling;
-	delete prtMandelbrotJulia;
+	delete ptrRippling;
+	//delete prtMandelbrotJulia;
 
-	//ptrRippling = NULL;
-	prtMandelbrotJulia=NULL;
+	ptrRippling = NULL;
+	//prtMandelbrotJulia=NULL;
 	}
 
     return EXIT_SUCCESS;

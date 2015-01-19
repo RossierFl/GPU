@@ -47,6 +47,7 @@
     double resultTheorique = ResultatTheorique(nbrVecteurComponents);
     std::cout<<"Result comparaison  = " << resultTheorique <<std::endl;;
 
+
 }
 
   double ProduitScalaireHost::ResultatTheorique(long n){

@@ -153,47 +153,41 @@ void MandelbrotJuliaMultiGPU::runGPU(uchar4* ptrDevPixels, const DomaineMath& do
 
     const size_t SIZE_RESULT = h/6*w*(size_t)sizeof(uchar4);
 
-    const int NBTHREAD = setAndGetNaturalGranularity();
 
 
 
 
-        #pragma omp parallel
-        {
-	  const int TID = omp_get_thread_num();
-	  switch(TID){
-	      case 0 :
-		  cudaSetDevice(0);
+
+
+
+
+	     		  cudaSetDevice(0);
 		  		     mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels,w,h/6,domaineMath,n,t, isJulia, cX, cY,0);
-		  break;
-	      case 1 :
+
+
 		  cudaSetDevice(1);
 		 		    mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels1,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6);
 		 		    HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w),ptrDevPixels1,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
-		  break;
-	      case 2 :  cudaSetDevice(2);
+
+	        cudaSetDevice(2);
 	      mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels2,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*2);
 	      HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*2),ptrDevPixels2,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
-      	      	      break;
-	      case 3 :
+
+
 		  cudaSetDevice(3);
 		  		     mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels3,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*3);
 		  		     HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*3),ptrDevPixels3,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
-		      break;
-	      case 4 :
+
+
 		  cudaSetDevice(4);
 		      mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels4,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*4);
 		      HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*4),ptrDevPixels4,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
-	      	      break;
-	      case 5 :
+
+
 		  cudaSetDevice(5);
 		         mandelbrotJuliaCuMltiGPU<<<dg,db>>>(ptrDevPixels5,w,h/6,domaineMath,n,t, isJulia, cX, cY,h/6*5);
 		         HANDLE_ERROR(cudaMemcpy(ptrDevPixels+(h/6*w*5),ptrDevPixels5,SIZE_RESULT,cudaMemcpyDeviceToDevice));//barriere implicite de sync
-	      	      break;
-	      default :
-		  break;
-	  }
-        }
+
 
     cudaSetDevice(0);
 
