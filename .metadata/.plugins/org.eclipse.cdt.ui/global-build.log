@@ -1,5 +1,5 @@
-14:30:21 **** Incremental Build of configuration CudaGCC for project Student_Cuda_Image ****
-makeCudaGCC.sh all 
+15:30:42 **** Incremental Build of configuration GCC for project Student_OMP_Image ****
+makeGCC.sh all 
 
 --------------------------------------------------------
 [Runtime] : gcc x86
@@ -21,7 +21,7 @@ makeCudaGCC.sh all
 --------------------------------------------------------
 
 
-[CUDA GCC] : all
+[GCC] : all
 
 g++ (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
 Copyright (C) 2011 Free Software Foundation, Inc.
@@ -29,71 +29,48 @@ This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
-nvcc: NVIDIA (R) Cuda compiler driver
-Copyright (c) 2005-2014 NVIDIA Corporation
-Built on Thu_Jul_17_21:41:27_CDT_2014
-Cuda compilation tools, release 6.5, V6.5.12
-
-
 ==================================================================================
-[CBI] -> Target Name  : Student_Cuda_Image_64
+[CBI] -> Target Name  : Student_OMP_Image_64
 [CBI] ->
-[CBI] -> Build        : /tmp/ramdrive/mse14/Targets/Student_Cuda_Image/bin/Student_Cuda_Image_64.run
+[CBI] -> Build     	  : /tmp/ramdrive/mse14/Targets/Student_OMP_Image/bin/Student_OMP_Image_64.run
 [CBI] -> Deploy       : ../RELEASE/bin
 [CBI] ->
-[CBI] -> Type	      : EXE
-[CBI] -> Arch	      : 64
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
 [CBI] -> OS	 		  : Linux
 [CBI] -> User	 	  : mse14
 [CBI] ->
-[CBI] -> Task		  : Compiling-Linking !
+[CBI] -> Task		  : Compiling-Linking
 ==================================================================================
 
 [CBI] -> SRC AUX (Recursif) :
 [CBI] ->
-[CBI] ->              : ../BilatTools_CPP/src/core
-[CBI] ->              : ../BilatTools_Cuda/src/core
-[CBI] ->              : ../BilatTools_Cuda_Image/src/core
-[CBI] ->              : ../BilatTools_OpenCV/src/core
-[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core
 [CBI] ->              : ../API_Bilat_DLL_Tools/INC
-[CBI] ->              : ../API_Bilat_Displayable/INC
 [CBI] ->              : ../API_Bilat_Displayable/BIN/gcc
-[CBI] ->              : ../API_Bilat_Image_GL/INC
-[CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc
 [CBI] ->              : ../API_Bilat_Displayable/INC
-[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc
-[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC
 [CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/gcc
-[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC
 [CBI] ->              : ../API_Bilat_Image_FreeGlut/BIN/gcc
-[CBI] ->              : ../API_Bilat_Image_GL_Cuda/INC
-[CBI] ->              : ../API_Bilat_Image_GL_Cuda/BIN/gcc
-[CBI] ->              : ../API_Bilat_Image_FreeGlut_Cuda/INC
-[CBI] ->              : ../API_Bilat_Image_FreeGlut_Cuda/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC
+[CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_GL/INC
+[CBI] ->              : ../BilatTools_CPP/src/core
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core
+[CBI] ->              : ../BilatTools_OMP/src/core
+[CBI] ->              : ../BilatTools_OpenCV/src/core
 
 [CBI] -> CXXFLAGS (Partial) :
 [CBI] ->
-[CBI] ->              : -std=c++0x
-[CBI] ->              : -fopenmp
 [CBI] ->              : -DCBI_DISPLAYABLE_DLL
+[CBI] ->              : -DCBI_NO_CUDA
 [CBI] ->              : -O3
-[CBI] ->              : -frerun-loop-opt
 [CBI] ->              : -fomit-frame-pointer
+[CBI] ->              : -fopenmp
+[CBI] ->              : -frerun-loop-opt
 [CBI] ->              : -march=corei7
+[CBI] ->              : -std=c++0x
 
-[CBI] -> CXXLDFLAGS (Partial) :
-[CBI] ->
-
-[CBI] -> NVCCFLAGS (Partial) :
-[CBI] ->
-[CBI] ->              : --fmad=true
-[CBI] ->              : --ptxas-options=-v
-[CBI] ->              : -arch=sm_20
-[CBI] ->              : -m64
-[CBI] ->              : -use_fast_math
-
-[CBI] -> NVCCLDFLAGS (Partial) :
+[CBI] -> LDFLAGS (Partial) :
 [CBI] ->
 
 [CBI] -> INC_PATH (auto detect):
@@ -103,24 +80,11 @@ Cuda compilation tools, release 6.5, V6.5.12
 [CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/
 [CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/common/
 [CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/cpu/
-[CBI] ->              : ../API_Bilat_Image_FreeGlut_Cuda/INC/
 [CBI] ->              : ../API_Bilat_Image_GL/INC/
 [CBI] ->              : ../API_Bilat_Image_GL/INC/common/
 [CBI] ->              : ../API_Bilat_Image_GL/INC/cpu/
-[CBI] ->              : ../API_Bilat_Image_GL_Cuda/INC/
-[CBI] ->              : ../API_Bilat_Image_GL_Cuda/INC/gpu/
 [CBI] ->              : ../BilatTools_CPP/src/core/tools/header/
 [CBI] ->              : ../BilatTools_CPP/src/core/tools/header/namespace_cpu/
-[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/both/
-[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/device/
-[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/device/curand/
-[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/device/reduction/
-[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/device/synchronisation/
-[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/host/
-[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/mixte/
-[CBI] ->              : ../BilatTools_Cuda_Image/src/core/cudaImageTools/
-[CBI] ->              : ../BilatTools_Cuda_Image/src/core/cudaImageTools/bitmap/header/
-[CBI] ->              : ../BilatTools_Cuda_Image/src/core/cudaImageTools/fonctionel/header/
 [CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_FreeGlut/
 [CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_GL/
 [CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_GL/indirect/
@@ -128,271 +92,87 @@ Cuda compilation tools, release 6.5, V6.5.12
 [CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/tools_GPU/
 [CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/tools_switch/
 [CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/type/
+[CBI] ->              : ../BilatTools_OMP/src/core/OMP_Tools/header/
 [CBI] ->              : ../BilatTools_OpenCV/src/core/capture/header/
 [CBI] ->              : ../BilatTools_OpenCV/src/core/viewer/image/
 [CBI] ->              : ../BilatTools_OpenCV/src/core/viewer/sequence/
-[CBI] ->              : src/cpp/core/00_Rippling_warmup/
-[CBI] ->              : src/cpp/core/00_Rippling_warmup/01_imageAPI/
-[CBI] ->              : src/cpp/core/00_Rippling_warmup/03_math/
-[CBI] ->              : src/cpp/core/01_Rippling/moo/device/math/
-[CBI] ->              : src/cpp/core/01_Rippling/moo/host/
-[CBI] ->              : src/cpp/core/01_Rippling/provider/
-[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/moo/device/math/
-[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/moo/host/
-[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/provider/
-[CBI] ->              : src/cpp/core/03_Newton/moo/device/math/
-[CBI] ->              : src/cpp/core/03_Newton/moo/host/
-[CBI] ->              : src/cpp/core/03_Newton/provider/
-[CBI] ->              : src/cpp/core/04_RayTracing/
-[CBI] ->              : src/cpp/core/04_RayTracing/moo/device/math/
-[CBI] ->              : src/cpp/core/04_RayTracing/moo/host/
-[CBI] ->              : src/cpp/core/04_RayTracing/provider/
-[CBI] ->              : src/cpp/core/05_HeatTransfert/moo/device/math/
-[CBI] ->              : src/cpp/core/05_HeatTransfert/moo/host/
-[CBI] ->              : src/cpp/core/05_HeatTransfert/provider/
-[CBI] ->              : src/cpp/core/06_Convolution/moo/device/math/
-[CBI] ->              : src/cpp/core/06_Convolution/moo/host/
-[CBI] ->              : src/cpp/core/06_Convolution/provider/
-[CBI] ->              : src/cpp/core/07_Convolution_texture_memory/moo/device/math/
-[CBI] ->              : src/cpp/core/07_Convolution_texture_memory/moo/host/
-[CBI] ->              : src/cpp/core/07_Convolution_texture_memory/provider/
-[CBI] ->              : src/cpp/core/Mandelbrot_Julia_MultiGPU/moo/device/math/
-[CBI] ->              : src/cpp/core/Mandelbrot_Julia_MultiGPU/moo/host/
-[CBI] ->              : src/cpp/core/Mandelbrot_Julia_MultiGPU/provider/
+[CBI] ->              : src/cpp/core/01_Rippling/a_image/
+[CBI] ->              : src/cpp/core/01_Rippling/b_moo/
+[CBI] ->              : src/cpp/core/01_Rippling/c_math/
+[CBI] ->              : src/cpp/core/01_Rippling/d_provider/
+[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/a_image/
+[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/b_moo/
+[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/c_math/
+[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/d_provider/
+[CBI] ->              : src/cpp/core/03_Newton/a_image/
+[CBI] ->              : src/cpp/core/03_Newton/b_moo/
+[CBI] ->              : src/cpp/core/03_Newton/c_math/
+[CBI] ->              : src/cpp/core/03_Newton/d_provider/
 
 
 [CBI] -> LIB_PATH (auto detect):
 [CBI] ->              : ../API_Bilat_Displayable/BIN/gcc/
 [CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/gcc/
 [CBI] ->              : ../API_Bilat_Image_FreeGlut/BIN/gcc/
-[CBI] ->              : ../API_Bilat_Image_FreeGlut_Cuda/BIN/gcc/
 [CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc/
-[CBI] ->              : ../API_Bilat_Image_GL_Cuda/BIN/gcc/
 
-[CBI] -> Create folder : /tmp/ramdrive/mse14/Targets/Student_Cuda_Image/bin
-[CBI] -> Create folder : /tmp/ramdrive/mse14/Targets/Student_Cuda_Image/obj
-[CBI] -> Create folder : /tmp/ramdrive/mse14/Targets/Student_Cuda_Image/cubin
 
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/main.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/mainFreeGL.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/mainGL.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/Mandelbrot_Julia_MultiGPU/provider/MandelbrotJuliaProvider.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/Mandelbrot_Julia_MultiGPU/provider/MandelbrotJuliaProviderMultiGPU.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/06_Convolution/provider/ConvolutionProvider.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/01_Rippling/provider/RipplingProvider.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/05_HeatTransfert/provider/HeatTransfertProvider.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/07_Convolution_texture_memory/provider/ConvolutionTextureProvider.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/00_Rippling_warmup/rippling0FreeGL.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/00_Rippling_warmup/01_imageAPI/Rippling0Image.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/03_Newton/provider/NewtonProvider.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : src/cpp/core/04_RayTracing/provider/RayTracingProvider.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/AleaTools.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/Chronos.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/LimitsTools.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/MathTools.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/StringTools.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/TabTools.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurF.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurI.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/ColorTools_CPU.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/IndiceTools_CPU.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_Cuda/src/core/cudatools/cpp/cudaTools.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_Cuda/src/core/cudatools/cpp/Device.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_Cuda_Image/src/core/cudaImageTools/bitmap/cpp/AnimateurFreeGL.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_Cuda_Image/src/core/cudaImageTools/bitmap/cpp/Image.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_Cuda_Image/src/core/cudaImageTools/fonctionel/cpp/AnimateurFonctionelFreeGL.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_Cuda_Image/src/core/cudaImageTools/fonctionel/cpp/ImageFonctionel.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/tuto/tuto.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/Capture_A.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/CaptureCamera.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/CaptureVideo.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/viewer/image/ImageViewerCV.cpp
-[Student_Cuda_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/viewer/sequence/SequenceViewerCV.cpp
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/Mandelbrot_Julia_MultiGPU/moo/host/MandelbrotJuliaMultiGPU.cu
-ptxas info    : 160 bytes gmem, 16 bytes cmem[14]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/Mandelbrot_Julia_MultiGPU/moo/device/MandelbrotJuliaDeviceMultiGPU.cu
-ptxas info    : 0 bytes gmem
-ptxas info    : Compiling entry function '_Z24mandelbrotJuliaCuMltiGPUP6uchar4iiN3gpu11DomaineMathEifbfff' for 'sm_20'
-ptxas info    : Function properties for _Z24mandelbrotJuliaCuMltiGPUP6uchar4iiN3gpu11DomaineMathEifbfff
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 21 registers, 120 bytes cmem[0], 24 bytes cmem[16]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/06_Convolution/moo/host/Convolution.cu
-ptxas info    : 144 bytes gmem, 16 bytes cmem[14]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/06_Convolution/moo/device/ConvolutionDevice.cu
-ptxas info    : 4 bytes gmem, 8 bytes cmem[14]
-ptxas info    : Compiling entry function '_Z17convolutionKernelP6uchar4Pfiiif' for 'sm_20'
-ptxas info    : Function properties for _Z17convolutionKernelP6uchar4Pfiiif
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 29 registers, 64 bytes cmem[0]
-ptxas info    : Compiling entry function '_Z11colorToGreyP6uchar4ii' for 'sm_20'
-ptxas info    : Function properties for _Z11colorToGreyP6uchar4ii
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 11 registers, 48 bytes cmem[0], 4 bytes cmem[16]
-ptxas info    : Compiling entry function '_Z10findMinMaxP6uchar4Phii' for 'sm_20'
-ptxas info    : Function properties for _Z10findMinMaxP6uchar4Phii
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 14 registers, 56 bytes cmem[0]
-ptxas info    : Compiling entry function '_Z15affineTransformP6uchar4ffiii' for 'sm_20'
-ptxas info    : Function properties for _Z15affineTransformP6uchar4ffiii
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 10 registers, 60 bytes cmem[0]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/01_Rippling/moo/host/Rippling.cu
-ptxas info    : 144 bytes gmem, 16 bytes cmem[14]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/01_Rippling/moo/device/ripplingDevice.cu
-ptxas info    : 0 bytes gmem, 272 bytes cmem[2]
-ptxas info    : Compiling entry function '_Z8ripplingP6uchar4iif' for 'sm_20'
-ptxas info    : Function properties for _Z8ripplingP6uchar4iif
-    8 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 33 registers, 52 bytes cmem[0], 48 bytes cmem[16]
-ptxas info    : Function properties for __internal_trig_reduction_slowpathd
-    40 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/05_HeatTransfert/moo/host/HeatTransfert.cu
-ptxas info    : 176 bytes gmem, 24 bytes cmem[14]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/05_HeatTransfert/moo/device/HeatTransfertDevice.cu
-ptxas info    : 0 bytes gmem
-ptxas info    : Compiling entry function '_Z14heatEcrasementPfS_S_ii' for 'sm_20'
-ptxas info    : Function properties for _Z14heatEcrasementPfS_S_ii
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 11 registers, 64 bytes cmem[0]
-ptxas info    : Compiling entry function '_Z20heatToScreenImageHSBPfP6uchar4ii14CalibreurCudas' for 'sm_20'
-ptxas info    : Function properties for _Z20heatToScreenImageHSBPfP6uchar4ii14CalibreurCudas
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 13 registers, 88 bytes cmem[0], 24 bytes cmem[16]
-ptxas info    : Compiling entry function '_Z13heatTransfertPfS_iif' for 'sm_20'
-ptxas info    : Function properties for _Z13heatTransfertPfS_iif
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 19 registers, 60 bytes cmem[0]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/07_Convolution_texture_memory/moo/host/ConvolutionTexture.cu
-ptxas info    : 144 bytes gmem, 16 bytes cmem[14]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/07_Convolution_texture_memory/moo/device/ConvolutionTextureDevice.cu
-src/cpp/core/07_Convolution_texture_memory/moo/device/math/ConvolutionTextureMath.h(61): warning: variable "size" was declared but never referenced
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/03_Newton/d_provider/NewtonProvider.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Mandelbrot_Julia/a_image/MandelbrotJuliaImage.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Mandelbrot_Julia/b_moo/MandelbrotJuliaMOO.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Mandelbrot_Julia/d_provider/MandelbrotJuliaProvider.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/AleaTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/Chronos.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/LimitsTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/MathTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/StringTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/TabTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurF.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurI.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/ColorTools_CPU.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/IndiceTools_CPU.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OMP/src/core/OMP_Tools/cpp/OmpTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/tuto/tuto.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/Capture_A.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/CaptureCamera.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/CaptureVideo.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/viewer/image/ImageViewerCV.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/viewer/sequence/SequenceViewerCV.cpp
 
-src/cpp/core/07_Convolution_texture_memory/moo/device/math/ConvolutionTextureMath.h(61): warning: variable "size" was declared but never referenced
-
-ptxas info    : 4 bytes gmem, 324 bytes cmem[2], 8 bytes cmem[14]
-ptxas info    : Compiling entry function '_Z24convolutionTextureKernelP6uchar4iiif' for 'sm_20'
-ptxas info    : Function properties for _Z24convolutionTextureKernelP6uchar4iiif
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 29 registers, 56 bytes cmem[0], 1 textures
-ptxas info    : Compiling entry function '_Z18colorToGreyTextureP6uchar4ii' for 'sm_20'
-ptxas info    : Function properties for _Z18colorToGreyTextureP6uchar4ii
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 11 registers, 48 bytes cmem[0], 4 bytes cmem[16]
-ptxas info    : Compiling entry function '_Z17findMinMaxTextureP6uchar4Phii' for 'sm_20'
-ptxas info    : Function properties for _Z17findMinMaxTextureP6uchar4Phii
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 14 registers, 56 bytes cmem[0]
-ptxas info    : Compiling entry function '_Z22affineTransformTextureP6uchar4ffiii' for 'sm_20'
-ptxas info    : Function properties for _Z22affineTransformTextureP6uchar4ffiii
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 10 registers, 60 bytes cmem[0]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/00_Rippling_warmup/02_cuda/rippling0.cu
-ptxas info    : 0 bytes gmem
-ptxas info    : Compiling entry function '_Z9rippling0P6uchar4iif' for 'sm_20'
-ptxas info    : Function properties for _Z9rippling0P6uchar4iif
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 8 registers, 52 bytes cmem[0]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/03_Newton/moo/host/Newton.cu
-ptxas info    : 160 bytes gmem, 16 bytes cmem[14]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/03_Newton/moo/device/NewtonDevice.cu
-src/cpp/core/03_Newton/moo/device/math/NewtonMath.h(70): warning: missing return statement at end of non-void function "NewtonMath::f"
-
-src/cpp/core/03_Newton/moo/device/math/NewtonMath.h(70): warning: missing return statement at end of non-void function "NewtonMath::f"
-
-ptxas info    : 32 bytes gmem, 8 bytes cmem[14]
-ptxas info    : Compiling entry function '_Z13fractalNewtonP6uchar4iiN3gpu11DomaineMathEifff' for 'sm_20'
-ptxas info    : Function properties for _Z13fractalNewtonP6uchar4iiN3gpu11DomaineMathEifff
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 20 registers, 112 bytes cmem[0]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/02_Mandelbrot_Julia/moo/host/MandelbrotJulia.cu
-ptxas info    : 160 bytes gmem, 16 bytes cmem[14]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/02_Mandelbrot_Julia/moo/device/MandelbrotJuliaDevice.cu
-ptxas info    : 0 bytes gmem
-ptxas info    : Compiling entry function '_Z17mandelbrotJuliaCuP6uchar4iiN3gpu11DomaineMathEifbff' for 'sm_20'
-ptxas info    : Function properties for _Z17mandelbrotJuliaCuP6uchar4iiN3gpu11DomaineMathEifbff
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 20 registers, 116 bytes cmem[0], 24 bytes cmem[16]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/04_RayTracing/moo/host/RayTracing.cu
-ptxas info    : 144 bytes gmem, 16 bytes cmem[14]
-[Student_Cuda_Image_64] -> nvcc compiling .cu : src/cpp/core/04_RayTracing/moo/device/RayTracingDevice.cu
-ptxas info    : 32 bytes gmem, 8 bytes cmem[14]
-ptxas info    : Compiling entry function '_Z13rayTracingGPUP6uchar4iifP6Spherei' for 'sm_20'
-ptxas info    : Function properties for _Z13rayTracingGPUP6uchar4iifP6Spherei
-    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
-ptxas info    : Used 19 registers, 68 bytes cmem[0]
-
-[CBI] -> Linking to   : /tmp/ramdrive/mse14/Targets/Student_Cuda_Image/bin/Student_Cuda_Image_64.run
+[CBI] -> Linking to   : /tmp/ramdrive/mse14/Targets/Student_OMP_Image/bin/Student_OMP_Image_64.run
 
 [CBI] -> Library Link :
-[CBI] ->
 [CBI] ->              : -L/usr/lib/x86_64-linux-gnu
 [CBI] ->              : -lBilat_Displayable_004_64
 [CBI] ->              : -lBilat_FreeGlut_Tools_006_64
 [CBI] ->              : -lBilat_Image_FreeGlut_003_64
-[CBI] ->              : -lBilat_Image_FreeGlut_Cuda_65_004_64
 [CBI] ->              : -lBilat_Image_GL_005_64
-[CBI] ->              : -lBilat_Image_GL_Cuda_65_004_64
 [CBI] ->              : -lGL
 [CBI] ->              : -lGLEW
 [CBI] ->              : -lGLU
 [CBI] ->              : -lX11
-[CBI] ->              : -lboost_atomic
-[CBI] ->              : -lboost_chrono
-[CBI] ->              : -lboost_context
-[CBI] ->              : -lboost_date_time
-[CBI] ->              : -lboost_exception
-[CBI] ->              : -lboost_filesystem
-[CBI] ->              : -lboost_graph
-[CBI] ->              : -lboost_locale
-[CBI] ->              : -lboost_math_c99
-[CBI] ->              : -lboost_math_c99f
-[CBI] ->              : -lboost_math_c99l
-[CBI] ->              : -lboost_math_tr1
-[CBI] ->              : -lboost_math_tr1f
-[CBI] ->              : -lboost_math_tr1l
-[CBI] ->              : -lboost_prg_exec_monitor
-[CBI] ->              : -lboost_program_options
-[CBI] ->              : -lboost_random
-[CBI] ->              : -lboost_regex
-[CBI] ->              : -lboost_serialization
-[CBI] ->              : -lboost_signals
-[CBI] ->              : -lboost_system
-[CBI] ->              : -lboost_test_exec_monitor
-[CBI] ->              : -lboost_thread
-[CBI] ->              : -lboost_timer
-[CBI] ->              : -lboost_unit_test_framework
-[CBI] ->              : -lboost_wave
-[CBI] ->              : -lboost_wserialization
-[CBI] ->              : -lcublas
-[CBI] ->              : -lcudart
-[CBI] ->              : -lcufft
-[CBI] ->              : -lcuinj64
-[CBI] ->              : -lcurand
-[CBI] ->              : -lcusparse
 [CBI] ->              : -lglut
 [CBI] ->              : -lgomp
 [CBI] ->              : -lopencv_core
 [CBI] ->              : -lopencv_highgui
 [CBI] ->              : -lopencv_imgproc
-[CBI] ->              : -lrt
-
 
 ==================================================================================
-[CBI] -> Target Name  : Student_Cuda_Image_64
-[CBI] -> Location     : /tmp/ramdrive/mse14/Targets/Student_Cuda_Image/bin/Student_Cuda_Image_64.run
+[CBI] -> Target Name  : Student_OMP_Image_64
+[CBI] -> Location     : /tmp/ramdrive/mse14/Targets/Student_OMP_Image/bin/Student_OMP_Image_64.run
 [CBI] -> Deploy 	  : ../RELEASE/bin
 [CBI] ->
 [CBI] -> Type	 	  : EXE
 [CBI] -> Arch	 	  : 64
-[CBI] -> OS	 	      : Linux
+[CBI] -> OS	 		  : Linux
 [CBI] -> User	 	  : mse14
 [CBI] ->
-[CBI] -> Compilateur  : g++) && nvcc
-[CBI] -> Task		  : End Compiling-Linking !
-[CBI] -> Time	      : 14:31:21
+[CBI] -> Compilateur  : g++ (g++)
+[CBI] -> Task	      : End Compiling-Linking !
+[CBI] -> Time		  : 15:30:50
 ==================================================================================
 
 
-[CBI] -> Deploying      : ../RELEASE/bin/Student_Cuda_Image_64.run
+[CBI] -> Deploying    : ../RELEASE/bin/Student_OMP_Image_64.run
 
-[CBI] -> Student_Cuda_Image_64   : End ALL!
+[CBI] -> Student_OMP_Image_64 : End ALL!

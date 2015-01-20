@@ -1,4 +1,4 @@
-23:57:30 **** Incremental Build of configuration GCC for project Student_OMP_Image ****
+15:30:42 **** Incremental Build of configuration GCC for project Student_OMP_Image ****
 makeGCC.sh all 
 
 --------------------------------------------------------
@@ -104,6 +104,10 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 [CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/b_moo/
 [CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/c_math/
 [CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/d_provider/
+[CBI] ->              : src/cpp/core/03_Newton/a_image/
+[CBI] ->              : src/cpp/core/03_Newton/b_moo/
+[CBI] ->              : src/cpp/core/03_Newton/c_math/
+[CBI] ->              : src/cpp/core/03_Newton/d_provider/
 
 
 [CBI] -> LIB_PATH (auto detect):
@@ -113,7 +117,27 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 [CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc/
 
 
-[Student_OMP_Image_64] -> g++ compiling .cpp : src/main.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/03_Newton/d_provider/NewtonProvider.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Mandelbrot_Julia/a_image/MandelbrotJuliaImage.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Mandelbrot_Julia/b_moo/MandelbrotJuliaMOO.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Mandelbrot_Julia/d_provider/MandelbrotJuliaProvider.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/AleaTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/Chronos.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/LimitsTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/MathTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/StringTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/TabTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurF.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurI.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/ColorTools_CPU.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/IndiceTools_CPU.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OMP/src/core/OMP_Tools/cpp/OmpTools.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/tuto/tuto.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/Capture_A.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/CaptureCamera.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/CaptureVideo.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/viewer/image/ImageViewerCV.cpp
+[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/viewer/sequence/SequenceViewerCV.cpp
 
 [CBI] -> Linking to   : /tmp/ramdrive/mse14/Targets/Student_OMP_Image/bin/Student_OMP_Image_64.run
 
@@ -145,7 +169,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 [CBI] ->
 [CBI] -> Compilateur  : g++ (g++)
 [CBI] -> Task	      : End Compiling-Linking !
-[CBI] -> Time		  : 23:57:31
+[CBI] -> Time		  : 15:30:50
 ==================================================================================
 
 
@@ -153,5 +177,5 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 [CBI] -> Student_OMP_Image_64 : End ALL!
 
-23:57:31 Build Finished (took 859ms)
+15:30:50 Build Finished (took 8s.77ms)
 

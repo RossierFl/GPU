@@ -15,7 +15,7 @@ class NewtonProvider
     {
     public:
 
-	static NewtonImage* create(void);
+	static DamierImage* create(void);
 
     };
 
