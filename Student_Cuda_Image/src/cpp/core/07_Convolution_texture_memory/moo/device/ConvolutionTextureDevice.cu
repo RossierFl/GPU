@@ -14,15 +14,19 @@
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
-
+#define KERNEL_LENGTH 9*9
 __device__ int mutex = 0;
 
 texture<uchar4,2> textureRef;
 
+__constant__ float CONST_MEM_KERNEL[KERNEL_LENGTH];
+
+__host__ void init_Const_Memory_Kernel(float* ptrKernelDevice);
 __host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h);
 __host__ void unMapTextMemory();
 
-__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
+//__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
+__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, int k, int w, int h, float t);
 
 __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
 
@@ -149,7 +153,50 @@ __global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, i
 	}
     }
 
-__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t)
+__global__ void convolutionTextureKernel(uchar4* ptrDevPixels,int k, int w, int h, float t)
+    {
+    ConvolutionTextureMath convMath = ConvolutionTextureMath(w, h);
+
+    const int TID = Indice2D::tid();
+    const int NB_THREAD = Indice2D::nbThread();
+
+    const int WH=w*h;
+
+
+    uchar4 color;
+
+
+    int pixelI;
+    int pixelJ;
+
+    int s = TID;
+    while (s < WH)
+	{
+	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
+	const int KERN_SIZE =9;
+	const int KERN_OFFSET=-4;
+	uchar4 colorsVideo[9*9];
+	int sk=0;
+	for(int i=0;i<KERN_SIZE;i++){
+	    int iTex = KERN_OFFSET+i;
+	    for (int j=0;j<KERN_SIZE;j++){
+	    int jTex=KERN_OFFSET+j;
+	    colorsVideo[sk]=tex2D(textureRef,jTex+pixelJ,iTex+pixelI);
+
+
+
+	    sk++;
+	    }
+	}
+
+	convMath.colorIJ(&color,colorsVideo,CONST_MEM_KERNEL,KERN_SIZE); // update color
+	ptrDevPixels[s] = color;
+	s += NB_THREAD;
+	}
+    }
+
+
+/*__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t)
     {
     ConvolutionTextureMath convMath = ConvolutionTextureMath(w, h);
 
@@ -189,7 +236,8 @@ __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceN
 	ptrDevPixels[s] = color;
 	s += NB_THREAD;
 	}
-    }
+    }*/
+
 
 /*
  * ptrDevResult should contain min in [0] and max in [1]
@@ -219,6 +267,13 @@ __host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h){
 
 __host__ void unMapTextMemory(){
     cudaUnbindTexture(textureRef);
+}
+__host__ void init_Const_Memory_Kernel(float* ptrKernelDevice){
+
+    size_t size = KERNEL_LENGTH*sizeof(float);
+    int offset =0;
+    HANDLE_ERROR(cudaMemcpyToSymbol(CONST_MEM_KERNEL, ptrKernelDevice, size, offset,cudaMemcpyDeviceToDevice));
+
 }
 
 /*--------------------------------------*\

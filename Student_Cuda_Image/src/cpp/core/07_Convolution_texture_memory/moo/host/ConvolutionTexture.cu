@@ -17,9 +17,11 @@ using std::endl;
 /*--------------------------------------*\
  |*		Imported	 	*|
  \*-------------------------------------*/
+extern __host__ void init_Const_Memory_Kernel(float* ptrKernelDevice);
 extern __host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h);
 extern __host__ void unMapTextMemory();
-extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t);
+//extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t);
+extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels,int k, int w, int h, float t);
 extern __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
 extern __global__ void findMinMaxTexture(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h);
 extern __global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
@@ -77,6 +79,7 @@ ConvolutionTexture::ConvolutionTexture()
 
     HANDLE_ERROR(cudaMalloc((void **)&ptrDeviceNoyau,N*sizeof(float)));
     HANDLE_ERROR(cudaMemcpy(ptrDeviceNoyau,ptrHostNoyau,N*sizeof(float),cudaMemcpyHostToDevice));
+    init_Const_Memory_Kernel(ptrDeviceNoyau);
 
 
     sizeSM = 2*db.x*sizeof(uchar);
@@ -147,7 +150,8 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
 
     colorToGreyTexture<<<dg,db>>>(ptrImageVideoDevice,w,h);
     HANDLE_ERROR(cudaDeviceSynchronize());
-    convolutionTextureKernel<<<dg,db>>>(ptrDevPixels, ptrDeviceNoyau,  k,  w,  h,  t);
+    //convolutionTextureKernel<<<dg,db>>>(ptrDevPixels, ptrDeviceNoyau,  k,  w,  h,  t);//Sans memory constant
+    convolutionTextureKernel<<<dg,db>>>(ptrDevPixels,  k,  w,  h,  t);
     HANDLE_ERROR(cudaPeekAtLastError());
    // convolutionTextureKernel<<<dg,db>>>(ptrImageVideoDevice,ptrDeviceNoyau,k,w,h,t);
     HANDLE_ERROR(cudaDeviceSynchronize());
