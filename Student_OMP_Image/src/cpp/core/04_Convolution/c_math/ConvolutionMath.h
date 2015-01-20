@@ -14,69 +14,173 @@
  * Dans un header only pour preparer la version cuda
  */
 class ConvolutionMath
-    {
+        {
 
 	/*--------------------------------------*\
-	|*		Constructeur		*|
+	|*		Constructor		*|
 	 \*-------------------------------------*/
 
     public:
 
-	ConvolutionMath(unsigned int w, unsigned int h)
+	__device__ ConvolutionMath(int w, int h)
 	    {
-	    this->dim2 = w / 2;
+	this->w = w;
+	this->h = h;
 	    }
 
-	virtual ~ConvolutionMath(void)
+	__device__ ConvolutionMath(const ConvolutionMath& source)
 	    {
-	    //rien
+	    // rien
 	    }
 
 	/*--------------------------------------*\
-	|*		Methode			*|
+	|*		Methodes		*|
 	 \*-------------------------------------*/
 
     public:
 
-    	void colorIJ(uchar4* ptrColor, int i, int j, float t)
-    	    {
-    	    // TODO
-    		float resulDXY = 0;
-    		dxy(i,j, &resulDXY);
-    		int levelGrey = 128 + 127 * cos(resulDXY/10.0-t/7.0) /(resulDXY/10.0+1.0);
-    		ptrColor->x = levelGrey;
-    		ptrColor->y = levelGrey;
-    		ptrColor->z = levelGrey;
-    		ptrColor->w = 255;
-    	    }
-
-    private:
-
-	void dxy(int i, int j, float* ptrResult) // par exmple
+	/**
+	 * x=pixelI
+	 * y=pixelJ
+	 */
+	__device__
+	void colorIJ(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
-	    //TODO
-		double fx = i- dim2;
-		double fy = j-dim2;
-		*ptrResult = sqrt(fx*fx+fy*fy);
+
+	f(ptrColor, ptrDevPixels, ptrDeviceNoyau,k,i, j, s); // update levelGris
+
+	//	ptrOutputColor->x = levelGris;
+	//	ptrOutputColor->y = levelGris;
+	//	ptrOutputColor->z = levelGris;
+	// trololololo
+
+	ptrColor->w = 255; // opaque
 	    }
 
-
-
     private:
 
-	/*--------------------------------------*\
-	|*		Attribut		*|
-	 \*-------------------------------------*/
+	__device__
+	void firstLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
+	    {
+	int k2 = k/2;
+	if(j<k2)
+	    {
+	    ptrColor->x = 0;
+	    ptrColor->y = 0;
+	    ptrColor->z = 0;
+	    }
+	else if(j>=k2 && j<w-k2)
+	    {
+	    ptrColor->x = 0;
+	    ptrColor->y = 0;
+	    ptrColor->z = 0;
+	    }
+	else if(j >= w-k2)
+	    {
+	    ptrColor->x = 0;
+	    ptrColor->y = 0;
+	    ptrColor->z = 0;
+	    }
+	    }
 
-    private:
+	/*
+	 *
+	 *
+	 *
+	 */
+	__device__
+	void middleLines(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
+	    {
+	    int ss = (int)(k*((float)k/2.0f));
+	    int k2 = k/2;
+	    if(j<k2)
+		{
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
+		}
+	    else if(j>=k2 && j<w-k2)
+		{
+		//		ptrColor->x = 0;
+		//		ptrColor->y = 0;
+		//		ptrColor->z = 0;
+		//		return;
+		float sum = 0.0f;
 
-	// Tools
-	double dim2; //=dim/2
+		for(int v = 1;v<=k2;v++)
+		    {
+		    for(int u = 1;u<=k2;u++)
+			{
+			// bas droite
+			sum+=ptrDeviceNoyau[(ss+v*k)+u]*ptrDevPixels[(s+v*w)+u].x;
+			// haut droite
+			sum+=ptrDeviceNoyau[(ss-v*k)+u]*ptrDevPixels[(s-v*w)+u].x;
+			// bas gauche
+			sum+=ptrDeviceNoyau[(ss+v*k)-u]*ptrDevPixels[(s+v*w)-u].x;
+			// haut gauche
+			sum+=ptrDeviceNoyau[(ss-v*k)-u]*ptrDevPixels[(s-v*w)-u].x;
+			}
+		    // bras east
+		    sum+=ptrDeviceNoyau[ss+v]*ptrDevPixels[s+v].x;
+		    // bras west
+		    sum+=ptrDeviceNoyau[ss-v]*ptrDevPixels[s-v].x;
+		    // bras south
+		    sum+=ptrDeviceNoyau[ss+v*k]*ptrDevPixels[s+v*w].x;
+		    // bras south
+		    sum+=ptrDeviceNoyau[ss-v*k]*ptrDevPixels[s-v*w].x;
+		    }
+		// centre
+		sum+=ptrDeviceNoyau[ss]*ptrDevPixels[s].x;
+		ptrColor->x = sum;
+		ptrColor->y = sum;
+		ptrColor->z = sum;
+		}
+	    else if(j >= w-k2)
+		{
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
+		}
+	    }
 
-    };
+	__device__
+	void lastLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
+	    {
+	    int k2 = k/2;
+	    if(j<k2)
+		{
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
+		}
+	    else if(j>=k2 && j<w-k2)
+		{
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
+		}
+	    else if(j >= w-k2)
+		{
+		ptrColor->x = 0;
+		ptrColor->y = 0;
+		ptrColor->z = 0;
+		}
+	    }
 
-#endif
-
-/*----------------------------------------------------------------------*\
- |*			End	 					*|
- \*---------------------------------------------------------------------*/
+	__device__
+	void f(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
+	    {
+	    int k2 = k/2;
+	    if(i<k2)
+		{
+		firstLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,i,j,s);
+		}
+	    else if(i>=k2 && i<h-k2)
+		{
+		middleLines(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,i,j,s);
+		}
+	    else if(i>=h-k2)
+		{
+		lastLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,i,j,s);
+		}
+	    }
