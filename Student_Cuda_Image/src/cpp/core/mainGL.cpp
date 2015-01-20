@@ -15,6 +15,7 @@
 #include "RaytracingProvider.h"
 #include "ConvolutionProvider.h"
 #include "ConvolutionProviderShared.h"
+#include "ConvolutionProviderTexture.h"
 #include "HeatTransfertProvider.h"
 
 using std::cout;
@@ -55,6 +56,7 @@ int mainGL(void)
     Image* ptrHeatTransfert = HeatTransfertProvider::createGL();
     Image* ptrConvolution = ConvolutionProvider::createGL();
     Image* ptrConvolutionShared = ConvolutionProviderShared::createGL();
+    Image* ptrConvolutionTexture = ConvolutionProviderTexture::createGL();
     ImageFonctionel* ptrMandelbrot = MandelbrotJuliaProvider::createGL();
     ImageFonctionel* ptrMandelbrotMGPU = MandelbrotJuliaProviderMGPU::createGL();
     ImageFonctionel* ptrNewton = NewtonProvider::createGL();
@@ -70,7 +72,8 @@ int mainGL(void)
     //GLUTImageViewers rayViewer(ptrRay,isAnimation,isSelection,10,10);
     //GLUTImageViewers heatViewer(ptrHeatTransfert,isAnimation,isSelection,10,10);
     //GLUTImageViewers convolViewer(ptrConvolution,isAnimation,isSelection,10,10);
-    GLUTImageViewers convolViewerShared(ptrConvolutionShared,isAnimation,isSelection,10,10);
+    //GLUTImageViewers convolViewerShared(ptrConvolutionShared,isAnimation,isSelection,10,10);
+    GLUTImageViewers convolViewerTexture(ptrConvolutionTexture,isAnimation,isSelection,10,10);
     // TODO : Insert here autres ImageViewers ...
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
@@ -86,6 +89,7 @@ int mainGL(void)
 	delete ptrHeatTransfert;
 	delete ptrConvolution;
 	delete ptrConvolutionShared;
+	delete ptrConvolutionTexture;
 
 	//ptrRippling0 = NULL;
 	ptrRippling = NULL;
@@ -96,6 +100,7 @@ int mainGL(void)
 	ptrHeatTransfert = NULL;
 	ptrConvolution = NULL;
 	ptrConvolutionShared = NULL;
+	ptrConvolutionTexture = NULL;
 	}
 
     return EXIT_SUCCESS;
