@@ -23,7 +23,6 @@ __host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h);
 __host__ void unMapTextMemory();
 
 __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
-//__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h,float t);
 
 __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
 
@@ -102,8 +101,6 @@ __device__ void reductionIntraTTexture(uchar* tabSM, uchar4* ptrDevPixels,int n)
 	    minCrtThread = crtVal;
 	s+=NB_THREAD;
 	}
-    //printf("currentSum=%f PI=%f\n in reduce intrathread", sumCurrentThread,sumCurrentThread*DX);
-    //cout<<"currentSum"<<sumCurrentThread<<endl;
     tabSM[TID_LOCAL] = minCrtThread;
     tabSM[Indice1D::nbThreadBlock()+TID_LOCAL] = maxCrtThread; // tabSM is 2*n size
     }
@@ -172,29 +169,24 @@ __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceN
     while (s < WH)
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
-	//color = ptrDevPixels[s];
 	const int KERN_SIZE =9;
 	const int KERN_OFFSET=-4;
 	uchar4 colorsVideo[9*9];
-	//uchar4* ptrOnePixel = tex2D(textureRef,pixelJ,pixelI);
 	int sk=0;
 	for(int i=0;i<KERN_SIZE;i++){
 	    int iTex = KERN_OFFSET+i;
 	    for (int j=0;j<KERN_SIZE;j++){
 	    int jTex=KERN_OFFSET+j;
 	    colorsVideo[sk]=tex2D(textureRef,jTex+pixelJ,iTex+pixelI);
-	    //printf("Value of : %i + %i + %i \n",colorsVideo[sk].x,colorsVideo[sk].y,colorsVideo[sk].z);
 
 
 
 	    sk++;
 	    }
 	}
-//	convMath.colorIJ(&color,ptrDevPixels,ptrDeviceNoyau,k,pixelI, pixelJ, s); // update color
+
 	convMath.colorIJ(&color,colorsVideo,ptrDeviceNoyau,KERN_SIZE); // update color
 	ptrDevPixels[s] = color;
-	//ptrDevPixels[s] = tex2D(textureRef,pixelI,pixelJ);
-	//ptrDevPixels[s].w=255;
 	s += NB_THREAD;
 	}
     }

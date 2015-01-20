@@ -20,7 +20,6 @@ using std::endl;
 extern __host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h);
 extern __host__ void unMapTextMemory();
 extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t);
-//extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
 extern __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
 extern __global__ void findMinMaxTexture(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h);
 extern __global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
@@ -171,10 +170,8 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
     if(min != 0)
 	b = 255.0f/((-max/(float)min)+1.0f);
     affineTransformTexture<<<dg,db>>>(ptrDevPixels, a, b, w, h,0);
-   // HANDLE_ERROR(cudaMemcpy(ptrDevPixels,ptrDevPixels,(w*h)*sizeof(uchar4),cudaMemcpyDeviceToDevice));
-   // HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(uchar4),cudaMemcpyHostToDevice));
+
     unMapTextMemory();
-    //printf("min: %d, max: %d\n",min,max);
     }
 
 /*--------------*\
