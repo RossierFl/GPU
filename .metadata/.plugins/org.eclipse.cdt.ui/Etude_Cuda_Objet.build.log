@@ -1,0 +1,70 @@
+11:56:37 **** Incremental Build of configuration CudaWin for project Etude_Cuda_Objet ****
+makeCudaVisual.bat all 
+
+[CUDA VISUAL] : all  
+
+
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2013 NVIDIA Corporation
+Built on Fri_Mar_14_19:30:01_PDT_2014
+Cuda compilation tools, release 6.0, V6.0.1
+
+==================================================================================
+[CBI] -> Target Name  : Etude_Cuda_Objet_64
+[CBI] ->
+[CBI] -> Build        : Q:/bilat/Targets/Etude_Cuda_Objet/bin/Etude_Cuda_Objet_64.exe
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	      : EXE
+[CBI] -> Arch	      : 64
+[CBI] -> OS	 		  : Win
+[CBI] -> User	 	  : bilat
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking !
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+[CBI] ->              : ../BilatTools_CPP/src/core
+[CBI] ->              : ../BilatTools_Cuda/src/core
+[CBI] ->              : ../BilatTools_OpenCV/src/core
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : /openmp
+[CBI] ->              : /MD
+[CBI] ->              : /Ox
+[CBI] ->              : /arch:AVX
+
+[CBI] -> CXXLDFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : /NODEFAULTLIB:LIBCMT
+
+[CBI] -> NVCCFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : --fmad=true
+[CBI] ->              : -gencode
+[CBI] ->              : -m64
+[CBI] ->              : -use_fast_math
+[CBI] ->              : arch=compute_20,code=sm_20
+[CBI] ->              : arch=compute_30,code=sm_30
+[CBI] ->              : arch=compute_35,code=sm_35
+[CBI] ->              : arch=compute_50,code=sm_50
+
+[CBI] -> NVCCLDFLAGS (Partial) :
+[CBI] ->
+
+[CBI] -> Create folder  : Q:/bilat/Targets/Etude_Cuda_Objet/bin
+[CBI] -> Create folder  : Q:/bilat/Targets/Etude_Cuda_Objet/obj
+[CBI] -> Create folder  : Q:/bilat/Targets/Etude_Cuda_Objet/cubin
+
+main.obj
+main.cpp
+src/cpp/core/01_rendu_opencv\Animation.h(47) : error C2146: syntax error : missing ';' before identifier 'imageViewer'
+src/cpp/core/01_rendu_opencv\Animation.h(47) : error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+../BUILDER/makefile/private/cuda/makeCudaVisual.mk:396: recipe for target `Q:/bilat/Targets/Etude_Cuda_Objet/obj/main.obj' failed
+make: *** [Q:/bilat/Targets/Etude_Cuda_Objet/obj/main.obj] Error 2
+
+11:56:40 Build Finished (took 3s.431ms)
+

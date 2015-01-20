@@ -1,0 +1,210 @@
+11:56:45 **** Build of configuration CudaWin for project Etude_Cula ****
+makeCudaVisual.bat all 
+
+[CUDA VISUAL] : all  
+
+
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2013 NVIDIA Corporation
+Built on Fri_Mar_14_19:30:01_PDT_2014
+Cuda compilation tools, release 6.0, V6.0.1
+
+==================================================================================
+[CBI] -> Target Name  : Etude_Cula_64
+[CBI] ->
+[CBI] -> Build        : Q:/bilat/Targets/Etude_Cula/bin/Etude_Cula_64.exe
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	      : EXE
+[CBI] -> Arch	      : 64
+[CBI] -> OS	 		  : Win
+[CBI] -> User	 	  : bilat
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking !
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+[CBI] ->              : ../BilatTools_CPP/src/core
+[CBI] ->              : ../BilatTools_Cuda/src/core
+[CBI] ->              : ../BilatUtil_CPP/src/core
+[CBI] ->              : ../API_CppTest/SRC
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : /openmp
+[CBI] ->              : /MD
+[CBI] ->              : /Ox
+[CBI] ->              : /arch:AVX
+
+[CBI] -> CXXLDFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : /NODEFAULTLIB:LIBCMT
+
+[CBI] -> NVCCFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : --fmad=true
+[CBI] ->              : -gencode
+[CBI] ->              : -m64
+[CBI] ->              : -use_fast_math
+[CBI] ->              : arch=compute_20,code=sm_20
+[CBI] ->              : arch=compute_30,code=sm_30
+[CBI] ->              : arch=compute_35,code=sm_35
+[CBI] ->              : arch=compute_50,code=sm_50
+
+[CBI] -> NVCCLDFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : cula_lapack.lib
+
+[CBI] -> Create folder  : Q:/bilat/Targets/Etude_Cula/bin
+[CBI] -> Create folder  : Q:/bilat/Targets/Etude_Cula/obj
+[CBI] -> Create folder  : Q:/bilat/Targets/Etude_Cula/cubin
+
+main.obj
+main.cpp
+mainCore.obj
+mainCore.cpp
+versionCheck.obj
+versionCheck.cpp
+systemSolve.obj
+systemSolve.cpp
+mainTest.obj
+mainTest.cpp
+TestCulaJunit.obj
+TestCulaJunit.cpp
+StringTools.obj
+StringTools.cpp
+TabTools.obj
+TabTools.cpp
+Chronos.obj
+Chronos.cpp
+AleaTools.obj
+AleaTools.cpp
+LimitsTools.obj
+LimitsTools.cpp
+VariateurF.obj
+VariateurF.cpp
+VariateurI.obj
+VariateurI.cpp
+MathTools.obj
+MathTools.cpp
+IndiceTools_CPU.obj
+IndiceTools_CPU.cpp
+ColorTools_CPU.obj
+ColorTools_CPU.cpp
+cudaTools.obj
+cudaTools.cpp
+Device.obj
+Device.cpp
+vectorTools.obj
+vectorTools.cpp
+tab1DTools.obj
+tab1DTools.cpp
+histo.obj
+histo.cpp
+rawMajorTools.obj
+rawMajorTools.cpp
+tab2DTools.obj
+tab2DTools.cpp
+suite.obj
+suite.cpp
+htmloutput.obj
+htmloutput.cpp
+compileroutput.obj
+compileroutput.cpp
+textoutput.obj
+textoutput.cpp
+collectoroutput.obj
+collectoroutput.cpp
+time.obj
+time.cpp
+utils.obj
+utils.cpp
+missing.obj
+missing.cpp
+source.obj
+source.cpp
+testTools.obj
+testTools.cpp
+culaEigenValues.cu
+
+[CBI] -> Linking to   : Q:/bilat/Targets/Etude_Cula/bin/Etude_Cula_64.exe
+
+[CBI] -> Library Link :
+[CBI] ->
+[CBI] ->              : -lOpenCL
+[CBI] ->              : -lcublas
+[CBI] ->              : -lcublas_device
+[CBI] ->              : -lcuda
+[CBI] ->              : -lcudadevrt
+[CBI] ->              : -lcudart
+[CBI] ->              : -lcudart_static
+[CBI] ->              : -lcufft
+[CBI] ->              : -lcufftw
+[CBI] ->              : -lcurand
+[CBI] ->              : -lcusparse
+[CBI] ->              : -lnppc
+[CBI] ->              : -lnppi
+[CBI] ->              : -lnpps
+[CBI] ->              : -lnvcuvenc
+[CBI] ->              : -lnvcuvid
+
+nvcc : warning : The 'compute_10' and 'sm_10' architectures are deprecated, and may be removed in a future release.
+cula_lapack.lib
+main.obj
+mainCore.obj
+versionCheck.obj
+systemSolve.obj
+mainTest.obj
+TestCulaJunit.obj
+StringTools.obj
+TabTools.obj
+Chronos.obj
+AleaTools.obj
+LimitsTools.obj
+VariateurF.obj
+VariateurI.obj
+MathTools.obj
+IndiceTools_CPU.obj
+ColorTools_CPU.obj
+cudaTools.obj
+Device.obj
+vectorTools.obj
+tab1DTools.obj
+histo.obj
+rawMajorTools.obj
+tab2DTools.obj
+suite.obj
+htmloutput.obj
+compileroutput.obj
+textoutput.obj
+collectoroutput.obj
+time.obj
+utils.obj
+missing.obj
+source.obj
+testTools.obj
+culaEigenValues.obj
+
+==================================================================================
+[CBI] -> Target Name  : Etude_Cula_64
+[CBI] -> Location     : Q:/bilat/Targets/Etude_Cula/bin/Etude_Cula_64.exe
+[CBI] -> Deploy 	  : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 	      : Win
+[CBI] -> User	 	  : bilat
+[CBI] ->
+[CBI] -> Compilateur  : VISUAL (cl) && NVIDIA (nvcc)
+[CBI] -> Task		  : End Compiling-Linking !
+[CBI] -> Time	      : 11:57:31
+==================================================================================
+
+
+[CBI] -> Deploying    : ../RELEASE/bin/Etude_Cula_64.exe
+
+[CBI] -> Etude_Cula_64   : End ALL!
+
+11:57:32 Build Finished (took 47s.0ms)
+

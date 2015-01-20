@@ -1,0 +1,304 @@
+17:21:12 **** Build of configuration IntelLinux for project Tuto_Graphe_GL ****
+makeIntelLinux.sh all 
+
+--------------------------------------------------------
+[Runtime] : intel x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/intel/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : Intel      : Ready!
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : intel x86 : Ready!
+--------------------------------------------------------
+
+
+[INTEL] : all
+
+icpc (ICC) 14.0.1 20131008
+Copyright (C) 1985-2013 Intel Corporation.  All rights reserved.
+
+==================================================================================
+[CBI] -> Target Name  : Tuto_Graphe_64
+[CBI] ->
+[CBI] -> Build     	  : /tmp/ramdrive/stahli/Targets/Tuto_Graphe/bin/Tuto_Graphe_64.run
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : stahli
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC
+[CBI] ->              : ../API_Bilat_Displayable/BIN/intelLinux
+[CBI] ->              : ../API_Bilat_Displayable/INC
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/intelLinux
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC
+[CBI] ->              : ../API_Bilat_GL/BIN/intelLinux
+[CBI] ->              : ../API_Bilat_GL/INC
+[CBI] ->              : ../API_Bilat_Graph2D/BIN/intelLinux
+[CBI] ->              : ../API_Bilat_Graph2D/INC
+[CBI] ->              : ../API_Bilat_Graph2D_FreeGlut/BIN/intelLinux
+[CBI] ->              : ../API_Bilat_Graph2D_FreeGlut/INC
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : -DCBI_DISPLAYABLE_DLL
+[CBI] ->              : -DCBI_GRAPH_DLL
+[CBI] ->              : -O3
+[CBI] ->              : -axSSE4.2
+[CBI] ->              : -fast
+[CBI] ->              : -openmp
+[CBI] ->              : -par-threshold100
+[CBI] ->              : -parallel
+[CBI] ->              : -std=c++0x
+
+[CBI] -> LDFLAGS (Partial) :
+[CBI] ->
+
+[CBI] -> INC_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC/
+[CBI] ->              : ../API_Bilat_Displayable/INC/
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC/
+[CBI] ->              : ../API_Bilat_GL/INC/
+[CBI] ->              : ../API_Bilat_Graph2D/INC/
+[CBI] ->              : ../API_Bilat_Graph2D/INC/model/
+[CBI] ->              : ../API_Bilat_Graph2D/INC/view/
+[CBI] ->              : ../API_Bilat_Graph2D_FreeGlut/INC/
+[CBI] ->              : ../API_Bilat_Graph2D_FreeGlut/INC/freeglut/
+[CBI] ->              : src/exemples/00_tools/
+[CBI] ->              : src/exemples/01_static/01_discret_curve/01_graphe/
+[CBI] ->              : src/exemples/01_static/01_discret_curve/02_glut/
+[CBI] ->              : src/exemples/01_static/02_analytique_curve/01_graphe/
+[CBI] ->              : src/exemples/01_static/02_analytique_curve/01_graphe/curve/
+[CBI] ->              : src/exemples/01_static/02_analytique_curve/02_glut/
+[CBI] ->              : src/exemples/01_static/03_lignes/01_graphe/
+[CBI] ->              : src/exemples/01_static/03_lignes/02_glut/
+[CBI] ->              : src/exemples/01_static/04_polylines/01_graphe/
+[CBI] ->              : src/exemples/01_static/04_polylines/02_glut/
+[CBI] ->              : src/exemples/01_static/05_nuage_points/01_graphe/
+[CBI] ->              : src/exemples/01_static/05_nuage_points/02_glut/
+[CBI] ->              : src/exemples/01_static/06_histogram/01_graphe/
+[CBI] ->              : src/exemples/01_static/06_histogram/02_glut/
+[CBI] ->              : src/exemples/01_static/07_histogram_density/01_graphe/
+[CBI] ->              : src/exemples/01_static/07_histogram_density/01_graphe/curve/
+[CBI] ->              : src/exemples/01_static/07_histogram_density/02_glut/
+[CBI] ->              : src/exemples/01_static/08_parametric_curve/01_graphe/
+[CBI] ->              : src/exemples/01_static/08_parametric_curve/01_graphe/curve/
+[CBI] ->              : src/exemples/01_static/08_parametric_curve/02_glut/
+[CBI] ->              : src/exemples/02_animation/02_animated_MultiThread/02_glut_tools/
+[CBI] ->              : src/exemples/02_animation/02_animated_MultiThread/03_glut/
+[CBI] ->              : src/exemples/02_animation/03_animation_Manuel/02_glut/
+
+
+[CBI] -> LIB_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_Displayable/BIN/intelLinux/
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/intelLinux/
+[CBI] ->              : ../API_Bilat_GL/BIN/intelLinux/
+[CBI] ->              : ../API_Bilat_Graph2D/BIN/intelLinux/
+[CBI] ->              : ../API_Bilat_Graph2D_FreeGlut/BIN/intelLinux/
+
+
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/main.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/08_parametric_curve/01_graphe/SpiraleGraphe.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/08_parametric_curve/01_graphe/curve/SpiraleCurve.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/08_parametric_curve/02_glut/SpiraleGlut.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/06_histogram/01_graphe/HistoGraphe.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/06_histogram/02_glut/HistoGlut.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/04_polylines/01_graphe/PolylinesGraphe.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/04_polylines/02_glut/PolyligneGlut.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/01_discret_curve/01_graphe/DiscretCurveGraph.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/01_discret_curve/02_glut/DiscretCurveGlut.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/02_analytique_curve/01_graphe/SinusGraphe.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/02_analytique_curve/02_glut/SinusGlut.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/07_histogram_density/01_graphe/HistoAdjustGraphe.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/07_histogram_density/01_graphe/curve/GaussCurve.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/07_histogram_density/02_glut/HistoAdjustGlut.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/03_lignes/01_graphe/LinesGraphe.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/03_lignes/02_glut/LinesGlut.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/05_nuage_points/01_graphe/NuagesPointsGraphe.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/01_static/05_nuage_points/02_glut/NuagePointGlut.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/02_animation/02_animated_MultiThread/03_glut/SinusAnimatedGlut.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/02_animation/02_animated_MultiThread/02_glut_tools/GLUTMultithreadWindow.cpp
+[Tuto_Graphe_64] -> icpc compiling .cpp : src/exemples/02_animation/03_animation_Manuel/02_glut/AnimateManuelGlut.cpp
+
+[CBI] -> Linking to   : /tmp/ramdrive/stahli/Targets/Tuto_Graphe/bin/Tuto_Graphe_64.run
+
+[CBI] -> Library Link :
+[CBI] ->              : -L/usr/lib/x86_64-linux-gnu
+[CBI] ->              : -lBilat_Displayable_004_64
+[CBI] ->              : -lBilat_FreeGlut_Tools_006_64
+[CBI] ->              : -lBilat_GL_003_64
+[CBI] ->              : -lBilat_Graph2D_001_64
+[CBI] ->              : -lBilat_Graph2D_Freeglut_001_64
+[CBI] ->              : -lGL
+[CBI] ->              : -lGLEW
+[CBI] ->              : -lGLU
+[CBI] ->              : -lX11
+[CBI] ->              : -lboost_atomic
+[CBI] ->              : -lboost_chrono
+[CBI] ->              : -lboost_context
+[CBI] ->              : -lboost_date_time
+[CBI] ->              : -lboost_exception
+[CBI] ->              : -lboost_filesystem
+[CBI] ->              : -lboost_graph
+[CBI] ->              : -lboost_locale
+[CBI] ->              : -lboost_math_c99
+[CBI] ->              : -lboost_math_c99f
+[CBI] ->              : -lboost_math_c99l
+[CBI] ->              : -lboost_math_tr1
+[CBI] ->              : -lboost_math_tr1f
+[CBI] ->              : -lboost_math_tr1l
+[CBI] ->              : -lboost_prg_exec_monitor
+[CBI] ->              : -lboost_program_options
+[CBI] ->              : -lboost_random
+[CBI] ->              : -lboost_regex
+[CBI] ->              : -lboost_serialization
+[CBI] ->              : -lboost_signals
+[CBI] ->              : -lboost_system
+[CBI] ->              : -lboost_test_exec_monitor
+[CBI] ->              : -lboost_thread
+[CBI] ->              : -lboost_timer
+[CBI] ->              : -lboost_unit_test_framework
+[CBI] ->              : -lboost_wave
+[CBI] ->              : -lboost_wserialization
+[CBI] ->              : -lglut
+[CBI] ->              : -liomp5
+[CBI] ->              : -lrt
+ipo: warning #11021: unresolved xcb_get_file_descriptor
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_connect
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_generate_id
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_connect_to_display_with_auth_info
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_writev
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_wait_for_reply
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_poll_for_event
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_get_maximum_request_length
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_poll_for_reply
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_take_socket
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_wait_for_event
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_disconnect
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_connection_has_error
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_get_setup
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved xcb_parse_display
+        Referenced in /usr/lib/x86_64-linux-gnu/libX11.so
+ipo: warning #11021: unresolved _nv013glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv020glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv019glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv002glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv023tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv008tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv024tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv018glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv007tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv006tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved XextFindDisplay
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv022tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv009tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved XextRemoveDisplay
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv021tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv020tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved XextDestroyExtension
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv016glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv014glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved XMissingExtension
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv022glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv015glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv021glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv014tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv015tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv016tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv019tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv000glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv018tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv017tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved XextCreateExtension
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv011tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv001glcore
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved _nv013tls
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+ipo: warning #11021: unresolved XextAddDisplay
+        Referenced in /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib//libGL.so
+
+==================================================================================
+[CBI] -> Target Name  : Tuto_Graphe_64
+[CBI] -> Location     : /tmp/ramdrive/stahli/Targets/Tuto_Graphe/bin/Tuto_Graphe_64.run
+[CBI] -> Deploy 	  : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : stahli
+[CBI] ->
+[CBI] -> Compilateur  : INTEL (icpc)
+[CBI] -> Task	      : End Compiling-Linking !
+[CBI] -> Time		  : 17:21:30
+==================================================================================
+
+
+[CBI] -> Deploying    : ../RELEASE/bin/Tuto_Graphe_64.run
+
+[CBI] -> Tuto_Graphe_64 : End ALL!
+
+17:21:32 Build Finished (took 20s.356ms)
+

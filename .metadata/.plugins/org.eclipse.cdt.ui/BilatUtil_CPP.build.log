@@ -1,0 +1,81 @@
+18:27:21 **** Build of configuration GCC for project BilatUtil_CPP ****
+makeGCC.sh all 
+
+--------------------------------------------------------
+[Runtime] : gcc x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/gcc/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : gcc x86 : Ready!
+--------------------------------------------------------
+
+
+[GCC] : all
+
+g++ (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
+Copyright (C) 2011 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+==================================================================================
+[CBI] -> Target Name  : BilatUtil_CPP_64
+[CBI] ->
+[CBI] -> Build     	  : /tmp/ramdrive/bilat/Targets/BilatUtil_CPP/bin/BilatUtil_CPP_64.run
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : bilat
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+[CBI] ->              : ../API_CppTest/SRC
+[CBI] ->              : ../BilatTools_CPP/src/core
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : -O3
+[CBI] ->              : -fomit-frame-pointer
+[CBI] ->              : -fopenmp
+[CBI] ->              : -frerun-loop-opt
+[CBI] ->              : -march=corei7
+[CBI] ->              : -std=c++0x
+
+[CBI] -> LDFLAGS (Partial) :
+[CBI] ->
+
+[CBI] -> INC_PATH (auto detect):
+[CBI] ->              : ../API_CppTest/SRC/core/
+[CBI] ->              : ../API_CppTest/SRC/core/extension/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/namespace_cpu/
+[CBI] ->              : src/core/utils/header/
+[CBI] ->              : src/test/header/
+
+
+[CBI] -> LIB_PATH (auto detect):
+
+
+
+[CBI] -> Deploying    : ../RELEASE/bin/BilatUtil_CPP_64.run
+
+[CBI] -> BilatUtil_CPP_64 : End ALL!
+
+18:27:21 Build Finished (took 107ms)
+

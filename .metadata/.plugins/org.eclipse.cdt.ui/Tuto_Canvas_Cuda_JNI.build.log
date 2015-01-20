@@ -1,0 +1,152 @@
+17:22:53 **** Build of configuration CudaGCC for project Tuto_Canvas_Cuda_JNI ****
+makeCudaGCC.sh all 
+
+--------------------------------------------------------
+[Runtime] : gcc x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/gcc/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : gcc x86 : Ready!
+--------------------------------------------------------
+
+
+[CUDA GCC] : all
+
+g++ (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
+Copyright (C) 2011 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2014 NVIDIA Corporation
+Built on Thu_Jul_17_21:41:27_CDT_2014
+Cuda compilation tools, release 6.5, V6.5.12
+
+
+==================================================================================
+[CBI] -> Target Name  : Tuto_Canvas_JNI_64
+[CBI] ->
+[CBI] -> Build        : /tmp/ramdrive/stahli/Targets/Tuto_Canvas_JNI/bin/libTuto_Canvas_JNI_64.so
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	      : SHARED_LIB
+[CBI] -> Arch	      : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : stahli
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking !
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC
+[CBI] ->              : ../API_Bilat_Displayable/INC
+[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc
+[CBI] ->              : ../API_Bilat_Canvas_JNI/INC
+[CBI] ->              : ../API_Bilat_Canvas_JNI/BIN/gcc
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : -fPIC
+[CBI] ->              : -fvisibility=hidden
+[CBI] ->              : -std=c++0x
+[CBI] ->              : -fpermissive
+[CBI] ->              : -DCBI_DISPLAYABLE_DLL
+[CBI] ->              : -O3
+[CBI] ->              : -frerun-loop-opt
+[CBI] ->              : -fomit-frame-pointer
+[CBI] ->              : -march=corei7
+
+[CBI] -> CXXLDFLAGS (Partial) :
+[CBI] ->
+
+[CBI] -> NVCCFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : --fmad=true
+[CBI] ->              : -arch=sm_20
+[CBI] ->              : -m64
+[CBI] ->              : -use_fast_math
+
+[CBI] -> NVCCLDFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : -shared
+
+[CBI] -> INC_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_Canvas_JNI/INC/
+[CBI] ->              : ../API_Bilat_Canvas_JNI/INC/private/
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC/
+[CBI] ->              : ../API_Bilat_Displayable/INC/
+[CBI] ->              : src/cpp/core/02_toScenario/
+[CBI] ->              : src/cpp/core/03_scenario/
+[CBI] ->              : src/cpp/core/04_GL/
+
+
+[CBI] -> LIB_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_Canvas_JNI/BIN/gcc/
+[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc/
+
+[CBI] -> Create folder : /tmp/ramdrive/stahli/Targets/Tuto_Canvas_JNI/bin
+[CBI] -> Create folder : /tmp/ramdrive/stahli/Targets/Tuto_Canvas_JNI/obj
+[CBI] -> Create folder : /tmp/ramdrive/stahli/Targets/Tuto_Canvas_JNI/cubin
+
+[Tuto_Canvas_JNI_64] -> g++ compiling .cpp : src/cpp/core/02_toScenario/helloworld.cpp
+[Tuto_Canvas_JNI_64] -> g++ compiling .cpp : src/cpp/core/04_GL/HelloWorldGL.cpp
+[Tuto_Canvas_JNI_64] -> g++ compiling .cpp : src/cpp/core/03_scenario/HelloWorldScenario.cpp
+[Tuto_Canvas_JNI_64] -> g++ compiling .cpp : src/cpp/core/01_jni/helloworld_jni.cpp
+
+[CBI] -> Linking to   : /tmp/ramdrive/stahli/Targets/Tuto_Canvas_JNI/bin/libTuto_Canvas_JNI_64.so
+
+[CBI] -> Library Link :
+[CBI] ->
+[CBI] ->              : -L/usr/lib/x86_64-linux-gnu
+[CBI] ->              : -lBilat_Canvas_JNI_001_64
+[CBI] ->              : -lBilat_Displayable_004_64
+[CBI] ->              : -lGL
+[CBI] ->              : -lGLEW
+[CBI] ->              : -lGLU
+[CBI] ->              : -lX11
+[CBI] ->              : -lc
+[CBI] ->              : -lcublas
+[CBI] ->              : -lcudart
+[CBI] ->              : -lcufft
+[CBI] ->              : -lcuinj64
+[CBI] ->              : -lcurand
+[CBI] ->              : -lcusparse
+[CBI] ->              : -ljawt
+[CBI] ->              : -lmawt
+
+
+==================================================================================
+[CBI] -> Target Name  : Tuto_Canvas_JNI_64
+[CBI] -> Location     : /tmp/ramdrive/stahli/Targets/Tuto_Canvas_JNI/bin/libTuto_Canvas_JNI_64.so
+[CBI] -> Deploy 	  : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : SHARED_LIB
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 	      : Linux
+[CBI] -> User	 	  : stahli
+[CBI] ->
+[CBI] -> Compilateur  : g++) && nvcc
+[CBI] -> Task		  : End Compiling-Linking !
+[CBI] -> Time	      : 17:22:55
+==================================================================================
+
+
+[CBI] -> Deploying      : ../RELEASE/bin/libTuto_Canvas_JNI_64.so
+
+[CBI] -> Tuto_Canvas_JNI_64   : End ALL!
+
+17:22:55 Build Finished (took 1s.411ms)
+

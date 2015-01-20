@@ -1,0 +1,165 @@
+18:27:56 **** Build of configuration CudaGCC for project Cuda_Image ****
+makeCudaGCC.sh all 
+
+--------------------------------------------------------
+[Runtime] : gcc x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/gcc/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : gcc x86 : Ready!
+--------------------------------------------------------
+
+
+[CUDA GCC] : all
+
+g++ (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
+Copyright (C) 2011 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2014 NVIDIA Corporation
+Built on Thu_Jul_17_21:41:27_CDT_2014
+Cuda compilation tools, release 6.5, V6.5.12
+
+
+==================================================================================
+[CBI] -> Target Name  : Cuda_Image_64
+[CBI] ->
+[CBI] -> Build        : /tmp/ramdrive/bilat/Targets/Cuda_Image/bin/Cuda_Image_64.run
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	      : EXE
+[CBI] -> Arch	      : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : bilat
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking !
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+[CBI] ->              : ../BilatTools_CPP/src/core
+[CBI] ->              : ../BilatTools_Cuda/src/core
+[CBI] ->              : ../BilatTools_Cuda_Image/src/core
+[CBI] ->              : ../BilatTools_OpenCV/src/core
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC
+[CBI] ->              : ../API_Bilat_Displayable/INC
+[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_GL/INC
+[CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc
+[CBI] ->              : ../API_Bilat_Displayable/INC
+[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_GL_Cuda/INC
+[CBI] ->              : ../API_Bilat_Image_GL_Cuda/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_FreeGlut_Cuda/INC
+[CBI] ->              : ../API_Bilat_Image_FreeGlut_Cuda/BIN/gcc
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : -std=c++0x
+[CBI] ->              : -fopenmp
+[CBI] ->              : -DCBI_DISPLAYABLE_DLL
+[CBI] ->              : -O3
+[CBI] ->              : -frerun-loop-opt
+[CBI] ->              : -fomit-frame-pointer
+[CBI] ->              : -march=corei7
+
+[CBI] -> CXXLDFLAGS (Partial) :
+[CBI] ->
+
+[CBI] -> NVCCFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : --fmad=true
+[CBI] ->              : -arch=sm_20
+[CBI] ->              : -m64
+[CBI] ->              : -use_fast_math
+
+[CBI] -> NVCCLDFLAGS (Partial) :
+[CBI] ->
+
+[CBI] -> INC_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC/
+[CBI] ->              : ../API_Bilat_Displayable/INC/
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/common/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/cpu/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut_Cuda/INC/
+[CBI] ->              : ../API_Bilat_Image_GL/INC/
+[CBI] ->              : ../API_Bilat_Image_GL/INC/common/
+[CBI] ->              : ../API_Bilat_Image_GL/INC/cpu/
+[CBI] ->              : ../API_Bilat_Image_GL_Cuda/INC/
+[CBI] ->              : ../API_Bilat_Image_GL_Cuda/INC/gpu/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/namespace_cpu/
+[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/both/
+[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/device/
+[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/device/curand/
+[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/device/reduction/
+[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/device/synchronisation/
+[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/host/
+[CBI] ->              : ../BilatTools_Cuda/src/core/cudatools/header/mixte/
+[CBI] ->              : ../BilatTools_Cuda_Image/src/core/cudaImageTools/
+[CBI] ->              : ../BilatTools_Cuda_Image/src/core/cudaImageTools/bitmap/header/
+[CBI] ->              : ../BilatTools_Cuda_Image/src/core/cudaImageTools/fonctionel/header/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_FreeGlut/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_GL/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_GL/indirect/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_Jni/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/tools_GPU/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/tools_switch/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/type/
+[CBI] ->              : ../BilatTools_OpenCV/src/core/capture/header/
+[CBI] ->              : ../BilatTools_OpenCV/src/core/viewer/image/
+[CBI] ->              : ../BilatTools_OpenCV/src/core/viewer/sequence/
+[CBI] ->              : src/cpp/core/00_rippling_warmup/
+[CBI] ->              : src/cpp/core/00_rippling_warmup/01_imageAPI/
+[CBI] ->              : src/cpp/core/00_rippling_warmup/03_math/
+[CBI] ->              : src/cpp/core/01_rippling/moo/device/math/
+[CBI] ->              : src/cpp/core/01_rippling/moo/host/
+[CBI] ->              : src/cpp/core/01_rippling/provider/
+[CBI] ->              : src/cpp/core/03_mandelbrot/01_imageAPI/
+[CBI] ->              : src/cpp/core/03_mandelbrot/03_math/
+[CBI] ->              : src/cpp/core/04_raytracing/01_imageAPI/
+[CBI] ->              : src/cpp/core/04_raytracing/02_cuda/
+[CBI] ->              : src/cpp/core/04_raytracing/03_math/
+[CBI] ->              : src/cpp/core/06_convolution/01_imageAPI/
+[CBI] ->              : src/cpp/core/06_convolution/02_cuda/
+[CBI] ->              : src/cpp/core/06_convolution/02_cuda/kernel/
+[CBI] ->              : src/cpp/core/06_convolution/03_math/
+
+
+[CBI] -> LIB_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc/
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/gcc/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/BIN/gcc/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut_Cuda/BIN/gcc/
+[CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc/
+[CBI] ->              : ../API_Bilat_Image_GL_Cuda/BIN/gcc/
+
+
+
+[CBI] -> Deploying      : ../RELEASE/bin/Cuda_Image_64.run
+
+[CBI] -> Cuda_Image_64   : End ALL!
+
+18:27:56 Build Finished (took 316ms)
+

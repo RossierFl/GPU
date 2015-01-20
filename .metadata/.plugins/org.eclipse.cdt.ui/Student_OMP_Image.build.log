@@ -1,0 +1,157 @@
+23:57:30 **** Incremental Build of configuration GCC for project Student_OMP_Image ****
+makeGCC.sh all 
+
+--------------------------------------------------------
+[Runtime] : gcc x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/gcc/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : gcc x86 : Ready!
+--------------------------------------------------------
+
+
+[GCC] : all
+
+g++ (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
+Copyright (C) 2011 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+==================================================================================
+[CBI] -> Target Name  : Student_OMP_Image_64
+[CBI] ->
+[CBI] -> Build     	  : /tmp/ramdrive/mse14/Targets/Student_OMP_Image/bin/Student_OMP_Image_64.run
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : mse14
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC
+[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc
+[CBI] ->              : ../API_Bilat_Displayable/INC
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/gcc
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC
+[CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_GL/INC
+[CBI] ->              : ../BilatTools_CPP/src/core
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core
+[CBI] ->              : ../BilatTools_OMP/src/core
+[CBI] ->              : ../BilatTools_OpenCV/src/core
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : -DCBI_DISPLAYABLE_DLL
+[CBI] ->              : -DCBI_NO_CUDA
+[CBI] ->              : -O3
+[CBI] ->              : -fomit-frame-pointer
+[CBI] ->              : -fopenmp
+[CBI] ->              : -frerun-loop-opt
+[CBI] ->              : -march=corei7
+[CBI] ->              : -std=c++0x
+
+[CBI] -> LDFLAGS (Partial) :
+[CBI] ->
+
+[CBI] -> INC_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC/
+[CBI] ->              : ../API_Bilat_Displayable/INC/
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/common/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/cpu/
+[CBI] ->              : ../API_Bilat_Image_GL/INC/
+[CBI] ->              : ../API_Bilat_Image_GL/INC/common/
+[CBI] ->              : ../API_Bilat_Image_GL/INC/cpu/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/namespace_cpu/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_FreeGlut/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_GL/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_GL/indirect/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_Jni/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/tools_GPU/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/tools_switch/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/type/
+[CBI] ->              : ../BilatTools_OMP/src/core/OMP_Tools/header/
+[CBI] ->              : ../BilatTools_OpenCV/src/core/capture/header/
+[CBI] ->              : ../BilatTools_OpenCV/src/core/viewer/image/
+[CBI] ->              : ../BilatTools_OpenCV/src/core/viewer/sequence/
+[CBI] ->              : src/cpp/core/01_Rippling/a_image/
+[CBI] ->              : src/cpp/core/01_Rippling/b_moo/
+[CBI] ->              : src/cpp/core/01_Rippling/c_math/
+[CBI] ->              : src/cpp/core/01_Rippling/d_provider/
+[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/a_image/
+[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/b_moo/
+[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/c_math/
+[CBI] ->              : src/cpp/core/02_Mandelbrot_Julia/d_provider/
+
+
+[CBI] -> LIB_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc/
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/gcc/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/BIN/gcc/
+[CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc/
+
+
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/main.cpp
+
+[CBI] -> Linking to   : /tmp/ramdrive/mse14/Targets/Student_OMP_Image/bin/Student_OMP_Image_64.run
+
+[CBI] -> Library Link :
+[CBI] ->              : -L/usr/lib/x86_64-linux-gnu
+[CBI] ->              : -lBilat_Displayable_004_64
+[CBI] ->              : -lBilat_FreeGlut_Tools_006_64
+[CBI] ->              : -lBilat_Image_FreeGlut_003_64
+[CBI] ->              : -lBilat_Image_GL_005_64
+[CBI] ->              : -lGL
+[CBI] ->              : -lGLEW
+[CBI] ->              : -lGLU
+[CBI] ->              : -lX11
+[CBI] ->              : -lglut
+[CBI] ->              : -lgomp
+[CBI] ->              : -lopencv_core
+[CBI] ->              : -lopencv_highgui
+[CBI] ->              : -lopencv_imgproc
+
+==================================================================================
+[CBI] -> Target Name  : Student_OMP_Image_64
+[CBI] -> Location     : /tmp/ramdrive/mse14/Targets/Student_OMP_Image/bin/Student_OMP_Image_64.run
+[CBI] -> Deploy 	  : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : mse14
+[CBI] ->
+[CBI] -> Compilateur  : g++ (g++)
+[CBI] -> Task	      : End Compiling-Linking !
+[CBI] -> Time		  : 23:57:31
+==================================================================================
+
+
+[CBI] -> Deploying    : ../RELEASE/bin/Student_OMP_Image_64.run
+
+[CBI] -> Student_OMP_Image_64 : End ALL!
+
+23:57:31 Build Finished (took 859ms)
+

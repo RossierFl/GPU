@@ -1,0 +1,183 @@
+10:15:02 **** Build of configuration GCC for project Tuto_Image ****
+makeGCC.sh all 
+
+--------------------------------------------------------
+[Runtime] : gcc x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/gcc/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : gcc x86 : Ready!
+--------------------------------------------------------
+
+
+[GCC] : all
+
+g++ (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
+Copyright (C) 2011 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+==================================================================================
+[CBI] -> Target Name  : Tuto_Image_64
+[CBI] ->
+[CBI] -> Build     	  : /tmp/ramdrive/mse14/Targets/Tuto_Image/bin/Tuto_Image_64.run
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : mse14
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC
+[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc
+[CBI] ->              : ../API_Bilat_Displayable/INC
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/gcc
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC
+[CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc
+[CBI] ->              : ../API_Bilat_Image_GL/INC
+[CBI] ->              : ../BilatTools_CPP/src/core
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core
+[CBI] ->              : ../BilatTools_OMP/src/core
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : -DCBI_DISPLAYABLE_DLL
+[CBI] ->              : -DCBI_NO_CUDA
+[CBI] ->              : -O3
+[CBI] ->              : -fomit-frame-pointer
+[CBI] ->              : -fopenmp
+[CBI] ->              : -frerun-loop-opt
+[CBI] ->              : -march=corei7
+[CBI] ->              : -std=c++0x
+
+[CBI] -> LDFLAGS (Partial) :
+[CBI] ->
+
+[CBI] -> INC_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_DLL_Tools/INC/
+[CBI] ->              : ../API_Bilat_Displayable/INC/
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/INC/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/common/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/INC/cpu/
+[CBI] ->              : ../API_Bilat_Image_GL/INC/
+[CBI] ->              : ../API_Bilat_Image_GL/INC/common/
+[CBI] ->              : ../API_Bilat_Image_GL/INC/cpu/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/namespace_cpu/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_FreeGlut/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_GL/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_GL/indirect/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/Image_Jni/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/tools_GPU/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/tools_switch/
+[CBI] ->              : ../BilatTools_Cuda_smart_switch/src/core/switch/header/type/
+[CBI] ->              : ../BilatTools_OMP/src/core/OMP_Tools/header/
+[CBI] ->              : src/cpp/core/01_Vague/a_image/
+[CBI] ->              : src/cpp/core/01_Vague/b_moo/
+[CBI] ->              : src/cpp/core/01_Vague/c_math/
+[CBI] ->              : src/cpp/core/01_Vague/d_provider/
+[CBI] ->              : src/cpp/core/02_Damier_Zoomable/a_image/
+[CBI] ->              : src/cpp/core/02_Damier_Zoomable/b_moo/
+[CBI] ->              : src/cpp/core/02_Damier_Zoomable/c_math/
+[CBI] ->              : src/cpp/core/02_Damier_Zoomable/d_provider/
+[CBI] ->              : src/cpp/core/03_Event/image/
+[CBI] ->              : src/cpp/core/03_Event/listener/key/
+[CBI] ->              : src/cpp/core/03_Event/listener/mouse/
+[CBI] ->              : src/cpp/core/03_Event/provider/
+[CBI] ->              : src/cpp/core/04_OpenGL_pure/glut/
+[CBI] ->              : src/cpp/core/04_OpenGL_pure/opengl/
+[CBI] ->              : src/cpp/core/04_OpenGL_pure/provider/
+
+
+[CBI] -> LIB_PATH (auto detect):
+[CBI] ->              : ../API_Bilat_Displayable/BIN/gcc/
+[CBI] ->              : ../API_Bilat_FreeGlut_Tools/BIN/gcc/
+[CBI] ->              : ../API_Bilat_Image_FreeGlut/BIN/gcc/
+[CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc/
+
+[CBI] -> Create folder : /tmp/ramdrive/mse14/Targets/Tuto_Image/bin
+[CBI] -> Create folder : /tmp/ramdrive/mse14/Targets/Tuto_Image/obj
+
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/main.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/03_Event/listener/mouse/SimpleMouseListener.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/03_Event/listener/key/SimpleKeyListener.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/03_Event/image/EventImage.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/03_Event/provider/EventProvider.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/01_Vague/a_image/VagueImage.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/01_Vague/b_moo/VagueMOO.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/01_Vague/d_provider/VagueProvider.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Damier_Zoomable/a_image/DamierImage.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Damier_Zoomable/b_moo/DamierMOO.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Damier_Zoomable/d_provider/DamierProvider.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/04_OpenGL_pure/opengl/MyDisplayable.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/04_OpenGL_pure/glut/MyGLUTWindow.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : src/cpp/core/04_OpenGL_pure/provider/MyDisplayableProvider.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/AleaTools.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/Chronos.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/LimitsTools.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/MathTools.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/StringTools.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/TabTools.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurF.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurI.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/ColorTools_CPU.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/IndiceTools_CPU.cpp
+[Tuto_Image_64] -> g++ compiling .cpp : ../BilatTools_OMP/src/core/OMP_Tools/cpp/OmpTools.cpp
+
+[CBI] -> Linking to   : /tmp/ramdrive/mse14/Targets/Tuto_Image/bin/Tuto_Image_64.run
+
+[CBI] -> Library Link :
+[CBI] ->              : -L/usr/lib/x86_64-linux-gnu
+[CBI] ->              : -lBilat_Displayable_004_64
+[CBI] ->              : -lBilat_FreeGlut_Tools_006_64
+[CBI] ->              : -lBilat_Image_FreeGlut_003_64
+[CBI] ->              : -lBilat_Image_GL_005_64
+[CBI] ->              : -lGL
+[CBI] ->              : -lGLEW
+[CBI] ->              : -lGLU
+[CBI] ->              : -lX11
+[CBI] ->              : -lglut
+[CBI] ->              : -lgomp
+
+==================================================================================
+[CBI] -> Target Name  : Tuto_Image_64
+[CBI] -> Location     : /tmp/ramdrive/mse14/Targets/Tuto_Image/bin/Tuto_Image_64.run
+[CBI] -> Deploy 	  : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : mse14
+[CBI] ->
+[CBI] -> Compilateur  : g++ (g++)
+[CBI] -> Task	      : End Compiling-Linking !
+[CBI] -> Time		  : 10:15:09
+==================================================================================
+
+
+[CBI] -> Deploying    : ../RELEASE/bin/Tuto_Image_64.run
+
+[CBI] -> Tuto_Image_64 : End ALL!
+
+10:15:09 Build Finished (took 6s.743ms)
+

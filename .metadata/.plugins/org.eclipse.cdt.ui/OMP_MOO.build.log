@@ -1,0 +1,93 @@
+18:27:47 **** Incremental Build of configuration GCC for project OMP_MOO ****
+makeGCC.sh all 
+
+--------------------------------------------------------
+[Runtime] : gcc x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/gcc/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : gcc x86 : Ready!
+--------------------------------------------------------
+
+
+[GCC] : all
+
+g++ (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
+Copyright (C) 2011 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+==================================================================================
+[CBI] -> Target Name  : OMP_MOO_64
+[CBI] ->
+[CBI] -> Build     	  : /tmp/ramdrive/bilat/Targets/OMP_MOO/bin/OMP_MOO_64.run
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : EXE
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : bilat
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+[CBI] ->              : ../API_CppTest/SRC
+[CBI] ->              : ../BilatTools_CPP/src/core
+[CBI] ->              : ../BilatTools_OMP/src/core
+[CBI] ->              : ../BilatUtil_CPP/src/core
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : -O3
+[CBI] ->              : -fomit-frame-pointer
+[CBI] ->              : -fopenmp
+[CBI] ->              : -frerun-loop-opt
+[CBI] ->              : -march=corei7
+[CBI] ->              : -std=c++0x
+
+[CBI] -> LDFLAGS (Partial) :
+[CBI] ->
+
+[CBI] -> INC_PATH (auto detect):
+[CBI] ->              : ../API_CppTest/SRC/core/
+[CBI] ->              : ../API_CppTest/SRC/core/extension/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/
+[CBI] ->              : ../BilatTools_CPP/src/core/tools/header/namespace_cpu/
+[CBI] ->              : ../BilatTools_OMP/src/core/OMP_Tools/header/
+[CBI] ->              : ../BilatUtil_CPP/src/core/utils/header/
+[CBI] ->              : src/cpp/core/omp/02_pi/
+[CBI] ->              : src/cpp/core/omp/03_dotProd/
+[CBI] ->              : src/cpp/core/omp/04_histo/
+[CBI] ->              : src/cpp/test/unit/01_Test_Hello/
+[CBI] ->              : src/cpp/test/unit/02_Test_Pi/
+[CBI] ->              : src/cpp/test/unit/03_Test_DotProd/
+[CBI] ->              : src/cpp/test/unit/04_Test_Histo/
+[CBI] ->              : src/cpp/test/unit/05_Test_Montecarlo/
+[CBI] ->              : src/cpp/test/unit/07_Test_Racine2/
+[CBI] ->              : src/cpp/test/unit/08_Test_VectorADD/
+
+
+[CBI] -> LIB_PATH (auto detect):
+
+
+
+[CBI] -> Deploying    : ../RELEASE/bin/OMP_MOO_64.run
+
+[CBI] -> OMP_MOO_64 : End ALL!
+
+18:27:48 Build Finished (took 158ms)
+

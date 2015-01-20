@@ -1,0 +1,74 @@
+18:27:12 **** Build of configuration GCC for project BilatTools_OMP ****
+Info: Configuration "GCC" uses tool-chain "cdt.managedbuild.toolchain.gnu.mingw.base" that is unsupported on this system, attempting to build anyway.
+makeGCC.sh all 
+
+--------------------------------------------------------
+[Runtime] : gcc x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/gcc/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : gcc x86 : Ready!
+--------------------------------------------------------
+
+
+[GCC] : all
+
+g++ (Ubuntu/Linaro 4.6.3-1ubuntu5) 4.6.3
+Copyright (C) 2011 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+==================================================================================
+[CBI] -> Target Name  : BilatTools_OMP_64
+[CBI] ->
+[CBI] -> Build     	  : /tmp/ramdrive/bilat/Targets/BilatTools_OMP/bin/libBilatTools_OMP_64.a
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : STATIC_LIB
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Linux
+[CBI] -> User	 	  : bilat
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : -O3
+[CBI] ->              : -fPIC
+[CBI] ->              : -fomit-frame-pointer
+[CBI] ->              : -fopenmp
+[CBI] ->              : -frerun-loop-opt
+[CBI] ->              : -march=corei7
+[CBI] ->              : -std=c++0x
+
+
+[CBI] -> INC_PATH (auto detect):
+[CBI] ->              : src/core/OMP_Tools/header/
+
+
+[CBI] -> LIB_PATH (auto detect):
+
+
+
+[CBI] -> Deploying    : ../RELEASE/bin/libBilatTools_OMP_64.a
+
+[CBI] -> BilatTools_OMP_64 : End ALL!
+
+18:27:12 Build Finished (took 58ms)
+

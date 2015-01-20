@@ -1,0 +1,79 @@
+12:47:01 **** Build of configuration Visual for project PRODUCER_CppTest ****
+makeVisual.bat all 
+
+[VISUAL] : all  
+
+==================================================================================
+[CBI] -> Target Name  : Cpp_Test_64
+[CBI] ->
+[CBI] -> Build     	  : Q:/cedric.bilat/Targets/Cpp_Test/bin/Cpp_Test_64.lib
+[CBI] -> Deploy       : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : STATIC_LIB
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Win
+[CBI] -> User	 	  : cedric.bilat
+[CBI] ->
+[CBI] -> Task		  : Compiling-Linking
+==================================================================================
+
+[CBI] -> SRC AUX (Recursif) :
+[CBI] ->
+
+[CBI] -> CXXFLAGS (Partial) :
+[CBI] ->
+[CBI] ->              : /EHsc
+[CBI] ->              : /MD
+[CBI] ->              : /Ox
+[CBI] ->              : /nologo
+
+
+[CBI] -> INC_PATH (auto detect):
+[CBI] ->              : ./src/core/
+[CBI] ->              : ./src/core/extension/
+[CBI] ->              : src/core/
+[CBI] ->              : src/core/extension/
+
+
+[CBI] -> LIB_PATH (auto detect):
+
+[CBI] -> Create folder : Q:/cedric.bilat/Targets/Cpp_Test/bin
+[CBI] -> Create folder : Q:/cedric.bilat/Targets/Cpp_Test/obj
+
+suite.cpp
+htmloutput.cpp
+compileroutput.cpp
+textoutput.cpp
+collectoroutput.cpp
+time.cpp
+utils.cpp
+missing.cpp
+source.cpp
+testTools.cpp
+
+Microsoft (R) Library Manager Version 12.00.30501.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+==================================================================================
+[CBI] -> Target Name  : Cpp_Test_64
+[CBI] -> Location     : Q:/cedric.bilat/Targets/Cpp_Test/bin/Cpp_Test_64.lib
+[CBI] -> Deploy 	  : ../RELEASE/bin
+[CBI] ->
+[CBI] -> Type	 	  : STATIC_LIB
+[CBI] -> Arch	 	  : 64
+[CBI] -> OS	 		  : Win
+[CBI] -> User	 	  : cedric.bilat
+[CBI] ->
+[CBI] -> Compilateur  : VISUAL (cl)
+[CBI] -> Task	      : End Compiling-Archive !
+[CBI] -> Time		  : 12:47:05
+==================================================================================
+
+
+[CBI] -> Deploying    : ../RELEASE/bin/Cpp_Test_64.lib
+
+[CBI] -> Cpp_Test_64 : End ALL!
+
+12:47:06 Build Finished (took 4s.422ms)
+
