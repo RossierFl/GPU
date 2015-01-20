@@ -32,6 +32,8 @@ __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
 
 __global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
 
+__device__ void getTextureMem(uchar4* ptrPixel,int j,int i);
+
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
@@ -174,7 +176,7 @@ __global__ void convolutionTextureKernel(uchar4* ptrDevPixels,int k, int w, int 
 	{
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 	const int KERN_SIZE =9;
-	const int KERN_OFFSET=-4;
+	/*const int KERN_OFFSET=-4;
 	uchar4 colorsVideo[9*9];
 	int sk=0;
 	for(int i=0;i<KERN_SIZE;i++){
@@ -187,9 +189,9 @@ __global__ void convolutionTextureKernel(uchar4* ptrDevPixels,int k, int w, int 
 
 	    sk++;
 	    }
-	}
+	}*/
 
-	convMath.colorIJ(&color,colorsVideo,CONST_MEM_KERNEL,KERN_SIZE); // update color
+	convMath.colorIJ(&color,CONST_MEM_KERNEL,KERN_SIZE, w, pixelJ, pixelI); // update color
 	ptrDevPixels[s] = color;
 	s += NB_THREAD;
 	}
@@ -274,6 +276,10 @@ __host__ void init_Const_Memory_Kernel(float* ptrKernelDevice){
     int offset =0;
     HANDLE_ERROR(cudaMemcpyToSymbol(CONST_MEM_KERNEL, ptrKernelDevice, size, offset,cudaMemcpyDeviceToDevice));
 
+}
+
+__device__ void getTextureMem(uchar4* ptrPixel,int j,int i){
+   *ptrPixel = tex2D(textureRef,j,i);
 }
 
 /*--------------------------------------*\

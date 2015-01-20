@@ -145,6 +145,7 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
     uchar4* image = CaptureVideo::castToUChar4(&matImage);
     HANDLE_ERROR(cudaMemcpy(ptrImageVideoDevice,image,(w*h)*sizeof(uchar4),cudaMemcpyHostToDevice));
 
+   // init_textMemory (ptrImageVideoDevice,  w,  h);
     init_textMemory (ptrImageVideoDevice,  w,  h);
      //taille en octets d'une ligne
 

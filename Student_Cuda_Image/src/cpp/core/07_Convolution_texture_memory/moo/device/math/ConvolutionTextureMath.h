@@ -11,7 +11,7 @@
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
-
+extern __device__ void getTextureMem(uchar4* ptrPixel,int j,int i);
 class ConvolutionTextureMath
     {
 
@@ -57,12 +57,27 @@ class ConvolutionTextureMath
 	    }*/
 
 	__device__
-	void colorIJ(uchar4* ptrColor, uchar4* ptrVideoImage, float* ptrDeviceNoyau, size_t sizetKernel){
-	    size_t size = sizetKernel* sizetKernel;
+	void colorIJ(uchar4* ptrColor, float* ptrDeviceNoyau, size_t dimKernel,int w,int pixelJ,int pixelI){
+	    size_t size = dimKernel* dimKernel;
+	    int kernOffset= -dimKernel/2;
 	    int sum = 0;
-		for(int s=0;s<size;s++){
+		/*for(int s=0;s<size;s++){
 		    sum += ptrVideoImage[s].x * ptrDeviceNoyau[s];
-		}
+		}*/
+
+		int sk=0;
+			for(int i=0;i<dimKernel;i++){
+			    int iTex = kernOffset+i;
+			    for (int j=0;j<dimKernel;j++){
+				int jTex=kernOffset+j;
+				uchar4 pix;
+				getTextureMem(&pix,jTex+pixelJ,iTex+pixelI);
+				sum+=ptrDeviceNoyau[sk] *pix.x;
+				//sum+=ptrDeviceNoyau[sk] *tex2D(textureRef,jTex+pixelJ,iTex+pixelI).x;
+
+			    sk++;
+			    }
+			}
 
 		ptrColor->x=sum;
 		ptrColor->y=sum;
