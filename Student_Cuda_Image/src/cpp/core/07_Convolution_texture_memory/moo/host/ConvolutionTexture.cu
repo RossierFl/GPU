@@ -17,7 +17,8 @@ using std::endl;
 /*--------------------------------------*\
  |*		Imported	 	*|
  \*-------------------------------------*/
-extern texture<uchar4,2> textureRef;
+extern __host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h);
+extern __host__ void unMapTextMemory();
 extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t);
 //extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
 extern __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
@@ -136,20 +137,14 @@ void ConvolutionTexture::animationStep()
  */
 void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
     {
-	size_t pitch = w * sizeof(uchar4);
-
-
-
 
     Mat matImage = captureur->capturer();
     //Copie de l'image dans le GPU et binder avec le mode texture
     uchar4* image = CaptureVideo::castToUChar4(&matImage);
     HANDLE_ERROR(cudaMemcpy(ptrImageVideoDevice,image,(w*h)*sizeof(uchar4),cudaMemcpyHostToDevice));
 
-
+    init_textMemory (ptrImageVideoDevice,  w,  h);
      //taille en octets d'une ligne
-     cudaChannelFormatDesc channelDesc = cudaCreateChannelDesc<uchar4>();
-     HANDLE_ERROR(cudaBindTexture2D(NULL, textureRef,ptrImageVideoDevice,channelDesc,w,h,pitch));
 
     colorToGreyTexture<<<dg,db>>>(ptrImageVideoDevice,w,h);
     HANDLE_ERROR(cudaDeviceSynchronize());
@@ -178,7 +173,7 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
     affineTransformTexture<<<dg,db>>>(ptrDevPixels, a, b, w, h,0);
    // HANDLE_ERROR(cudaMemcpy(ptrDevPixels,ptrDevPixels,(w*h)*sizeof(uchar4),cudaMemcpyDeviceToDevice));
    // HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(uchar4),cudaMemcpyHostToDevice));
-    cudaUnbindTexture(textureRef);
+    unMapTextMemory();
     //printf("min: %d, max: %d\n",min,max);
     }
 

@@ -19,6 +19,9 @@ __device__ int mutex = 0;
 
 texture<uchar4,2> textureRef;
 
+__host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h);
+__host__ void unMapTextMemory();
+
 __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
 //__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h,float t);
 
@@ -179,8 +182,8 @@ __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceN
 	    int iTex = KERN_OFFSET+i;
 	    for (int j=0;j<KERN_SIZE;j++){
 	    int jTex=KERN_OFFSET+j;
-	    colorsVideo[sk]=tex2D(textureRef,jTex,iTex);
-	    printf("Value of : %i + %i + %i \n",colorsVideo[sk].x,colorsVideo[sk].y,colorsVideo[sk].z);
+	    colorsVideo[sk]=tex2D(textureRef,jTex+pixelJ,iTex+pixelI);
+	    //printf("Value of : %i + %i + %i \n",colorsVideo[sk].x,colorsVideo[sk].y,colorsVideo[sk].z);
 
 
 
@@ -210,6 +213,21 @@ __global__ void findMinMaxTexture(uchar4* ptrDevPixels, uchar* ptrDevResult,int 
     reductionIntraBTexture(tabSM);
     reductionInterBTexture(tabSM, ptrDevResult);
     }
+
+__host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h){
+
+    textureRef.addressMode[0] = cudaAddressModeClamp; //par defaut
+    textureRef.addressMode[1] = cudaAddressModeClamp; //par defaut
+    textureRef.filterMode = cudaFilterModePoint; //par defaut
+    textureRef.normalized = false; //coordonnÃ©e texture //par defau
+    size_t pitch = w * sizeof(uchar4);
+    cudaChannelFormatDesc channelDesc = cudaCreateChannelDesc<uchar4>();
+        HANDLE_ERROR(cudaBindTexture2D(NULL, textureRef,ptrImageVideoDevice,channelDesc,w,h,pitch));
+}
+
+__host__ void unMapTextMemory(){
+    cudaUnbindTexture(textureRef);
+}
 
 /*--------------------------------------*\
  |*		Private			*|
