@@ -1,8 +1,16 @@
 #ifndef CONVOLUTION_MOO_H_
 #define CONVOLUTION_MOO_H_
 
-#include "cudaType.h"
 
+#include <iostream>
+#include "MathTools.h"
+#include "CaptureVideo.h"
+
+
+
+using std::cout;
+using std::endl;
+using std::string;
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
@@ -35,9 +43,10 @@ class ConvolutionMOO
 
     private:
 
-	void entrelacementOMP(uchar4* ptrTabPixels,int w,int h); 	// Code entrainement Cuda
+	/*void entrelacementOMP(uchar4* ptrTabPixels,int w,int h); 	// Code entrainement Cuda
 	void forAutoOMP(uchar4* ptrTabPixels,int w, int h); 		// Code naturel et direct OMP, plus performsnt
-
+    */
+	void fillDetourage(float* ptrNoyau);
 	/*--------------------------------------*\
 	|*		Attribut		*|
 	 \*-------------------------------------*/
@@ -50,6 +59,32 @@ class ConvolutionMOO
 	// Tools
 	double t;
 	bool isEntrelacement;
+
+	int w;
+	int h;
+
+	int k;
+
+	// Tools
+
+
+	//Outputs
+	string title;
+
+	// noyau convolution
+	float* ptrHostNoyau;
+
+
+	// capture video
+	string videoPath;
+	string videoTitle;
+	CaptureVideo* captureur;
+	uchar4* ptrHostMemory;
+
+
+	size_t sizeSM;
+	uchar* ptrHostResult;
+	size_t sizeResult;
 
 
 
