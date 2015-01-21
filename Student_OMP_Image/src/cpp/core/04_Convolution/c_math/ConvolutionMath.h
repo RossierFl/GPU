@@ -1,4 +1,4 @@
-#ifndef CONVOLUTION_MATH_H_
+#ifdef CONVOLUTION_MATH_H_
 #define CONVOLUTION_MATH_H_
 
 /*----------------------------------------------------------------------*\
@@ -22,13 +22,13 @@ class ConvolutionMath
 
     public:
 
-	__device__ ConvolutionMath(int w, int h)
+	 ConvolutionMath(int w, int h)
 	    {
 	this->w = w;
 	this->h = h;
 	    }
 
-	__device__ ConvolutionMath(const ConvolutionMath& source)
+	 ConvolutionMath(const ConvolutionMath& source)
 	    {
 	    // rien
 	    }
@@ -43,7 +43,7 @@ class ConvolutionMath
 	 * x=pixelI
 	 * y=pixelJ
 	 */
-	__device__
+
 	void colorIJ(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
 
@@ -59,7 +59,7 @@ class ConvolutionMath
 
     private:
 
-	__device__
+
 	void firstLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
 	int k2 = k/2;
@@ -88,7 +88,7 @@ class ConvolutionMath
 	 *
 	 *
 	 */
-	__device__
+
 	void middleLines(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
 	    int ss = (int)(k*((float)k/2.0f));
@@ -143,7 +143,7 @@ class ConvolutionMath
 		}
 	    }
 
-	__device__
+
 	void lastLine(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
 	    int k2 = k/2;
@@ -167,7 +167,7 @@ class ConvolutionMath
 		}
 	    }
 
-	__device__
+
 	void f(uchar4* ptrColor, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int i, int j, int s)
 	    {
 	    int k2 = k/2;
