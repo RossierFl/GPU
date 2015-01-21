@@ -5,6 +5,7 @@
 #include <iostream>
 #include "MathTools.h"
 #include "CaptureVideo.h"
+#include "ConvolutionDevice.h"
 
 
 
@@ -85,6 +86,8 @@ class ConvolutionMOO
 	size_t sizeSM;
 	uchar* ptrHostResult;
 	size_t sizeResult;
+
+	ConvolutionDevice* convolutionDevice;
 
 
 

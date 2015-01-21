@@ -96,6 +96,30 @@ void ConvolutionMOO::process(uchar4* ptrTabPixels, int w, int h)
 
      isEntrelacement=!isEntrelacement;// Pour tester que les deux implementations fonctionnent*/
 
+   	size_t pitch = w * sizeof(float);
+
+
+
+       Mat matImage = captureur->capturer();
+       uchar4* image = CaptureVideo::castToUChar4(&matImage);
+      // HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(ptrDevPixels[0]),cudaMemcpyHostToDevice));
+       convolutionDevice->colorToGreyTexture(ptrTabPixels,w,h);
+      // HANDLE_ERROR(cudaDeviceSynchronize());
+       convolutionDevice->convolutionTextureKernel(ptrTabPixels,ptrHostNoyau,k,w,h,t);
+       //HANDLE_ERROR(cudaDeviceSynchronize());
+       convolutionDevice->findMinMaxTexture(ptrTabPixels,ptrHostResult,w,h);
+     //  HANDLE_ERROR(cudaMemcpy(ptrHostResult, ptrDevResult, sizeResult, cudaMemcpyDeviceToHost));
+       uchar max = ptrHostResult[1];
+       uchar min = ptrHostResult[0];
+
+       // affine transformation
+       float a = 255.0f/(float)(max-min);
+       float b = 0;
+       if(min != 0)
+   	b = 255.0f/((-max/(float)min)+1.0f);
+       convolutionDevice->affineTransformTexture(ptrTabPixels, a, b, w, h,0);
+       //cudaUnbindTexture(textureRef);
+
     }
 
 void ConvolutionMOO::animationStep()
