@@ -10041,3 +10041,9 @@ Binding(ALT+CTRL+H,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.cdt.ui.cViewScope,,,system)
+
+!ENTRY org.eclipse.debug.core 4 120 2015-01-21 23:40:09.545
+!MESSAGE Variable references empty selection: ${project_loc}
+
+!ENTRY org.eclipse.debug.core 4 120 2015-01-21 23:44:55.548
+!MESSAGE Variable references empty selection: ${project_loc}

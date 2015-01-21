@@ -5,6 +5,7 @@
 
 #include "RipplingProvider.h"
 #include "MandelbrotJuliaProvider.h"
+#include "ConvolutionProvider.h"
 
 using std::cout;
 using std::endl;
@@ -51,24 +52,28 @@ int run(void)
     bool isAnimation = true;
     bool isSelectionEnable = false;
 
-   RipplingImage* ptrRippling = RipplingProvider::create();
+ //  RipplingImage* ptrRippling = RipplingProvider::create();
+   ConvolutionImage* ptrConvolution = ConvolutionProvider::create();
 
-   GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelectionEnable, 20, 20);
+   GLUTImageViewers convolutionViewer(ptrConvolution, isAnimation, isSelectionEnable, 20, 20);
+ //  GLUTImageViewers ripplingViewer(ptrRippling, isAnimation, isSelectionEnable, 20, 20);
     // Insert here other viewers ...
 
   //  MandelbrotJuliaImage* prtMandelbrotJulia = MandelbrotJuliaProvider::create();
-    isAnimation = true ;
-    isSelectionEnable=false;
+ //   isAnimation = true ;
+  //  isSelectionEnable=false;
    // GLUTImageViewers mandelbrotJuliaViewer(prtMandelbrotJulia,isAnimation,isSelectionEnable,20,20);
 
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 
     // destruction
 	{
-	delete ptrRippling;
+	//delete ptrRippling;
+	delete ptrConvolution;
 	//delete prtMandelbrotJulia;
 
-	ptrRippling = NULL;
+	//ptrRippling = NULL;
+	ptrConvolution = NULL;
 	//prtMandelbrotJulia=NULL;
 	}
 

@@ -77,6 +77,7 @@ ConvolutionMOO::~ConvolutionMOO(void)
     delete[] ptrHostMemory;
     delete[] ptrHostNoyau;
     delete[] ptrHostResult;
+    delete convolutionDevice;
     }
 
 /*--------------------------------------*\
