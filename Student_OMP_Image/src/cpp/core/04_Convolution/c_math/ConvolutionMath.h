@@ -1,4 +1,4 @@
-#ifdef CONVOLUTION_MATH_H_
+#ifndef CONVOLUTION_MATH_H_
 #define CONVOLUTION_MATH_H_
 
 /*----------------------------------------------------------------------*\
@@ -184,3 +184,11 @@ class ConvolutionMath
 		lastLine(ptrColor,ptrDevPixels,ptrDeviceNoyau,k,i,j,s);
 		}
 	    }
+    private :
+	int w;
+	int h;
+
+
+
+        };
+#endif

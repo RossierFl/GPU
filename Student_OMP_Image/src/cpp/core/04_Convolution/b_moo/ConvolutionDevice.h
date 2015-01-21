@@ -26,7 +26,7 @@ class ConvolutionDevice
 
 	void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
 
-	void convolutionTextureKernel(uchar4* ptrDevPixels, int k, int w, int h, float t);
+	void convolutionTextureKernel(uchar4* ptrDevPixels,float* ptrKernel ,int k, int w, int h, float t);
 
 	void findMinMaxTexture(uchar4* ptrDevPixels, uchar* ptrDevResult, int w, int h);
 

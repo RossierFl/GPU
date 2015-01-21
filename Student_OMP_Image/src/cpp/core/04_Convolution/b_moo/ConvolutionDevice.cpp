@@ -8,7 +8,7 @@
 #include "OmpTools.h"
 #include "ConvolutionMath.h"
 
-void ConvolutionDevice::ecrasementTexture(uchar* tabSM, int halfThread)
+/*void ConvolutionDevice::ecrasementTexture(uchar* tabSM, int halfThread)
     {
     const int TID_LOCAL = Indice1D::tidLocalBlock();
     const int NB_THREAD_BLOCK = Indice1D::nbThreadBlock();
@@ -21,9 +21,9 @@ void ConvolutionDevice::ecrasementTexture(uchar* tabSM, int halfThread)
 	    tabSM[NB_THREAD_BLOCK + s] = tabSM[NB_THREAD_BLOCK + s + halfThread];
 	s += NB_THREAD_BLOCK;
 	}
-    }
+    }*/
 
-void ConvolutionDevice::reductionIntraBTexture(uchar* tabSM)
+/*void ConvolutionDevice::reductionIntraBTexture(uchar* tabSM)
     {
     const int NB_THREAD = Indice1D::nbThread();
     const int NB_THREAD_BLOCK = Indice1D::nbThreadBlock();
@@ -33,17 +33,17 @@ void ConvolutionDevice::reductionIntraBTexture(uchar* tabSM)
 	ecrasementTexture(tabSM, halfThread);
 	halfThread /= 2;
 	}
-    }
+    }*/
 
 void ConvolutionDevice::reductionInterBTexture(uchar* tabSM, uchar* ptrDevResult)
     {
     const int TID_LOCAL = OmpTools::getTid();
-    const int NB_THREAD = OmpTools::nbThreadBlock();
+    const int NB_THREAD = OmpTools::getNbThread();
 
     if (TID_LOCAL == 0)
 	{
 	ptrDevResult[0]=0;//Min
-	ptrDevResult[1]=0;//Max
+	ptrDevResult[1]=255;//Max
 	for(int i=0;i<NB_THREAD;i++){
 	    if(tabSM[i]<ptrDevResult[0]){
 		ptrDevResult[0]=tabSM[i];
@@ -126,7 +126,7 @@ void ConvolutionDevice::affineTransformTexture(uchar4* ptrDevPixels, float a, fl
 	}
     }
 
-void ConvolutionDevice::convolutionTextureKernel(uchar4* ptrDevPixels, int k, int w, int h, float t)
+void ConvolutionDevice::convolutionTextureKernel(uchar4* ptrDevPixels,float* ptrKernel ,int k, int w, int h, float t)
     {
     ConvolutionMath convMath = ConvolutionMath(w, h);
 
@@ -146,7 +146,7 @@ void ConvolutionDevice::convolutionTextureKernel(uchar4* ptrDevPixels, int k, in
 	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 	const int KERN_SIZE = 9;
 
-	convMath.colorIJ(&color, CONST_MEM_KERNEL, KERN_SIZE, w, pixelJ, pixelI); // update color
+	convMath.colorIJ(&color, ptrDevPixels, ptrKernel, k, pixelJ, pixelI,s); // update color
 	ptrDevPixels[s] = color;
 	s += NB_THREAD;
 	}
@@ -159,11 +159,10 @@ void ConvolutionDevice::findMinMaxTexture(uchar4* ptrDevPixels, uchar* ptrDevRes
     {
 
     uchar tabSM[OmpTools::getNbThread()*2];
-    //const int TID_LOCAL = Indice1D::tidLocalBlock();
 
     int sizePtrDevPixels = w * h;
     reductionIntraTTexture(tabSM, ptrDevPixels, sizePtrDevPixels);
-  //  reductionIntraBTexture (tabSM);
+
     reductionInterBTexture(tabSM, ptrDevResult);
     }
 
