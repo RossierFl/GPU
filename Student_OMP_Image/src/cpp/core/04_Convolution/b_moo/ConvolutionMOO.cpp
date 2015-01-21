@@ -1,10 +1,11 @@
 #include <iostream>
 #include <omp.h>
+#include "IndiceTools.h"
+#include "OmpTools.h"
 
 #include "ConvolutionMOO.h"
-#include "OmpTools.h"
 #include "ConvolutionMath.h"
-#include "IndiceTools.h"
+
 
 using std::cout;
 using std::endl;
@@ -80,9 +81,11 @@ float ConvolutionMOO::getT()
  |*		Private			*|
  \*-------------------------------------*/
 
-/**
- * Code entrainement Cuda
- */
+
+
+
+
+
 void ConvolutionMOO::entrelacementOMP(uchar4* ptrTabPixels,int w, int h)
     {
     ConvolutionMath convolutionMath(w,h);

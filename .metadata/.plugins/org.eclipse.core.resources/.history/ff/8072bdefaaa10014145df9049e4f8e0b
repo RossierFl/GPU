@@ -1,0 +1,48 @@
+#ifndef CONVOLUTIONDEVICE_H_
+#define CONVOLUTIONDEVICE_H_
+
+/*----------------------------------------------------------------------*\
+ |*			Declaration 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+
+class ConvolutionDevice
+    {
+    public:
+	ConvolutionDevice();
+	virtual ~ConvolutionDevice();
+
+	__device__ void ecrasementTexture(uchar* tabSM, int halfThread);
+
+	__device__ void reductionIntraBTexture(uchar* tabSM);
+
+	__device__ void reductionInterBTexture(uchar* tabSM, uchar* ptrDevResult);
+
+	__device__ void reductionIntraTTexture(uchar* tabSM, uchar4* ptrDevPixels,int n);
+
+	__global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
+
+	__global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
+
+
+	__global__ void convolutionTextureKernel(uchar4* ptrDevPixels,int k, int w, int h, float t);
+
+
+
+
+
+
+	__global__ void findMinMaxTexture(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h);
+
+
+
+    };
+
+#endif 
+
+/*----------------------------------------------------------------------*\
+ |*			End	 					*|
+ \*---------------------------------------------------------------------*/

@@ -37,8 +37,8 @@
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/API_Bilat_Image_FreeGlut_Cuda" type="4"/>
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/API_Bilat_Image_GL" type="4"/>
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/API_FreeGlut" type="4"/>
-<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/API_Bilat_Graph2D_FreeGlut" type="4"/>
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/API_Bilat_Graph2D" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/API_Bilat_Graph2D_FreeGlut" type="4"/>
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/API_Bilat_DLL_Tools" type="4"/>
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/API_Bilat_Canvas_JNI" type="4"/>
 </workingSet>

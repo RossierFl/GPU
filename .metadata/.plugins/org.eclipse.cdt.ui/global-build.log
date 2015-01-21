@@ -1,4 +1,4 @@
-15:30:42 **** Incremental Build of configuration GCC for project Student_OMP_Image ****
+21:32:36 **** Incremental Build of configuration GCC for project Student_OMP_Image ****
 makeGCC.sh all 
 
 --------------------------------------------------------
@@ -108,6 +108,10 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 [CBI] ->              : src/cpp/core/03_Newton/b_moo/
 [CBI] ->              : src/cpp/core/03_Newton/c_math/
 [CBI] ->              : src/cpp/core/03_Newton/d_provider/
+[CBI] ->              : src/cpp/core/04_Convolution/a_image/
+[CBI] ->              : src/cpp/core/04_Convolution/b_moo/
+[CBI] ->              : src/cpp/core/04_Convolution/c_math/
+[CBI] ->              : src/cpp/core/04_Convolution/d_provider/
 
 
 [CBI] -> LIB_PATH (auto detect):
@@ -117,62 +121,35 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 [CBI] ->              : ../API_Bilat_Image_GL/BIN/gcc/
 
 
-[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/03_Newton/d_provider/NewtonProvider.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Mandelbrot_Julia/a_image/MandelbrotJuliaImage.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Mandelbrot_Julia/b_moo/MandelbrotJuliaMOO.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/02_Mandelbrot_Julia/d_provider/MandelbrotJuliaProvider.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/AleaTools.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/Chronos.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/LimitsTools.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/MathTools.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/StringTools.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/TabTools.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurF.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/VariateurI.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/ColorTools_CPU.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_CPP/src/core/tools/cpp/namespace_cpu/IndiceTools_CPU.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OMP/src/core/OMP_Tools/cpp/OmpTools.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/tuto/tuto.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/Capture_A.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/CaptureCamera.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/capture/cpp/CaptureVideo.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/viewer/image/ImageViewerCV.cpp
-[Student_OMP_Image_64] -> g++ compiling .cpp : ../BilatTools_OpenCV/src/core/viewer/sequence/SequenceViewerCV.cpp
-
-[CBI] -> Linking to   : /tmp/ramdrive/mse14/Targets/Student_OMP_Image/bin/Student_OMP_Image_64.run
-
-[CBI] -> Library Link :
-[CBI] ->              : -L/usr/lib/x86_64-linux-gnu
-[CBI] ->              : -lBilat_Displayable_004_64
-[CBI] ->              : -lBilat_FreeGlut_Tools_006_64
-[CBI] ->              : -lBilat_Image_FreeGlut_003_64
-[CBI] ->              : -lBilat_Image_GL_005_64
-[CBI] ->              : -lGL
-[CBI] ->              : -lGLEW
-[CBI] ->              : -lGLU
-[CBI] ->              : -lX11
-[CBI] ->              : -lglut
-[CBI] ->              : -lgomp
-[CBI] ->              : -lopencv_core
-[CBI] ->              : -lopencv_highgui
-[CBI] ->              : -lopencv_imgproc
-
-==================================================================================
-[CBI] -> Target Name  : Student_OMP_Image_64
-[CBI] -> Location     : /tmp/ramdrive/mse14/Targets/Student_OMP_Image/bin/Student_OMP_Image_64.run
-[CBI] -> Deploy 	  : ../RELEASE/bin
-[CBI] ->
-[CBI] -> Type	 	  : EXE
-[CBI] -> Arch	 	  : 64
-[CBI] -> OS	 		  : Linux
-[CBI] -> User	 	  : mse14
-[CBI] ->
-[CBI] -> Compilateur  : g++ (g++)
-[CBI] -> Task	      : End Compiling-Linking !
-[CBI] -> Time		  : 15:30:50
-==================================================================================
-
-
-[CBI] -> Deploying    : ../RELEASE/bin/Student_OMP_Image_64.run
-
-[CBI] -> Student_OMP_Image_64 : End ALL!
+[Student_OMP_Image_64] -> g++ compiling .cpp : src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp: In member function ‘void ConvolutionDevice::ecrasementTexture(unsigned char*, int)’:
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:12:27: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:13:33: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:21:7: error:   in evaluation of ‘operator+=(int, const int)’
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp: In member function ‘void ConvolutionDevice::reductionIntraBTexture(unsigned char*)’:
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:27:27: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:28:33: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:33:16: error: ‘__syncthreads’ was not declared in this scope
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp: In member function ‘void ConvolutionDevice::reductionInterBTexture(unsigned char*, unsigned char*)’:
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:40:27: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:41:28: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:42:27: error: ‘gridDim’ was not declared in this scope
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:43:21: error: ‘blockIdx’ was not declared in this scope
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:47:18: error: array subscript is not an integer
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:48:50: error: array subscript is not an integer
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp: In member function ‘void ConvolutionDevice::reductionIntraTTexture(unsigned char*, cpu::uchar4*, int)’:
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:55:27: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:56:21: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:57:27: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:69:7: error:   in evaluation of ‘operator+=(int, const int)’
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:71:20: error: array subscript is not an integer
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:72:11: error: ‘Indice1D’ has not been declared
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp: In member function ‘void ConvolutionDevice::convolutionTextureKernel(cpu::uchar4*, int, int, int, float)’:
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:121:5: error: ‘ConvolutionTextureMath’ was not declared in this scope
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:121:28: error: expected ‘;’ before ‘convMath’
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:139:2: error: ‘convMath’ was not declared in this scope
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:139:27: error: ‘CONST_MEM_KERNEL’ was not declared in this scope
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp: In member function ‘void ConvolutionDevice::findMinMaxTexture(cpu::uchar4*, unsigned char*, int, int)’:
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:151:12: error: ‘__shared__’ does not name a type
+src/cpp/core/04_Convolution/b_moo/ConvolutionDevice.cpp:156:28: error: ‘tabSM’ was not declared in this scope
+make: *** [/tmp/ramdrive/mse14/Targets/Student_OMP_Image/obj/ConvolutionDevice.o] Error 1
