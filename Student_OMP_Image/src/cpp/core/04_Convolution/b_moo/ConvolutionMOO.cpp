@@ -102,7 +102,10 @@ void ConvolutionMOO::process(uchar4* ptrTabPixels, int w, int h)
 
 
        Mat matImage = captureur->capturer();
+
        uchar4* image = CaptureVideo::castToUChar4(&matImage);
+       size_t size_image = w*h*sizeof(uchar4);
+       memcpy ( ptrTabPixels,image,size_image);
       // HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(ptrDevPixels[0]),cudaMemcpyHostToDevice));
        convolutionDevice->colorToGreyTexture(ptrTabPixels,w,h);
       // HANDLE_ERROR(cudaDeviceSynchronize());
