@@ -43,16 +43,16 @@ static __global__ void kernel(uint* ptrImageDevGM, size_t sizeImage, uint* ptrHi
 	}
 }
 
-__host__ void hist_cuda_sm(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE)
+__host__ void hist_cuda_sm(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE, const int DG, const int DB)
 {
 	// Image
 	const size_t DATA_SIZE_BYTE = sizeof(int) * DATA_SIZE;
-	const uint NB_POSSIBLE_VALUE = MAX_VALUE - MIN_VALUE + 1;
-	const size_t HIST_SIZE_BYTE = sizeof(int) * NB_POSSIBLE_VALUE;
+	const uint HIST_SIZE = MAX_VALUE - MIN_VALUE + 1;
+	const size_t HIST_SIZE_BYTE = sizeof(int) * HIST_SIZE;
 
 	// Parameters
-	uint nThreadPerBlock = 32; // TODO to optimize
-	uint nBlockPerMP = 32; // TODO to optimize
+	uint nThreadPerBlock = DB; // TODO to optimize
+	uint nBlockPerMP = DG; // TODO to optimize
 	dim3 dg(nBlockPerMP, 1, 1);
 	dim3 db(nThreadPerBlock, 1, 1);
 #ifdef DEBUG
@@ -67,19 +67,19 @@ __host__ void hist_cuda_sm(int* data, int* hist, const uint DATA_SIZE, const int
 
 	// Histogramme en GRAM
 	uint* ptrHistogrammeDevGM = NULL;
-	size_t sizeHistogramme = sizeof(uint) * (NB_POSSIBLE_VALUE);
+	size_t sizeHistogramme = sizeof(int) * (HIST_SIZE);
 	HANDLE_ERROR(cudaMalloc(&ptrHistogrammeDevGM, sizeHistogramme));
 	HANDLE_ERROR(cudaMemset(ptrHistogrammeDevGM, 0, sizeHistogramme));
 
 	// call kernel
-	kernel<<<dg,db,HIST_SIZE_BYTE>>>(ptrImageDevGM, DATA_SIZE, ptrHistogrammeDevGM, NB_POSSIBLE_VALUE);
+	kernel<<<dg,db,HIST_SIZE_BYTE>>>(ptrImageDevGM, DATA_SIZE, ptrHistogrammeDevGM, HIST_SIZE);
 	Device::checkKernelError("Kernel error: kernel cuda SM");
 	Device::synchronize();
 
-	// Récupération du résultat
-	HANDLE_ERROR(cudaMemcpy(hist, ptrHistogrammeDevGM, HIST_SIZE_BYTE, cudaMemcpyDeviceToHost)); // barrière de synchronisation
+	// R��cup��ration du r��sultat
+	HANDLE_ERROR(cudaMemcpy(hist, ptrHistogrammeDevGM, HIST_SIZE_BYTE, cudaMemcpyDeviceToHost)); // barri��re de synchronisation
 
-	// Libération de la mémoire
+	// Lib��ration de la m��moire
 	HANDLE_ERROR(cudaFree(ptrImageDevGM));
 	HANDLE_ERROR(cudaFree(ptrHistogrammeDevGM));
 }

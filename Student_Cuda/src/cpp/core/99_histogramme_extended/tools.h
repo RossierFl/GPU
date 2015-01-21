@@ -13,7 +13,7 @@ static void generateData(int* data, const uint DATA_SIZE);
 static void swap(int* data, const uint DATA_SIZE)
 {
 	AleaTools r;
-	for(int i = 0; i < DATA_SIZE * 10; i++)
+	for(int i = 0; i < DATA_SIZE; i++)
 	{
 		int a = r.uniformeAB(0, DATA_SIZE - 1);
 		int b = r.uniformeAB(0, DATA_SIZE - 1);
@@ -30,14 +30,24 @@ static void generateData(int* data, const uint DATA_SIZE, const int MIN_VALUE, c
 {
 	assert(MIN_VALUE < MAX_VALUE);
 
-	int* itr = data;
+	const uint M = MAX_VALUE - MIN_VALUE;
+
+//#pragma omp parallel for
 	for(int i = 0; i < DATA_SIZE; i++)
 	{
-		*itr = MIN_VALUE + ((i * 11) % (MAX_VALUE - MIN_VALUE));
-		itr++;
+		data[i] = MIN_VALUE + ((i * 11) % M);
+	}
+}
+
+static bool check_histogramme(int* hist, int* valid_hist, const uint HIST_SIZE)
+{
+	for(int i = 0; i < HIST_SIZE; i++) {
+		if(hist[i] != valid_hist[i]) {
+			return false;
+		}
 	}
 
-	swap(data, DATA_SIZE);
+	return true;
 }
 
 #endif
