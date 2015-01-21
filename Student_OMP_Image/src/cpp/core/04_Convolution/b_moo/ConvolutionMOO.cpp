@@ -50,7 +50,7 @@ ConvolutionMOO::~ConvolutionMOO(void)
 
 void ConvolutionMOO::process(uchar4* ptrTabPixels, int w, int h)
     {
-    if (isEntrelacement)
+ /*   if (isEntrelacement)
 	{
 	entrelacementOMP(ptrTabPixels,w,h); // Plus lent
 	}
@@ -59,7 +59,8 @@ void ConvolutionMOO::process(uchar4* ptrTabPixels, int w, int h)
 	forAutoOMP(ptrTabPixels,w,h);  // Plus rapide
 	}
 
-    isEntrelacement=!isEntrelacement;// Pour tester que les deux implementations fonctionnent
+    isEntrelacement=!isEntrelacement;// Pour tester que les deux implementations fonctionnent*/
+
     }
 
 
@@ -86,7 +87,7 @@ float ConvolutionMOO::getT()
 
 
 
-void ConvolutionMOO::entrelacementOMP(uchar4* ptrTabPixels,int w, int h)
+/*void ConvolutionMOO::entrelacementOMP(uchar4* ptrTabPixels,int w, int h)
     {
     ConvolutionMath convolutionMath(w,h);
 
@@ -111,12 +112,12 @@ void ConvolutionMOO::entrelacementOMP(uchar4* ptrTabPixels,int w, int h)
  	    s += NB_THREAD;
  	    }
  	}
-    }
+    }*/
 
 /**
  * Code naturel et direct OMP
  */
-void ConvolutionMOO::forAutoOMP(uchar4* ptrTabPixels,int w,int h)
+/*void ConvolutionMOO::forAutoOMP(uchar4* ptrTabPixels,int w,int h)
     {
     // TODO
     ConvolutionMath convolutionMath(w,h); // ici pour preparer cuda
@@ -131,7 +132,7 @@ void ConvolutionMOO::forAutoOMP(uchar4* ptrTabPixels,int w,int h)
 	}
     }
     }
-
+*/
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
  \*---------------------------------------------------------------------*/
