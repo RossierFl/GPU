@@ -79,6 +79,7 @@ void initCuda(int deviceId)
     //HANDLE_ERROR(cudaDeviceReset());
 
     // Choose current device (state of host-thread)
+    HANDLE_ERROR(cudaSetDeviceFlags(cudaDeviceMapHost));
     HANDLE_ERROR(cudaSetDevice(deviceId));
 
     // It can be usefull to preload driver, by example to practice benchmarking! (sometimes slow under linux)

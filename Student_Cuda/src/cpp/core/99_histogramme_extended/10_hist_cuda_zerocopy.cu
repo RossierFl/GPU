@@ -43,8 +43,12 @@ static __global__ void kernel(int* ptrImageDevGM, size_t sizeImage, int* ptrHist
 	}
 }
 
-__host__ void hist_cuda_sm(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE, const int DG, const int DB)
+__host__ void hist_cuda_zerocopy(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE, const int DG, const int DB)
 {
+	//HANDLE_ERROR(cudaSetDevice(0));
+	//HANDLE_ERROR(cudaSetDeviceFlags(cudaDeviceMapHost));
+	//HANDLE_ERROR(cudaSetDevice(0));
+
 	// Image
 	const size_t DATA_SIZE_BYTE = sizeof(int) * DATA_SIZE;
 	const uint HIST_SIZE = MAX_VALUE - MIN_VALUE + 1;
@@ -61,9 +65,11 @@ __host__ void hist_cuda_sm(int* data, int* hist, const uint DATA_SIZE, const int
 #endif
 
 	// Image en GRAM
+	int* ptrDataZeroCopyMem = NULL;
+	HANDLE_ERROR(cudaHostAlloc(&ptrDataZeroCopyMem, DATA_SIZE_BYTE, cudaHostAllocDefault));
+	memcpy(ptrDataZeroCopyMem, data, DATA_SIZE_BYTE);
 	int* ptrImageDevGM = NULL;
-	HANDLE_ERROR(cudaMalloc(&ptrImageDevGM, DATA_SIZE_BYTE));
-	HANDLE_ERROR(cudaMemcpy(ptrImageDevGM, data, DATA_SIZE_BYTE, cudaMemcpyHostToDevice));
+	HANDLE_ERROR(cudaHostGetDevicePointer(&ptrImageDevGM, ptrDataZeroCopyMem, 0));
 
 	// Histogramme en GRAM
 	int* ptrHistogrammeDevGM = NULL;
@@ -73,13 +79,14 @@ __host__ void hist_cuda_sm(int* data, int* hist, const uint DATA_SIZE, const int
 
 	// call kernel
 	kernel<<<dg,db,HIST_SIZE_BYTE>>>(ptrImageDevGM, DATA_SIZE, ptrHistogrammeDevGM, HIST_SIZE);
-	Device::checkKernelError("Kernel error: kernel cuda SM");
+	Device::checkKernelError("Kernel error: kernel cuda ZCMEM");
 	Device::synchronize();
 
-	// R��cup��ration du r��sultat
-	HANDLE_ERROR(cudaMemcpy(hist, ptrHistogrammeDevGM, HIST_SIZE_BYTE, cudaMemcpyDeviceToHost)); // barri��re de synchronisation
+	// Recuperation du resultat
+	HANDLE_ERROR(cudaMemcpy(hist, ptrHistogrammeDevGM, HIST_SIZE_BYTE, cudaMemcpyDeviceToHost)); // barri������re de synchronisation
 
-	// Lib��ration de la m��moire
-	HANDLE_ERROR(cudaFree(ptrImageDevGM));
+	// Liberation de la memoire
+	HANDLE_ERROR(cudaFreeHost(ptrDataZeroCopyMem));
+	//HANDLE_ERROR(cudaFree(ptrImageDevGM));
 	HANDLE_ERROR(cudaFree(ptrHistogrammeDevGM));
 }

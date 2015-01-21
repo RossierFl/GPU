@@ -5,7 +5,7 @@
 #include "reduction.h"
 #include "cudaTools.h"
 
-static __global__ void kernel(uint* ptrImageDevGM, size_t sizeImage, uint* ptrHistogrammeDevGM, size_t sizeHistogramme)
+static __global__ void kernel(int* ptrImageDevGM, size_t sizeImage, int* ptrHistogrammeDevGM, size_t sizeHistogramme)
 {
 	const uint TID = Indice1D::tid();
 	const uint NB_THREAD = Indice1D::nbThread();
@@ -40,12 +40,12 @@ __host__ void hist_cuda_gm(int* data, int* hist, const uint DATA_SIZE, const int
 #endif
 
 	// Image en GRAM
-	uint* ptrImageDevGM = NULL;
+	int* ptrImageDevGM = NULL;
 	HANDLE_ERROR(cudaMalloc(&ptrImageDevGM, DATA_SIZE_BYTE));
 	HANDLE_ERROR(cudaMemcpy(ptrImageDevGM, data, DATA_SIZE_BYTE, cudaMemcpyHostToDevice));
 
 	// Histogramme en GRAM
-	uint* ptrHistogrammeDevGM = NULL;
+	int* ptrHistogrammeDevGM = NULL;
 	size_t sizeHistogramme = sizeof(int) * (HIST_SIZE);
 	HANDLE_ERROR(cudaMalloc(&ptrHistogrammeDevGM, sizeHistogramme));
 	HANDLE_ERROR(cudaMemset(ptrHistogrammeDevGM, 0, sizeHistogramme));
