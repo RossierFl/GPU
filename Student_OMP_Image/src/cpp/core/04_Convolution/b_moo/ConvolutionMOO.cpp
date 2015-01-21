@@ -84,7 +84,7 @@ ConvolutionMOO::~ConvolutionMOO(void)
  |*		Public			*|
  \*-------------------------------------*/
 
-void ConvolutionMOO::process(uchar4* ptrTabPixels, int w, int h)
+void ConvolutionMOO::process(uchar4* ptrTabPixels, int w2, int h2)
     {
     /*   if (isEntrelacement)
      {
@@ -97,7 +97,7 @@ void ConvolutionMOO::process(uchar4* ptrTabPixels, int w, int h)
 
      isEntrelacement=!isEntrelacement;// Pour tester que les deux implementations fonctionnent*/
 
-   	size_t pitch = w * sizeof(float);
+
 
 
 
@@ -105,14 +105,15 @@ void ConvolutionMOO::process(uchar4* ptrTabPixels, int w, int h)
 
        uchar4* image = CaptureVideo::castToUChar4(&matImage);
        size_t size_image = w*h*sizeof(uchar4);
+
        memcpy ( ptrTabPixels,image,size_image);
-      // HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(ptrDevPixels[0]),cudaMemcpyHostToDevice));
+
        convolutionDevice->colorToGreyTexture(ptrTabPixels,w,h);
-      // HANDLE_ERROR(cudaDeviceSynchronize());
+
        convolutionDevice->convolutionTextureKernel(ptrTabPixels,ptrHostNoyau,k,w,h,t);
-       //HANDLE_ERROR(cudaDeviceSynchronize());
+
        convolutionDevice->findMinMaxTexture(ptrTabPixels,ptrHostResult,w,h);
-     //  HANDLE_ERROR(cudaMemcpy(ptrHostResult, ptrDevResult, sizeResult, cudaMemcpyDeviceToHost));
+
        uchar max = ptrHostResult[1];
        uchar min = ptrHostResult[0];
 

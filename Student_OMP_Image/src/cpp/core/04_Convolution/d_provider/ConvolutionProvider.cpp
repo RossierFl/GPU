@@ -33,8 +33,8 @@ ConvolutionImage* ConvolutionProvider::create()
     {
     float dt = 1;
 
-    int dw = 16 * 60; // =32*30=960
-    int dh = 16 * 60; // =32*30=960
+    int dw = 640; // =32*30=960
+       int dh = 360; // =32*30=960
 
     return new ConvolutionImage(dw, dh, dt);
     }

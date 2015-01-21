@@ -158,7 +158,7 @@ void ConvolutionDevice::convolutionTextureKernel(uchar4* ptrDevPixels, float* pt
 	    IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
 	    const int KERN_SIZE = 9;
 
-	    convMath.colorIJ(&color, ptrDevPixels, ptrKernel, k, pixelJ, pixelI, s); // update color
+	    convMath.colorIJ(&color, ptrDevPixels, ptrKernel, k, pixelI, pixelJ, s); // update color
 	    ptrDevPixels[s] = color;
 	    s += NB_THREAD;
 	    }

@@ -35,7 +35,7 @@ using std::string;
 ConvolutionImage::ConvolutionImage(unsigned int w, unsigned int h, float dt) :
 	ImageMOOs_A(w, h)
     {
-    assert(w==h); // Image carrer
+   // assert(w==h); // Image carrer
 
     this->ptrConvolutionMOO=new ConvolutionMOO(w,h,dt);
     }
