@@ -22,6 +22,7 @@ extern void hist_omp_for_tabpromotion(int* data, int* hist, const uint DATA_SIZE
 extern void hist_cuda_gm(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE, const int DG, const int DB);
 extern void hist_cuda_sm(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE, const int DG, const int DB);
 extern void hist_cuda_zerocopy(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE, const int DG, const int DB);
+extern void hist_cuda_multigpu(int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE, const int DG, const int DB);
 
 typedef void (*hist_function_omp) (int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE);
 typedef void (*hist_function_cuda) (int* data, int* hist, const uint DATA_SIZE, const int MIN_VALUE, const int MAX_VALUE, const int DG, const int DB);
@@ -61,7 +62,6 @@ void histogramme_extended() {
 		{ (void*) &hist_omp_for_critical_withouttab, "hist_omp_for_critical_withouttab", false },
 		{ (void*) &hist_omp_for_atomic_withouttab, "hist_omp_for_atomic_withouttab", false },
 		{ (void*) &hist_omp_for_tabpromotion, "hist_omp_for_tabpromotion", false },
-		// { (void*) &hist_omp_reduction, "hist_omp_reduction" },
 
 		{ (void*) &hist_cuda_gm, "hist_cuda_gm", true, 1, 1 },
 		{ (void*) &hist_cuda_gm, "hist_cuda_gm", true, 16, 32 },
@@ -72,7 +72,7 @@ void histogramme_extended() {
 		{ (void*) &hist_cuda_gm, "hist_cuda_gm", true, 16, 512 },
 		{ (void*) &hist_cuda_gm, "hist_cuda_gm", true, 16, 768 },
 
-		{ (void*) &hist_cuda_sm, "hist_cuda_sm", true, 1, 1 },
+		//{ (void*) &hist_cuda_sm, "hist_cuda_sm", true, 1, 1 },
 		{ (void*) &hist_cuda_sm, "hist_cuda_sm", true, 16, 32 },
 		{ (void*) &hist_cuda_sm, "hist_cuda_sm", true, 16, 64 },
 		{ (void*) &hist_cuda_sm, "hist_cuda_sm", true, 16, 192 },
@@ -81,7 +81,9 @@ void histogramme_extended() {
 		{ (void*) &hist_cuda_sm, "hist_cuda_sm", true, 16, 512 },
 		{ (void*) &hist_cuda_sm, "hist_cuda_sm", true, 16, 768 },
 
-		{ (void*) &hist_cuda_zerocopy, "hist_cuda_zerocopy", true, 16, 768 }
+		{ (void*) &hist_cuda_zerocopy, "hist_cuda_zerocopy", true, 16, 768 },
+
+		{ (void*) &hist_cuda_multigpu, "hist_cuda_multigpu", true, 16, 768 }
 	};
 	int registred_hist_functions_length = 26;
 	// @formatter:on
@@ -89,9 +91,9 @@ void histogramme_extended() {
 	// Register runs
 	test_run_meta test_runs[] = {
 		{ 2000, 0, 5, NULL, NULL },
-		{ 200000000, 0, 5, NULL, NULL },
+		{ 40000000, 0, 5, NULL, NULL },
 		{ 2000, 0, 200, NULL, NULL },
-		{ 200000000, 0, 200, NULL, NULL }
+		{ 40000000, 0, 200, NULL, NULL }
 	};
 	int test_runs_length = 4;
 	for(int r = 0; r < test_runs_length; r++) {
@@ -136,6 +138,7 @@ void histogramme_extended() {
 		if(registred_hist_function.is_cuda) {
 			fcuda = (hist_function_cuda) registred_hist_function.function;
 		} else {
+			// continue;
 			fomp = (hist_function_omp) registred_hist_function.function;
 		}
 
