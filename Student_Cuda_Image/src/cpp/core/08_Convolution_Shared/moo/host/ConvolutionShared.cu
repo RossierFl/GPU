@@ -2,10 +2,7 @@
 #include <cstdio>
 #include <assert.h>
 
-#include "ConvolutionTexture.h"
-//#include "ConvolutionMathTexture.h"
-#include "Indice2D.h"
-#include "IndiceTools.h"
+#include "ConvolutionShared.h"
 #include "Device.h"
 #include "MathTools.h"
 
@@ -20,16 +17,14 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-//extern __global__ void convolutionKernelTexture(texture<uchar4,2> tex, uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
-extern __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
-extern __global__ void findMinMaxTexture(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h);
-extern __global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
+extern __global__ void convolutionKernelShared(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
+extern __global__ void colorToGreyShared(uchar4* ptrDevPixels, int w, int h);
+extern __global__ void findMinMaxShared(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h);
+extern __global__ void affineTransformShared(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
 
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
-
-texture<uchar4, 2> textureRef;
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -43,82 +38,11 @@ texture<uchar4, 2> textureRef;
  |*		Public			*|
  \*-------------------------------------*/
 
-__device__
-void colorIJ(uchar4* ptrColor, float* ptrDeviceNoyau, int k, int i, int j, int s)
-    {
-
-    float sum = 0.0f;
-    int ss = (int)(k*((float)k/2.0f));
-    int k2 = k/2;
-    for(int v = 1;v<=k2;v++)
-	{
-	for(int u = 1;u<=k2;u++)
-	    {
-	    // bas droite
-	    sum+=ptrDeviceNoyau[(ss+v*k)+u]*tex2D(textureRef,j+u,i+v).x;
-	    // haut droite
-	    sum+=ptrDeviceNoyau[(ss-v*k)+u]*tex2D(textureRef,j+u,i-v).x;
-	    // bas gauche
-	    sum+=ptrDeviceNoyau[(ss+v*k)-u]*tex2D(textureRef,j-u,i+v).x;
-	    // haut gauche
-	    sum+=ptrDeviceNoyau[(ss-v*k)-u]*tex2D(textureRef,j-u,i-v).x;
-	    }
-	// bras east
-	sum+=ptrDeviceNoyau[ss+v]*tex2D(textureRef,j,i+v).x;
-	// bras west
-	sum+=ptrDeviceNoyau[ss-v]*tex2D(textureRef,j,i-v).x;
-	// bras south
-	sum+=ptrDeviceNoyau[ss+v*k]*tex2D(textureRef,j+v,i).x;
-	// bras north
-	sum+=ptrDeviceNoyau[ss-v*k]*tex2D(textureRef,j-v,i).x;
-	}
-    // centre
-    sum+=ptrDeviceNoyau[ss]*tex2D(textureRef,j,i).x;
-    ptrColor->x = sum;
-    ptrColor->y = sum;
-    ptrColor->z = sum;
-
-    ptrColor->w = 255; // opaque
-    }
-
-__global__ void convolutionKernelTexture(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t)
-    {
-
-    extern __shared__ float convSM[];// 1 instance per block !
-
-    //ConvolutionMathTexture convMath = ConvolutionMathTexture(w, h);
-
-    const int TID = Indice2D::tid();
-    const int TID_LOCAL = Indice2D::tidLocal();
-    const int NB_THREAD = Indice2D::nbThread();
-
-    const int WH=w*h;
-
-    uchar4 color;
-
-    int pixelI;
-    int pixelJ;
-
-    int s = TID_LOCAL;
-    if(s < (k*k))
-	convSM[s] = ptrDeviceNoyau[s];
-    __syncthreads();
-
-    s = TID;
-    while (s < WH)
-	{
-	IndiceTools::toIJ(s, w, &pixelI, &pixelJ); // update (pixelI, pixelJ)
-	colorIJ(&color,convSM,k,pixelI, pixelJ, s); 	// update color
-	ptrDevPixels[s] = color;
-	s += NB_THREAD;
-	}
-    }
-
 /*-------------------------*\
  |*	Constructeur	    *|
  \*-------------------------*/
 
-ConvolutionTexture::ConvolutionTexture()
+ConvolutionShared::ConvolutionShared()
     {
     // Inputs
     this->w = 640;
@@ -131,9 +55,9 @@ ConvolutionTexture::ConvolutionTexture()
     this->t=0;
 
     //Outputs
-    this->title="[API Image Cuda] : Convolution CUDA";
-    this->videoPath="/media/Data/Video/nasaFHD_short.avi";
-    this->videoTitle="NASA FHD SHORT";
+    this->title="[API Image Cuda] : Convolution CUDA Shared";
+    //this->videoPath="/media/Data/Video/nasaFHD_short.avi";
+    //this->videoTitle="NASA FHD SHORT";
 
     this->videoPath="/media/Data/Video/neilPryde.avi";
     this->videoTitle="neilPryde";
@@ -161,18 +85,10 @@ ConvolutionTexture::ConvolutionTexture()
     // first contains min of each block, then max of each block
     HANDLE_ERROR(cudaMalloc((void**) &ptrDevResult, sizeResult));
 
-    textureRef.filterMode= cudaFilterModePoint;
-    textureRef.normalized=false; //ou true coordonnée texture (i,j)
-    textureRef.addressMode[0] = cudaAddressModeClamp;
-    textureRef.addressMode[1] = cudaAddressModeClamp;
-
-    pitch = w * sizeof(uchar4); //taille en octets d'une ligne
-    channelDesc = cudaCreateChannelDesc<uchar4>();
-
     //cout << endl<<"[CBI] Convolution dt =" << dt << endl;
     }
 
-ConvolutionTexture::~ConvolutionTexture()
+ConvolutionShared::~ConvolutionShared()
     {
     free(ptrHostResult);
     cudaFree(ptrDevResult);
@@ -185,7 +101,7 @@ ConvolutionTexture::~ConvolutionTexture()
 /**
  * Noyau detourage 9x9
  */
-void ConvolutionTexture::fillDetourage(float* ptrNoyau)
+void ConvolutionShared::fillDetourage(float* ptrNoyau)
     {
     const int N = 9*9;
     // Tab auto temporaire
@@ -204,7 +120,7 @@ void ConvolutionTexture::fillDetourage(float* ptrNoyau)
  * Override
  * Call periodicly by the API
  */
-void ConvolutionTexture::animationStep()
+void ConvolutionShared::animationStep()
     {
     //t+=dt;
     }
@@ -212,24 +128,18 @@ void ConvolutionTexture::animationStep()
 /**
  * Override
  */
-void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
+void ConvolutionShared::runGPU(uchar4* ptrDevPixels)
     {
+    Chronos chrono;
     Mat matImage = captureur->capturer();
     uchar4* image = CaptureVideo::castToUChar4(&matImage);
-
     HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(ptrDevPixels[0]),cudaMemcpyHostToDevice));
-
-    cudaBindTexture2D(NULL, textureRef,ptrDevPixels,channelDesc,w,h,pitch);
-
-    colorToGreyTexture<<<dg,db>>>(ptrDevPixels,w,h);
+    colorToGreyShared<<<dg,db>>>(ptrDevPixels,w,h);
     HANDLE_ERROR(cudaDeviceSynchronize());
-
-    convolutionKernelTexture<<<dg,db,sizeConvSM>>>(ptrDevPixels,ptrDeviceNoyau,k,w,h,t);
+    convolutionKernelShared<<<dg,db,sizeConvSM>>>(ptrDevPixels,ptrDeviceNoyau,k,w,h,t);
     HANDLE_ERROR(cudaDeviceSynchronize());
-
-    findMinMaxTexture<<<dg,db,sizeSM>>>(ptrDevPixels,ptrDevResult,w,h);
+    findMinMaxShared<<<dg,db,sizeSM>>>(ptrDevPixels,ptrDevResult,w,h);
     HANDLE_ERROR(cudaMemcpy(ptrHostResult, ptrDevResult, sizeResult, cudaMemcpyDeviceToHost));
-
     uchar max = 0;
     uchar min = 255;
     for(int i = 0;i<dg.x;i++)
@@ -246,8 +156,11 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
     float b = 0;
     if(min != 0)
 	b = 255.0f/((-max/(float)min)+1.0f);
-    affineTransformTexture<<<dg,db>>>(ptrDevPixels, a, b, w, h,0);
+    affineTransformShared<<<dg,db>>>(ptrDevPixels, a, b, w, h,0);
     //printf("min: %d, max: %d\n",min,max);
+    cudaDeviceSynchronize();
+    chrono.stop();
+    cout << "ElapseTime:  " << chrono.getDeltaTime()<< " (s)" << endl;
     }
 
 /*--------------*\
@@ -257,7 +170,7 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
 /**
  * Override
  */
-float ConvolutionTexture::getT(void)
+float ConvolutionShared::getT(void)
     {
     return t;
     }
@@ -265,7 +178,7 @@ float ConvolutionTexture::getT(void)
 /**
  * Override
  */
-int ConvolutionTexture::getW(void)
+int ConvolutionShared::getW(void)
     {
     return w;
     }
@@ -273,7 +186,7 @@ int ConvolutionTexture::getW(void)
 /**
  * Override
  */
-int ConvolutionTexture::getH(void)
+int ConvolutionShared::getH(void)
     {
     return  h;
     }
@@ -281,7 +194,7 @@ int ConvolutionTexture::getH(void)
 /**
  * Override
  */
-string ConvolutionTexture::getTitle(void)
+string ConvolutionShared::getTitle(void)
     {
     return title;
     }

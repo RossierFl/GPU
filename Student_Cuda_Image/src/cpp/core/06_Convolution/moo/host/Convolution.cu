@@ -55,9 +55,9 @@ Convolution::Convolution()
     this->t=0;
 
     //Outputs
-    this->title="[API Image Cuda] : Convolution CUDA";
-    this->videoPath="/media/Data/Video/nasaFHD_short.avi";
-    this->videoTitle="NASA FHD SHORT";
+    this->title="[API Image Cuda] : Convolution CUDA Std";
+    //this->videoPath="/media/Data/Video/nasaFHD_short.avi";
+    //this->videoTitle="NASA FHD SHORT";
 
     this->videoPath="/media/Data/Video/neilPryde.avi";
     this->videoTitle="neilPryde";
@@ -129,6 +129,7 @@ void Convolution::animationStep()
  */
 void Convolution::runGPU(uchar4* ptrDevPixels)
     {
+    Chronos chrono;
     Mat matImage = captureur->capturer();
     uchar4* image = CaptureVideo::castToUChar4(&matImage);
     HANDLE_ERROR(cudaMemcpy(ptrDevPixels,image,(w*h)*sizeof(ptrDevPixels[0]),cudaMemcpyHostToDevice));
@@ -156,6 +157,9 @@ void Convolution::runGPU(uchar4* ptrDevPixels)
 	b = 255.0f/((-max/(float)min)+1.0f);
     affineTransform<<<dg,db>>>(ptrDevPixels, a, b, w, h,0);
     //printf("min: %d, max: %d\n",min,max);
+    cudaDeviceSynchronize();
+    chrono.stop();
+    cout << "ElapseTime:  " << chrono.getDeltaTime()<< " (s)" << endl;
     }
 
 /*--------------*\
