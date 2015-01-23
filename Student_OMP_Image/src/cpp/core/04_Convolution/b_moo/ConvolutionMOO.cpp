@@ -6,6 +6,7 @@
 #include <omp.h>
 #include "IndiceTools.h"
 #include "OmpTools.h"
+#include "Chronos.h"
 
 
 /*----------------------------------------------------------------------*\
@@ -99,8 +100,9 @@ void ConvolutionMOO::process(uchar4* ptrTabPixels, int w2, int h2)
 
 
 
+	Chronos chrono;
 
-
+	chrono.start();
        Mat matImage = captureur->capturer();
 
        uchar4* image = CaptureVideo::castToUChar4(&matImage);
@@ -123,6 +125,8 @@ void ConvolutionMOO::process(uchar4* ptrTabPixels, int w2, int h2)
        if(min != 0)
    	b = 255.0f/((-max/(float)min)+1.0f);
        convolutionDevice->affineTransformTexture(ptrTabPixels, a, b, w, h,0);
+       chrono.stop();
+       cout<< "Temps : "<< chrono.getDeltaTime()<<" : (s)"<<endl;
        //cudaUnbindTexture(textureRef);
 
     }

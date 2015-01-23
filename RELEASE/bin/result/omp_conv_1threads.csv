@@ -1,0 +1,311 @@
+
+--------------------------------------------------------
+[Runtime] : gcc x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/gcc/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : gcc x86 : Ready!
+--------------------------------------------------------
+
+LD_LIBRARY_PATH : 
+     /opt/boost/gcc/lib
+     /opt/intel/mkl/lib/intel64
+     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64
+     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/xawt
+     /usr/local/cuda/lib64
+     /usr/local/cula/lib64
+
+Running (gcc) : [gl ./omp_conv_1threads.run]
+
+
+--------------------------------------------------------------------------------------
+[CBI] : Running remote-GL :
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : ./omp_conv_1threads.run 
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : Memo : How to kill process
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : From the focuses terminal: 
+[CBI] : 
+[CBI] :    CTRL C    : kill the process in focused terminal
+[CBI] : 
+[CBI] : From an other terminal: 
+[CBI] : 
+[CBI] :    kill pid  : to kill the process refered by processus-identity (pid)
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : Memo : How to monitor process
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : From an other terminal: 
+[CBI] : 
+[CBI] : 	top
+[CBI] : 
+[CBI] : 	htop
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : Tips : top
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : 	top -u <user>    : to see only the process of user  (without <>)
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : Tips : htop
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : Usefull filters :
+[CBI] : 
+[CBI] : 	F4 : .run
+[CBI] : 	
+[CBI] : 	F4 : <user>		(without <>)
+[CBI] : 	
+[CBI] : Kill process directcly from the GUI of htop :
+[CBI] : 	
+[CBI] : 	Select with mouse the process ------> F9 -----> ENTER
+[CBI] : 	
+--------------------------------------------------------------------------------------
+[CBI] : Tip : pid
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] :  ps aux               : to see all pid
+[CBI] :  ps aux|grep <user>   : to see pid of user     (without <>)
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : Running ./omp_conv_1threads.run 
+[CBI] : 
+--------------------------------------------------------------------------------------
+
+main
+Temps : 0.0481291 : (s)
+Temps : 0.0470254 : (s)
+Temps : 0.0469382 : (s)
+Temps : 0.0468934 : (s)
+Temps : 0.0469109 : (s)
+Temps : 0.0468632 : (s)
+Temps : 0.0468602 : (s)
+Temps : 0.0469329 : (s)
+Temps : 0.0469033 : (s)
+Temps : 0.046877 : (s)
+Temps : 0.0469215 : (s)
+Temps : 0.0468783 : (s)
+Temps : 0.0469087 : (s)
+Temps : 0.0470351 : (s)
+Temps : 0.0470209 : (s)
+Temps : 0.0469836 : (s)
+Temps : 0.0474786 : (s)
+Temps : 0.047584 : (s)
+Temps : 0.0476716 : (s)
+Temps : 0.0482469 : (s)
+Temps : 0.0472265 : (s)
+Temps : 0.047293 : (s)
+Temps : 0.047339 : (s)
+Temps : 0.0482135 : (s)
+Temps : 0.0480113 : (s)
+Temps : 0.0476505 : (s)
+Temps : 0.0476633 : (s)
+Temps : 0.0476359 : (s)
+Temps : 0.0476551 : (s)
+Temps : 0.0477226 : (s)
+Temps : 0.0477086 : (s)
+Temps : 0.047669 : (s)
+Temps : 0.0486277 : (s)
+Temps : 0.0478629 : (s)
+Temps : 0.0479008 : (s)
+Temps : 0.0489465 : (s)
+Temps : 0.0548505 : (s)
+Temps : 0.0529188 : (s)
+Temps : 0.0486347 : (s)
+Temps : 0.0484249 : (s)
+Temps : 0.0480047 : (s)
+Temps : 0.0481454 : (s)
+Temps : 0.0481039 : (s)
+Temps : 0.0481204 : (s)
+Temps : 0.0480504 : (s)
+Temps : 0.0482065 : (s)
+Temps : 0.0480674 : (s)
+Temps : 0.0480617 : (s)
+Temps : 0.0482394 : (s)
+Temps : 0.0487506 : (s)
+Temps : 0.0482904 : (s)
+Temps : 0.0483094 : (s)
+Temps : 0.0482415 : (s)
+Temps : 0.0480599 : (s)
+Temps : 0.0480492 : (s)
+Temps : 0.0481162 : (s)
+Temps : 0.0480933 : (s)
+Temps : 0.048165 : (s)
+Temps : 0.0481848 : (s)
+Temps : 0.0481676 : (s)
+Temps : 0.0482268 : (s)
+Temps : 0.0484325 : (s)
+Temps : 0.0483804 : (s)
+Temps : 0.0481158 : (s)
+Temps : 0.0483368 : (s)
+Temps : 0.0480731 : (s)
+Temps : 0.0480356 : (s)
+Temps : 0.0481333 : (s)
+Temps : 0.0481557 : (s)
+Temps : 0.0483105 : (s)
+Temps : 0.0482485 : (s)
+Temps : 0.048318 : (s)
+Temps : 0.0479205 : (s)
+Temps : 0.048177 : (s)
+Temps : 0.0485111 : (s)
+Temps : 0.0481257 : (s)
+Temps : 0.0478843 : (s)
+Temps : 0.0479656 : (s)
+Temps : 0.0480275 : (s)
+Temps : 0.0479074 : (s)
+Temps : 0.0479977 : (s)
+Temps : 0.0480027 : (s)
+Temps : 0.0483535 : (s)
+Temps : 0.0477847 : (s)
+Temps : 0.0478035 : (s)
+Temps : 0.0481917 : (s)
+Temps : 0.047634 : (s)
+Temps : 0.0475797 : (s)
+Temps : 0.0476293 : (s)
+Temps : 0.0479404 : (s)
+Temps : 0.0476447 : (s)
+Temps : 0.0477022 : (s)
+Temps : 0.0477639 : (s)
+Temps : 0.048221 : (s)
+Temps : 0.0486344 : (s)
+Temps : 0.048814 : (s)
+Temps : 0.0487163 : (s)
+Temps : 0.0477473 : (s)
+Temps : 0.0476754 : (s)
+Temps : 0.0476669 : (s)
+Temps : 0.0476342 : (s)
+Temps : 0.0476252 : (s)
+Temps : 0.0476139 : (s)
+Temps : 0.047639 : (s)
+Temps : 0.0480761 : (s)
+Temps : 0.0476957 : (s)
+Temps : 0.0476434 : (s)
+Temps : 0.0482819 : (s)
+Temps : 0.0476706 : (s)
+Temps : 0.0478864 : (s)
+Temps : 0.0484437 : (s)
+Temps : 0.0476346 : (s)
+Temps : 0.0476924 : (s)
+Temps : 0.048349 : (s)
+Temps : 0.0479541 : (s)
+Temps : 0.0478305 : (s)
+Temps : 0.0483805 : (s)
+Temps : 0.048112 : (s)
+Temps : 0.0476751 : (s)
+Temps : 0.04775 : (s)
+Temps : 0.0478638 : (s)
+Temps : 0.0476862 : (s)
+Temps : 0.0477998 : (s)
+Temps : 0.0481234 : (s)
+Temps : 0.0485822 : (s)
+Temps : 0.0477172 : (s)
+Temps : 0.047659 : (s)
+Temps : 0.0477222 : (s)
+Temps : 0.047754 : (s)
+Temps : 0.0477917 : (s)
+Temps : 0.0476632 : (s)
+Temps : 0.0476171 : (s)
+Temps : 0.0477641 : (s)
+Temps : 0.0477368 : (s)
+Temps : 0.0486614 : (s)
+Temps : 0.0484967 : (s)
+Temps : 0.0485769 : (s)
+Temps : 0.0587987 : (s)
+Temps : 0.0483647 : (s)
+Temps : 0.0484851 : (s)
+Temps : 0.0490148 : (s)
+Temps : 0.0483891 : (s)
+Temps : 0.0488349 : (s)
+Temps : 0.0486323 : (s)
+Temps : 0.0486684 : (s)
+Temps : 0.0483294 : (s)
+Temps : 0.0483277 : (s)
+Temps : 0.0483886 : (s)
+Temps : 0.0483953 : (s)
+Temps : 0.0482994 : (s)
+Temps : 0.0482741 : (s)
+Temps : 0.0484358 : (s)
+Temps : 0.0484113 : (s)
+Temps : 0.0483499 : (s)
+Temps : 0.0483165 : (s)
+Temps : 0.0484037 : (s)
+Temps : 0.0484519 : (s)
+Temps : 0.0483191 : (s)
+Temps : 0.04856 : (s)
+Temps : 0.0483495 : (s)
+Temps : 0.0482163 : (s)
+Temps : 0.0482863 : (s)
+Temps : 0.0482116 : (s)
+Temps : 0.0481999 : (s)
+Temps : 0.0483913 : (s)
+Temps : 0.0484438 : (s)
+Temps : 0.0485484 : (s)
+Temps : 0.048277 : (s)
+Temps : 0.0483548 : (s)
+Temps : 0.0484079 : (s)
+Temps : 0.0489027 : (s)
+Temps : 0.048589 : (s)
+Temps : 0.0484256 : (s)
+Temps : 0.0485849 : (s)
+Temps : 0.0485266 : (s)
+Temps : 0.048699 : (s)
+Temps : 0.0484858 : (s)
+Temps : 0.0484699 : (s)
+Temps : 0.0483789 : (s)
+Temps : 0.0483412 : (s)
+Temps : 0.0484615 : (s)
+Temps : 0.0483269 : (s)
+Temps : 0.0486174 : (s)
+Temps : 0.0484449 : (s)
+Temps : 0.0485315 : (s)
+Temps : 0.0484626 : (s)
+Temps : 0.0484701 : (s)
+Temps : 0.0487633 : (s)
+Temps : 0.0485171 : (s)
+Temps : 0.0484201 : (s)
+Temps : 0.048743 : (s)
+Temps : 0.0482997 : (s)
+Temps : 0.0482601 : (s)
+Temps : 0.0482397 : (s)
+Temps : 0.04825 : (s)
+Temps : 0.0484206 : (s)
+Temps : 0.0483295 : (s)
+Temps : 0.0484572 : (s)
+Temps : 0.0483273 : (s)
+Temps : 0.0484727 : (s)
+Temps : 0.0486332 : (s)
+Temps : 0.0483884 : (s)
+Temps : 0.0487672 : (s)
+Temps : 0.0482993 : (s)
+Temps : 0.0483882 : (s)
+Temps : 0.048376 : (s)
+Temps : 0.048366 : (s)
+Temps : 0.0483238 : (s)
+Temps : 0.0482624 : (s)
+Temps : 0.0485832 : (s)
+Temps : 0.0482609 : (s)
+Temps : 0.0482905 : (s)
+Temps : 0.0485758 : (s)
+Temps : 0.0488174 : (s)
+Temps : 0.0482738 : (s)
+Temps : 0.048302 : (s)
+Temps : 0.0482363 : (s)
+

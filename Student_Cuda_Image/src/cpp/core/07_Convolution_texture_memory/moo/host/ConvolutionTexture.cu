@@ -5,6 +5,7 @@
 #include "ConvolutionTexture.h"
 #include "Device.h"
 #include "MathTools.h"
+#include "Chronos.h"
 
 
 using std::cout;
@@ -20,8 +21,8 @@ using std::endl;
 extern __host__ void init_Const_Memory_Kernel(float* ptrKernelDevice);
 extern __host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h);
 extern __host__ void unMapTextMemory();
-//extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t);
-extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels,int k, int w, int h, float t);
+extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau,int k, int w, int h, float t);
+//extern __global__ void convolutionTextureKernel(uchar4* ptrDevPixels,int k, int w, int h, float t);
 extern __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
 extern __global__ void findMinMaxTexture(uchar4* ptrDevPixels, uchar* ptrDevResult,int w, int h);
 extern __global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, int w, int h, int offset);
@@ -54,8 +55,8 @@ ConvolutionTexture::ConvolutionTexture()
     this->k = 9;
 
     // Tools
-    this->dg = dim3(16, 1, 1); // disons a optimiser
-    this->db = dim3(32, 1, 1); // disons a optimiser
+    this->dg = dim3(32, 1, 1); // disons a optimiser
+    this->db = dim3(512, 1, 1); // disons a optimiser
     this->t=0;
 
     //Outputs
@@ -139,6 +140,7 @@ void ConvolutionTexture::animationStep()
  */
 void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
     {
+    Chronos chrono;
 
     Mat matImage = captureur->capturer();
     //Copie de l'image dans le GPU et binder avec le mode texture
@@ -151,10 +153,10 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
 
     colorToGreyTexture<<<dg,db>>>(ptrImageVideoDevice,w,h);
     HANDLE_ERROR(cudaDeviceSynchronize());
-    //convolutionTextureKernel<<<dg,db>>>(ptrDevPixels, ptrDeviceNoyau,  k,  w,  h,  t);//Sans memory constant
-    convolutionTextureKernel<<<dg,db>>>(ptrDevPixels,  k,  w,  h,  t);
+
+    convolutionTextureKernel<<<dg,db>>>(ptrDevPixels,ptrDeviceNoyau,  k,  w,  h,  t);
     HANDLE_ERROR(cudaPeekAtLastError());
-   // convolutionTextureKernel<<<dg,db>>>(ptrImageVideoDevice,ptrDeviceNoyau,k,w,h,t);
+
     HANDLE_ERROR(cudaDeviceSynchronize());
     findMinMaxTexture<<<dg,db,sizeSM>>>(ptrDevPixels,ptrDevResult,w,h);
     HANDLE_ERROR(cudaMemcpy(ptrHostResult, ptrDevResult, sizeResult, cudaMemcpyDeviceToHost));
@@ -175,7 +177,9 @@ void ConvolutionTexture::runGPU(uchar4* ptrDevPixels)
     if(min != 0)
 	b = 255.0f/((-max/(float)min)+1.0f);
     affineTransformTexture<<<dg,db>>>(ptrDevPixels, a, b, w, h,0);
-
+    HANDLE_ERROR(cudaThreadSynchronize());
+    chrono.stop();
+cout<< "Temps : "<< chrono.getDeltaTime()<<" : (s)"<<endl;
     unMapTextMemory();
     }
 

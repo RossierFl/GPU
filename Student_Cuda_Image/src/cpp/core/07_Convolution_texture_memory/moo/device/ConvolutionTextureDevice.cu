@@ -25,8 +25,8 @@ __host__ void init_Const_Memory_Kernel(float* ptrKernelDevice);
 __host__ void init_textMemory (uchar4* ptrImageVideoDevice, int w, int h);
 __host__ void unMapTextMemory();
 
-//__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
-__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, int k, int w, int h, float t);
+__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, float* ptrDeviceNoyau, int k, int w, int h, float t);
+//__global__ void convolutionTextureKernel(uchar4* ptrDevPixels, int k, int w, int h, float t);
 
 __global__ void colorToGreyTexture(uchar4* ptrDevPixels, int w, int h);
 
@@ -155,7 +155,7 @@ __global__ void affineTransformTexture(uchar4* ptrDevPixels, float a, float b, i
 	}
     }
 
-__global__ void convolutionTextureKernel(uchar4* ptrDevPixels,int k, int w, int h, float t)
+__global__ void convolutionTextureKernel(uchar4* ptrDevPixels,float* ptrDeviceNoyau,int k, int w, int h, float t)
     {
     ConvolutionTextureMath convMath = ConvolutionTextureMath(w, h);
 
@@ -191,7 +191,7 @@ __global__ void convolutionTextureKernel(uchar4* ptrDevPixels,int k, int w, int 
 	    }
 	}*/
 
-	convMath.colorIJ(&color,CONST_MEM_KERNEL,KERN_SIZE, w, pixelJ, pixelI); // update color
+	convMath.colorIJ(&color,ptrDeviceNoyau,KERN_SIZE, w, pixelJ, pixelI); // update color
 	ptrDevPixels[s] = color;
 	s += NB_THREAD;
 	}

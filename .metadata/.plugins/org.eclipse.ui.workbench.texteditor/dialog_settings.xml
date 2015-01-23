@@ -3,43 +3,43 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="319" key="DIALOG_WIDTH"/>
 		<item value="253" key="DIALOG_Y_ORIGIN"/>
-		<item value="422" key="DIALOG_HEIGHT"/>
 		<item value="1526" key="DIALOG_X_ORIGIN"/>
+		<item value="422" key="DIALOG_HEIGHT"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="true" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="ptrDeviceVideoImage" key="selection"/>
+		<item value="OmpTools::setNbThread(1)" key="selection"/>
 		<list key="findhistory">
+			<item value="OmpTools::setNbThread(1)"/>
+			<item value="OmpTools::setNbThread(1);"/>
+			<item value="Convolution"/>
+			<item value="reductionInterBTexture"/>
+			<item value="reductionIntraTTexture"/>
+			<item value="ecrasementTexture"/>
+			<item value="__device__"/>
 			<item value="ptrDeviceVideoImage"/>
-			<item value="t_size"/>
-			<item value="ptrImageVideoDevice"/>
-			<item value="ptrDevPixels"/>
-			<item value="cudaFre"/>
-			<item value=".x2"/>
-			<item value=".x1"/>
-			<item value="xa"/>
 		</list>
 		<list key="replacehistory">
+			<item value="//OmpTools::setNbThread(1);"/>
+			<item value=""/>
 			<item value="size_t"/>
 			<item value="[1]"/>
 			<item value="[0]"/>
 			<item value="rayonMax"/>
 			<item value="nbrBalls"/>
-			<item value=""/>
 			<item value="NBR_THREAD_PER_BLOCK"/>
-			<item value="int"/>
 		</list>
 	</section>
 	<section name="org.eclipse.cdt.internal.ui.preferences.CTemplatePreferencePage$CEditTemplateDialog_dialogBounds">
 		<item value="1600" key="DIALOG_WIDTH"/>
 		<item value="0" key="DIALOG_Y_ORIGIN"/>
-		<item value="968" key="DIALOG_HEIGHT"/>
 		<item value="8" key="DIALOG_X_ORIGIN"/>
+		<item value="968" key="DIALOG_HEIGHT"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">

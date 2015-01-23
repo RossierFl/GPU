@@ -1,0 +1,116 @@
+
+--------------------------------------------------------
+[Runtime] : gcc x86
+--------------------------------------------------------
+
+[Runtime] : Cuda  : /usr/local/cuda/lib64
+[Runtime] : Cula  : /usr/local/cula/lib64
+[Runtime] : BOOST : /opt/boost/gcc/lib
+[Runtime] : MKL   : /opt/intel/mkl/lib/intel64
+
+[Runtime] : GL         : Ready!
+[Runtime] : FreeGlut   : Ready!
+[Runtime] : OpenCV     : Ready!
+[Runtime] : Java (JNI) : Ready!
+[Runtime] : X11        : Ready!
+
+--------------------------------------------------------
+[Runtime] : gcc x86 : Ready!
+--------------------------------------------------------
+
+LD_LIBRARY_PATH : 
+     /opt/boost/gcc/lib
+     /opt/intel/mkl/lib/intel64
+     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64
+     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/xawt
+     /usr/local/cuda/lib64
+     /usr/local/cula/lib64
+
+Running (gcc) : [gl ./cuda_conv_dg1_db1.run]
+
+
+--------------------------------------------------------------------------------------
+[CBI] : Running remote-GL :
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : ./cuda_conv_dg1_db1.run 
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : Memo : How to kill process
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : From the focuses terminal: 
+[CBI] : 
+[CBI] :    CTRL C    : kill the process in focused terminal
+[CBI] : 
+[CBI] : From an other terminal: 
+[CBI] : 
+[CBI] :    kill pid  : to kill the process refered by processus-identity (pid)
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : Memo : How to monitor process
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : From an other terminal: 
+[CBI] : 
+[CBI] : 	top
+[CBI] : 
+[CBI] : 	htop
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : Tips : top
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : 	top -u <user>    : to see only the process of user  (without <>)
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : Tips : htop
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : Usefull filters :
+[CBI] : 
+[CBI] : 	F4 : .run
+[CBI] : 	
+[CBI] : 	F4 : <user>		(without <>)
+[CBI] : 	
+[CBI] : Kill process directcly from the GUI of htop :
+[CBI] : 	
+[CBI] : 	Select with mouse the process ------> F9 -----> ENTER
+[CBI] : 	
+--------------------------------------------------------------------------------------
+[CBI] : Tip : pid
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] :  ps aux               : to see all pid
+[CBI] :  ps aux|grep <user>   : to see pid of user     (without <>)
+[CBI] : 
+--------------------------------------------------------------------------------------
+[CBI] : 
+[CBI] : Running ./cuda_conv_dg1_db1.run 
+[CBI] : 
+--------------------------------------------------------------------------------------
+
+main
+
+==============================================================
+[CUDA] : List GPU Available : cuda version = 6050
+==============================================================
+
+[Quadro 7000] id = 0 sm=20 : [CURRENT]
+[Quadro 7000] id = 1 sm=20
+[Tesla M2090] id = 2 sm=20
+[Tesla M2090] id = 3 sm=20
+[Tesla M2090] id = 4 sm=20
+[Tesla M2090] id = 5 sm=20
+
+==============================================================
+[Cuda] : current device : [Quadro 7000] id = 0 sm=20
+==============================================================
+Temps : 1.68197 : (s)
+Temps : 1.68402 : (s)
+Temps : 1.68095 : (s)
+Temps : 1.68149 : (s)
+Temps : 1.68097 : (s)
+Temps : 1.68126 : (s)
+Temps : 1.68134 : (s)
+
